@@ -70,6 +70,26 @@ export default function App() {
     setSignModalOpen(true);
   };
 
+  // Load server-persisted signatories on mount so all visitors see newly added institutions
+  useEffect(() => {
+    fetch('/api/signatories')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data.signatories) && data.signatories.length > 0) {
+          setSignatories((prev) => {
+            const existingNames = new Set(prev.map((s) => s.organization || s.name));
+            const extra = data.signatories.filter(
+              (s: Signatory) => !existingNames.has(s.organization || s.name)
+            );
+            return extra.length > 0 ? [...prev, ...extra] : prev;
+          });
+        }
+      })
+      .catch(() => {
+        // ignore in offline/static mode
+      });
+  }, []);
+
   const handleAddSignatory = (newSignatory: Omit<Signatory, 'id' | 'date'>) => {
     const added: Signatory = {
       id: `sig-${Date.now()}`,
@@ -90,6 +110,16 @@ export default function App() {
       }
       return updated;
     });
+
+    // Also persist on the server so all visitors see the new signature
+    fetch('/api/signatories', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newSignatory)
+    }).catch(() => {
+      // ignore offline
+    });
+
     showToast(
       added.type === 'institutional' && added.organization
         ? `E-posta doğrulandı! "${added.organization}" İmzacı Kurumlar listesine eklendi.`
