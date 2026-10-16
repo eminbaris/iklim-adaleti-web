@@ -74,7 +74,10 @@ function createServer() {
       return res.status(400).json({ error: 'E-posta ve kod gereklidir.' });
     }
 
-    const smtpUser = process.env.SMTP_USER || 'iklimadaleti2026@gmail.com';
+    const candidateUsers = process.env.SMTP_USER
+      ? [process.env.SMTP_USER, 'iklimadaleti2026@gmail.com', 'eminbaris33@gmail.com']
+      : ['iklimadaleti2026@gmail.com', 'eminbaris33@gmail.com'];
+    const uniqueUsers = [...new Set(candidateUsers)];
     const smtpPass = (process.env.SMTP_PASS || '').replace(/\s+/g, '');
 
     if (!smtpPass) {
@@ -82,46 +85,53 @@ function createServer() {
       return res.json({ ok: true, previewCode: code });
     }
 
-    try {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: smtpUser,
-          pass: smtpPass
-        }
-      });
+    const signerTitle = organization ? `${organization} (${name})` : name;
+    const htmlBody = `
+      <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 24px; border: 1px solid #e5e7eb; border-radius: 12px; background-color: #fbf9f5;">
+        <h2 style="color: #0B4F71; margin-top: 0;">COP31'e Doğru İklim Adaleti Forumu</h2>
+        <p style="color: #292524; font-size: 15px; line-height: 1.6;">
+          Merhaba <strong>${signerTitle || ''}</strong>,
+        </p>
+        <p style="color: #44403c; font-size: 14px; line-height: 1.6;">
+          İklim Adaleti Forumu Çağrı Metni'ni imzalamak için tek kullanımlık 6 haneli e-posta doğrulama kodunuz aşağıdadır:
+        </p>
+        <div style="margin: 24px 0; padding: 16px; background-color: #ffffff; border: 2px solid #0B4F71; border-radius: 10px; text-align: center;">
+          <span style="font-family: monospace; font-size: 28px; font-weight: bold; letter-spacing: 8px; color: #0B4F71;">${code}</span>
+        </div>
+        <p style="color: #78716c; font-size: 12px; line-height: 1.5;">
+          Bu kodu web sayfasındaki doğrulama ekranına girerek imzanızı tamamlayabilirsiniz.<br/>
+          iklimadaleti.org
+        </p>
+      </div>
+    `;
 
-      const signerTitle = organization ? `${organization} (${name})` : name;
+    let lastErr = null;
+    for (const smtpUser of uniqueUsers) {
+      try {
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: smtpUser,
+            pass: smtpPass
+          }
+        });
 
-      await transporter.sendMail({
-        from: `"İklim Adaleti Forumu" <${smtpUser}>`,
-        to: email,
-        subject: `İklim Adaleti Forumu - İmza Onay Kodunuz: ${code}`,
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 24px; border: 1px solid #e5e7eb; border-radius: 12px; background-color: #fbf9f5;">
-            <h2 style="color: #0B4F71; margin-top: 0;">COP31'e Doğru İklim Adaleti Forumu</h2>
-            <p style="color: #292524; font-size: 15px; line-height: 1.6;">
-              Merhaba <strong>${signerTitle || ''}</strong>,
-            </p>
-            <p style="color: #44403c; font-size: 14px; line-height: 1.6;">
-              İklim Adaleti Forumu Çağrı Metni'ni imzalamak için tek kullanımlık 6 haneli e-posta doğrulama kodunuz aşağıdadır:
-            </p>
-            <div style="margin: 24px 0; padding: 16px; background-color: #ffffff; border: 2px solid #0B4F71; border-radius: 10px; text-align: center;">
-              <span style="font-family: monospace; font-size: 28px; font-weight: bold; letter-spacing: 8px; color: #0B4F71;">${code}</span>
-            </div>
-            <p style="color: #78716c; font-size: 12px; line-height: 1.5;">
-              Bu kodu web sayfasındaki doğrulama ekranına girerek imzanızı tamamlayabilirsiniz.<br/>
-              iklimadaleti.org
-            </p>
-          </div>
-        `
-      });
+        await transporter.sendMail({
+          from: `"İklim Adaleti Forumu" <${smtpUser}>`,
+          replyTo: 'iklimadaleti2026@gmail.com',
+          to: email,
+          subject: `İklim Adaleti Forumu - İmza Onay Kodunuz: ${code}`,
+          html: htmlBody
+        });
 
-      return res.json({ ok: true, sent: true });
-    } catch (err) {
-      console.error('SMTP error:', err);
-      return res.status(500).json({ error: 'E-posta gönderilemedi', previewCode: code });
+        return res.json({ ok: true, sent: true });
+      } catch (err) {
+        lastErr = err;
+      }
     }
+
+    console.error('SMTP error:', lastErr);
+    return res.status(500).json({ error: 'E-posta gönderilemedi', previewCode: code });
   });
 
   app.use(express.static(distPath));
