@@ -15,7 +15,7 @@
       ],
       "category": "Forum",
       "date": "17.10.2026",
-      "author": "İklim Adaleti Forumu",
+      "author": "Elektrik Mühendisleri Odası (EMO) Samsun Şubesi",
       "authorRole": "İklim Adaleti Forumu",
       "readTimeMinutes": 3,
       "tags": ["Forum"],
@@ -36,7 +36,7 @@
       ],
       "category": "Forum",
       "date": "17.10.2026",
-      "author": "İklim Adaleti Forumu",
+      "author": "Taşbaşı Kültür Merkezi - Kırmızı Salon, Eskişehir",
       "authorRole": "İklim Adaleti Forumu",
       "readTimeMinutes": 3,
       "tags": ["Forum"],
@@ -58,7 +58,7 @@
       ],
       "category": "Forum",
       "date": "20.10.2026",
-      "author": "İklim Adaleti Forumu",
+      "author": "Atatürk Kültür Merkezi, 2 Nolu Salonu - Uşak",
       "authorRole": "İklim Adaleti Forumu",
       "readTimeMinutes": 3,
       "tags": ["Forum"],
@@ -75,11 +75,30 @@
       ],
       "category": "Forum",
       "date": "25.10.2026",
-      "author": "İklim Adaleti Forumu",
+      "author": "Yeşilpark Kültür Merkezi Tiyatro Salonu (Yeşilbayır / Döşemealtı)",
       "authorRole": "İklim Adaleti Forumu",
       "readTimeMinutes": 3,
       "tags": ["Forum"],
       "imageUrl": "/uploads/1792161526273-d__emealt__forum.jpeg"
+    },
+    {
+      "id": "forum-1792164859279",
+      "slug": "fethiye-2-iklim-adaleti-forumu",
+      "title": "Fethiye 2. İklim Adaleti Forumu",
+      "excerpt": "Yaşamımız ve geleceğimiz üzerinde söz, karar ve denetim hakkımızı savunmak için tüm yurttaşları, emek ve meslek örgütlerini, ekoloji hareketlerini, gençleri, üreticileri ve yaşam savunucularını toplantımıza davet ediyoruz.",
+      "content": [
+        "Mayıs ayında gerçekleştirdiğimiz tanışma ve bilgilendirme toplantısında, iklim krizine karşı yerelden yükselen, katılımcı ve demokratik bir mücadeleyi birlikte kurmak için bir araya gelmiştik. Kıyılarımızı, koylarımızı, ormanlarımızı, tarım alanlarımızı ve ortak yaşamımızı tehdit eden politikalar karşısında başlattığımız tartışmayı büyütmek üzere yeniden buluşuyoruz.",
+        "İklim Adaleti Forumu'nun \"Zamanımızı, yaşamımızı, geleceğimizi istiyoruz!\" çağrısını Fethiye'den birlikte karşılamak; 15-17 Kasım'da Antalya'da gerçekleşecek buluşmaya yerel mücadelelerimizin sözünü ve taleplerini taşımak istiyoruz. Bu toplantıda iklim adaleti mücadelesinde ortak adımlarımızı, Antalya buluşmasına katılımı ve dayanışma olanaklarımızı birlikte konuşacağız.",
+        "Yaşamımız ve geleceğimiz üzerinde söz, karar ve denetim hakkımızı savunmak için tüm yurttaşları, emek ve meslek örgütlerini, ekoloji hareketlerini, gençleri, üreticileri ve yaşam savunucularını toplantımıza davet ediyoruz.",
+        "📍 KİTAPHANE - FETHİYE | 📅 31 EKİM 2026 CUMARTESİ | 🕒 14.00 - 16:00"
+      ],
+      "category": "Forum",
+      "date": "31.10.2026",
+      "author": "Kitaphane - Fethiye",
+      "authorRole": "İklim Adaleti Forumu",
+      "readTimeMinutes": 3,
+      "tags": ["Forum"],
+      "imageUrl": "/uploads/1792164708020-fethiye_2_bulu_ma.jpeg"
     }
   ],
   "workingGroups": [],
@@ -124,6 +143,16 @@
       "type": "Forum",
       "description": "Rant projelerine ve ekolojik yıkıma karşı yaşam alanlarımızı, emeğimizi ve doğayı savunmak için buluşuyoruz. İklim adaleti mücadelemizi konuşmak ve ortak sözümüzü büyütmek üzere tüm halkımızı Döşemealtı İklim Adaleti Forumu’na çağırıyoruz.\n\n📆 25 Ekim 2026 Pazar | ⏰ 13.00\n📍 Yeşilpark Kültür Merkezi Tiyatro Salonu (Yeşilbayır / Döşemealtı)",
       "imageUrl": "/uploads/1792161526273-d__emealt__forum.jpeg"
+    },
+    {
+      "id": "ev-1792164859279",
+      "title": "Fethiye 2. İklim Adaleti Forumu",
+      "date": "31.10.2026",
+      "time": "14:00 - 16:00",
+      "location": "Kitaphane - Fethiye",
+      "type": "Forum",
+      "description": "Mayıs ayında gerçekleştirdiğimiz tanışma ve bilgilendirme toplantısında, iklim krizine karşı yerelden yükselen, katılımcı ve demokratik bir mücadeleyi birlikte kurmak için bir araya gelmiştik. Kıyılarımızı, koylarımızı, ormanlarımızı, tarım alanlarımızı ve ortak yaşamımızı tehdit eden politikalar karşısında başlattığımız tartışmayı büyütmek üzere yeniden buluşuyoruz.\n\nİklim Adaleti Forumu'nun \"Zamanımızı, yaşamımızı, geleceğimizi istiyoruz!\" çağrısını Fethiye'den birlikte karşılamak; 15-17 Kasım'da Antalya'da gerçekleşecek buluşmaya yerel mücadelelerimizin sözünü ve taleplerini taşımak istiyoruz. Bu toplantıda iklim adaleti mücadelesinde ortak adımlarımızı, Antalya buluşmasına katılımı ve dayanışma olanaklarımızı birlikte konuşacağız.\n\nYaşamımız ve geleceğimiz üzerinde söz, karar ve denetim hakkımızı savunmak için tüm yurttaşları, emek ve meslek örgütlerini, ekoloji hareketlerini, gençleri, üreticileri ve yaşam savunucularını toplantımıza davet ediyoruz.\n\n📍 KİTAPHANE - FETHİYE | 📅 31 EKİM 2026 CUMARTESİ | 🕒 14.00 - 16:00",
+      "imageUrl": "/uploads/1792164708020-fethiye_2_bulu_ma.jpeg"
     }
   ],
   "removedSignatoryIds": [],

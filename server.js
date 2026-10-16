@@ -89,34 +89,162 @@ const DEFAULT_CMS = {
       title: 'Döşemealtı İklim Adaleti Forumu',
       date: '25.10.2026',
       time: '13:00',
-      location: 'Döşemealtı/ANTALYA',
+      location: 'Yeşilpark Kültür Merkezi Tiyatro Salonu (Yeşilbayır / Döşemealtı - ANTALYA)',
       type: 'Forum',
       description:
         'Rant projelerine ve ekolojik yıkıma karşı yaşam alanlarımızı, emeğimizi ve doğayı savunmak için buluşuyoruz. İklim adaleti mücadelemizi konuşmak ve ortak sözümüzü büyütmek üzere tüm halkımızı Döşemealtı İklim Adaleti Forumu’na çağırıyoruz.\n\n📆 25 Ekim 2026 Pazar | ⏰ 13.00\n📍 Yeşilpark Kültür Merkezi Tiyatro Salonu (Yeşilbayır / Döşemealtı)',
       imageUrl: '/uploads/1792161526273-d__emealt__forum.jpeg'
+    },
+    {
+      id: 'ev-1792164859279',
+      title: 'Fethiye 2. İklim Adaleti Forumu',
+      date: '31.10.2026',
+      time: '14:00 - 16:00',
+      location: 'Kitaphane - Fethiye',
+      type: 'Forum',
+      description:
+        'Mayıs ayında gerçekleştirdiğimiz tanışma ve bilgilendirme toplantısında, iklim krizine karşı yerelden yükselen, katılımcı ve demokratik bir mücadeleyi birlikte kurmak için bir araya gelmiştik. Kıyılarımızı, koylarımızı, ormanlarımızı, tarım alanlarımızı ve ortak yaşamımızı tehdit eden politikalar karşısında başlattığımız tartışmayı büyütmek üzere yeniden buluşuyoruz.\n\nİklim Adaleti Forumu\'nun "Zamanımızı, yaşamımızı, geleceğimizi istiyoruz!" çağrısını Fethiye\'den birlikte karşılamak; 15-17 Kasım\'da Antalya\'da gerçekleşecek buluşmaya yerel mücadelelerimizin sözünü ve taleplerini taşımak istiyoruz. Bu toplantıda iklim adaleti mücadelesinde ortak adımlarımızı, Antalya buluşmasına katılımı ve dayanışma olanaklarımızı birlikte konuşacağız.\n\nYaşamımız ve geleceğimiz üzerinde söz, karar ve denetim hakkımızı savunmak için tüm yurttaşları, emek ve meslek örgütlerini, ekoloji hareketlerini, gençleri, üreticileri ve yaşam savunucularını toplantımıza davet ediyoruz.\n\n📍 KİTAPHANE - FETHİYE | 📅 31 EKİM 2026 CUMARTESİ | 🕒 14.00 - 16:00',
+      imageUrl: '/uploads/1792164708020-fethiye_2_bulu_ma.jpeg'
     }
   ],
   removedSignatoryIds: [],
+  deletedItemKeys: [],
   customAdminPass: null,
   users: []
 };
+
+function parseEventDateForSort(dateStr, timeStr) {
+  if (!dateStr) return Number.MAX_SAFE_INTEGER;
+  const clean = String(dateStr).trim();
+  const dmy = clean.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{4})/);
+  if (dmy) {
+    const [hh = 0, mm = 0] = String(timeStr || '').split(/[:.]/).map(Number);
+    return new Date(Number(dmy[3]), Number(dmy[2]) - 1, Number(dmy[1]), hh || 0, mm || 0).getTime();
+  }
+  const ymd = clean.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (ymd) {
+    const [hh = 0, mm = 0] = String(timeStr || '').split(/[:.]/).map(Number);
+    return new Date(Number(ymd[1]), Number(ymd[2]) - 1, Number(ymd[3]), hh || 0, mm || 0).getTime();
+  }
+  const parsed = Date.parse(clean);
+  return Number.isNaN(parsed) ? Number.MAX_SAFE_INTEGER : parsed;
+}
+
+function normalizeAndSyncCms(rawCms) {
+  const deletedKeys = new Set(
+    (rawCms.deletedItemKeys || []).map((k) => String(k).trim().toLowerCase())
+  );
+  const isDeleted = (item) =>
+    !item ||
+    !item.title ||
+    deletedKeys.has(String(item.id || '').trim().toLowerCase()) ||
+    deletedKeys.has(String(item.title || '').trim().toLowerCase());
+
+  // 1. Collect all events (from DEFAULT_CMS + rawCms.events + rawCms.forums)
+  const eventMap = new Map();
+  for (const ev of [...DEFAULT_CMS.events, ...(rawCms.events || [])]) {
+    if (isDeleted(ev)) continue;
+    const key = String(ev.title).trim().toLowerCase();
+    eventMap.set(key, { ...eventMap.get(key), ...ev });
+  }
+
+  for (const f of rawCms.forums || []) {
+    if (isDeleted(f)) continue;
+    const key = String(f.title).trim().toLowerCase();
+    if (!eventMap.has(key)) {
+      const fullText = Array.isArray(f.content) ? f.content.join('\n\n') : String(f.content || f.excerpt || '');
+      eventMap.set(key, {
+        id: String(f.id || `ev-${Date.now()}`).replace(/^forum-/, 'ev-'),
+        title: f.title,
+        date: f.date || '',
+        time: '',
+        location: f.author && f.author !== 'İklim Adaleti Forumu' ? f.author : 'Türkiye',
+        type: f.category || 'Forum',
+        description: fullText,
+        imageUrl: f.imageUrl,
+        videoUrl: f.videoUrl,
+        pdfUrl: f.pdfUrl
+      });
+    }
+  }
+
+  const syncedEvents = Array.from(eventMap.values()).sort(
+    (a, b) => parseEventDateForSort(a.date, a.time) - parseEventDateForSort(b.date, b.time)
+  );
+
+  // 2. Collect all forums (from rawCms.forums + syncedEvents)
+  const forumMap = new Map();
+  for (const f of rawCms.forums || []) {
+    if (isDeleted(f)) continue;
+    const key = String(f.title).trim().toLowerCase();
+    forumMap.set(key, f);
+  }
+
+  for (const ev of syncedEvents) {
+    const key = String(ev.title).trim().toLowerCase();
+    if (!forumMap.has(key)) {
+      const paragraphs = String(ev.description || ev.title).split(/\n\s*\n/);
+      forumMap.set(key, {
+        id: String(ev.id || `forum-${Date.now()}`).replace(/^ev-/, 'forum-'),
+        slug: String(ev.id || `forum-${Date.now()}`),
+        title: ev.title,
+        excerpt: paragraphs.slice(0, 2).join('\n\n') || ev.title,
+        content: paragraphs,
+        category: ev.type || 'Forum',
+        date: ev.date,
+        author: ev.location || 'İklim Adaleti Forumu',
+        authorRole: 'İklim Adaleti Forumu',
+        readTimeMinutes: 3,
+        tags: [ev.type || 'Forum'],
+        imageUrl: ev.imageUrl,
+        videoUrl: ev.videoUrl,
+        pdfUrl: ev.pdfUrl
+      });
+    }
+  }
+
+  const syncedForums = Array.from(forumMap.values()).sort(
+    (a, b) => parseEventDateForSort(a.date, '') - parseEventDateForSort(b.date, '')
+  );
+
+  return {
+    ...DEFAULT_CMS,
+    ...rawCms,
+    events: syncedEvents,
+    forums: syncedForums,
+    deletedItemKeys: Array.from(deletedKeys)
+  };
+}
 
 function readCmsData() {
   try {
     if (fs.existsSync(cmsFile)) {
       const parsed = JSON.parse(fs.readFileSync(cmsFile, 'utf-8'));
-      return { ...DEFAULT_CMS, ...parsed };
+      return normalizeAndSyncCms({ ...DEFAULT_CMS, ...parsed });
     }
   } catch (err) {
     console.error('Error reading CMS data:', err);
   }
-  return { ...DEFAULT_CMS };
+  return normalizeAndSyncCms({ ...DEFAULT_CMS });
 }
 
 function writeCmsData(data) {
   try {
     const current = readCmsData();
-    const merged = { ...current, ...data };
+    const nextDeleted = new Set([
+      ...(current.deletedItemKeys || []),
+      ...(data.deletedItemKeys || [])
+    ]);
+    // Additive merge of forums and events so stale tabs never wipe out items
+    const mergedForums = [...(current.forums || []), ...(data.forums || [])];
+    const mergedEvents = [...(current.events || []), ...(data.events || [])];
+    const merged = normalizeAndSyncCms({
+      ...current,
+      ...data,
+      forums: mergedForums,
+      events: mergedEvents,
+      deletedItemKeys: Array.from(nextDeleted)
+    });
     fs.writeFileSync(cmsFile, JSON.stringify(merged, null, 2), 'utf-8');
     return merged;
   } catch (err) {
@@ -277,7 +405,8 @@ function createServer() {
       removedSignatoryIds,
       newAdminPass,
       newUser,
-      deleteUserId
+      deleteUserId,
+      deleteItemKey
     } = req.body || {};
 
     const authUser = verifyCredentials(username, password);
@@ -292,6 +421,9 @@ function createServer() {
     if (Array.isArray(declarations)) updates.declarations = declarations;
     if (Array.isArray(events)) updates.events = events;
     if (Array.isArray(removedSignatoryIds)) updates.removedSignatoryIds = removedSignatoryIds;
+    if (deleteItemKey) {
+      updates.deletedItemKeys = [...(currentCms.deletedItemKeys || []), String(deleteItemKey)];
+    }
     if (newAdminPass && String(newAdminPass).trim().length >= 4) {
       updates.customAdminPass = String(newAdminPass).trim();
     }

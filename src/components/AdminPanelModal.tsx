@@ -54,6 +54,7 @@ interface AdminPanelModalProps {
     newAdminPass?: string;
     newUser?: { username: string; name: string; password: string };
     deleteUserId?: string;
+    deleteItemKey?: string;
   }) => Promise<boolean>;
 }
 
@@ -222,6 +223,7 @@ export default function AdminPanelModal({
     newAdminPass?: string;
     newUser?: { username: string; name: string; password: string };
     deleteUserId?: string;
+    deleteItemKey?: string;
   }>) => {
     setSaving(true);
     const ok = await onSaveCms({
@@ -235,7 +237,8 @@ export default function AdminPanelModal({
       removedSignatoryIds: overrides.removedSignatoryIds ?? removedSignatoryIds,
       newAdminPass: overrides.newAdminPass,
       newUser: overrides.newUser,
-      deleteUserId: overrides.deleteUserId
+      deleteUserId: overrides.deleteUserId,
+      deleteItemKey: overrides.deleteItemKey
     });
     setSaving(false);
     if (ok) {
@@ -903,7 +906,13 @@ export default function AdminPanelModal({
                           <button
                             type="button"
                             onClick={() =>
-                              triggerSave({ forums: forums.filter((f) => f.id !== item.id) })
+                              triggerSave({
+                                forums: forums.filter((f) => f.id !== item.id),
+                                events: events.filter(
+                                  (ev) => ev.title.toLowerCase() !== item.title.toLowerCase()
+                                ),
+                                deleteItemKey: item.title
+                              })
                             }
                             className="p-2 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
                             title="Sil"
@@ -1317,7 +1326,13 @@ export default function AdminPanelModal({
                           <button
                             type="button"
                             onClick={() =>
-                              triggerSave({ events: events.filter((item) => item.id !== ev.id) })
+                              triggerSave({
+                                events: events.filter((item) => item.id !== ev.id),
+                                forums: forums.filter(
+                                  (f) => f.title.toLowerCase() !== ev.title.toLowerCase()
+                                ),
+                                deleteItemKey: ev.title
+                              })
                             }
                             className="p-2 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
                           >

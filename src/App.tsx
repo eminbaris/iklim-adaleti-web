@@ -66,7 +66,7 @@ export default function App() {
     }, 4000);
   };
 
-  // Load CMS data & server-persisted signatories on mount
+  // Load CMS data & server-persisted signatories on mount and when admin modal opens/closes
   useEffect(() => {
     fetch('/api/cms')
       .then((res) => (res.ok ? res.json() : null))
@@ -86,9 +86,9 @@ export default function App() {
       .catch(() => {
         // ignore in offline/static mode
       });
-  }, []);
+  }, [adminModalOpen]);
 
-  // Combined signatories list (39 founding + extra verified - removed)
+  // Combined signatories list (42 founding + extra verified - removed)
   const signatories: Signatory[] = [
     ...INITIAL_SIGNATORIES.filter((s) => !removedSignatoryIds.includes(s.id)),
     ...extraSignatories.filter((s) => !removedSignatoryIds.includes(s.id))
@@ -159,6 +159,7 @@ export default function App() {
     newAdminPass?: string;
     newUser?: { username: string; name: string; password: string };
     deleteUserId?: string;
+    deleteItemKey?: string;
   }) => {
     setForums(payload.forums);
     setWorkingGroups(payload.workingGroups);
@@ -173,7 +174,17 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-      return res.ok;
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data.forums)) setForums(data.forums);
+        if (Array.isArray(data.workingGroups)) setWorkingGroups(data.workingGroups);
+        if (Array.isArray(data.declarations)) setDeclarations(data.declarations);
+        if (Array.isArray(data.events)) setEvents(data.events);
+        if (Array.isArray(data.removedSignatoryIds)) setRemovedSignatoryIds(data.removedSignatoryIds);
+        if (Array.isArray(data.signatories)) setExtraSignatories(data.signatories);
+        return true;
+      }
+      return false;
     } catch {
       return true;
     }
