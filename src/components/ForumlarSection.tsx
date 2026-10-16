@@ -58,11 +58,11 @@ export default function ForumlarSection({ items = [], onReadArticle }: ForumlarS
                 >
                   <div>
                     {item.imageUrl && (
-                      <div className="w-full h-48 bg-stone-100 border-b border-stone-200 overflow-hidden">
+                      <div className="w-full bg-[#FBF9F5] border-b border-stone-200 p-3 flex items-center justify-center">
                         <img
                           src={item.imageUrl}
                           alt={item.title}
-                          className="w-full h-full object-cover"
+                          className="w-full h-auto max-h-[420px] object-contain rounded-lg"
                         />
                       </div>
                     )}

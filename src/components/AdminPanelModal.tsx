@@ -351,12 +351,14 @@ export default function AdminPanelModal({
     setDPdfUrl('');
   };
 
-  // Add Event
+  // Add or Update Event
+  const [editingEventId, setEditingEventId] = useState<string | null>(null);
+
   const handleAddEvent = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!eTitle.trim() || !eDate.trim() || !eLocation.trim()) return;
     const item: ForumEvent = {
-      id: `ev-${Date.now()}`,
+      id: editingEventId || `ev-${Date.now()}`,
       title: eTitle.trim(),
       date: eDate.trim(),
       time: eTime.trim(),
@@ -367,8 +369,11 @@ export default function AdminPanelModal({
       videoUrl: eVideoUrl.trim() || undefined,
       pdfUrl: ePdfUrl.trim() || undefined
     };
-    const next = [...events, item];
+    const next = editingEventId
+      ? events.map((ev) => (ev.id === editingEventId ? item : ev))
+      : [...events, item];
     await triggerSave({ events: next });
+    setEditingEventId(null);
     setETitle('');
     setEDate('');
     setETime('');
@@ -1183,14 +1188,39 @@ export default function AdminPanelModal({
                         className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
                       />
                     </div>
-                    <button
-                      type="submit"
-                      disabled={saving}
-                      className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#3E8226] hover:bg-[#31681E] text-white text-xs font-bold rounded-lg cursor-pointer"
-                    >
-                      <Plus className="w-4 h-4" />
-                      <span>Etkinlik Ekle ve Yayınla</span>
-                    </button>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="submit"
+                        disabled={saving}
+                        className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#3E8226] hover:bg-[#31681E] text-white text-xs font-bold rounded-lg cursor-pointer"
+                      >
+                        <Plus className="w-4 h-4" />
+                        <span>
+                          {editingEventId
+                            ? 'Etkinliği Güncelle ve Yayınla'
+                            : 'Etkinlik Ekle ve Yayınla'}
+                        </span>
+                      </button>
+                      {editingEventId && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingEventId(null);
+                            setETitle('');
+                            setEDate('');
+                            setETime('');
+                            setELocation('');
+                            setEDesc('');
+                            setEImageUrl('');
+                            setEVideoUrl('');
+                            setEPdfUrl('');
+                          }}
+                          className="px-4 py-2.5 bg-stone-200 hover:bg-stone-300 text-stone-700 text-xs font-bold rounded-lg cursor-pointer"
+                        >
+                          Düzenlemeyi İptal Et
+                        </button>
+                      )}
+                    </div>
                   </form>
 
                   <div className="space-y-2">
@@ -1208,15 +1238,35 @@ export default function AdminPanelModal({
                             {ev.type} · {ev.date} · {ev.location}
                           </p>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            triggerSave({ events: events.filter((item) => item.id !== ev.id) })
-                          }
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setEditingEventId(ev.id);
+                              setETitle(ev.title);
+                              setEDate(ev.date);
+                              setETime(ev.time || '');
+                              setELocation(ev.location);
+                              setEType(ev.type);
+                              setEDesc(ev.description || '');
+                              setEImageUrl(ev.imageUrl || '');
+                              setEVideoUrl(ev.videoUrl || '');
+                              setEPdfUrl(ev.pdfUrl || '');
+                            }}
+                            className="px-3 py-1.5 bg-sky-50 hover:bg-sky-100 border border-sky-200 text-[#0B4F71] text-xs font-bold rounded-lg cursor-pointer"
+                          >
+                            Düzenle
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              triggerSave({ events: events.filter((item) => item.id !== ev.id) })
+                            }
+                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>

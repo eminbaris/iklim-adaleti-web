@@ -58,8 +58,12 @@ export default function CalismaGruplariSection({ groups }: CalismaGruplariSectio
                 >
                   <div>
                     {g.imageUrl && (
-                      <div className="w-full h-44 bg-stone-100 border-b border-stone-200 overflow-hidden">
-                        <img src={g.imageUrl} alt={g.name} className="w-full h-full object-cover" />
+                      <div className="w-full bg-[#FBF9F5] border-b border-stone-200 p-3 flex items-center justify-center">
+                        <img
+                          src={g.imageUrl}
+                          alt={g.name}
+                          className="w-full h-auto max-h-[400px] object-contain rounded-lg"
+                        />
                       </div>
                     )}
                     {!g.imageUrl && g.videoUrl && (
