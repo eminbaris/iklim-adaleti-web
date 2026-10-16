@@ -13,8 +13,71 @@ interface EtkinliklerSectionProps {
   onRegisterEvent: (event: ForumEvent) => void;
 }
 
+function parseTurkishEventDate(dateStr: string, timeStr?: string): number {
+  if (!dateStr) return Number.MAX_SAFE_INTEGER;
+  const clean = dateStr.trim();
+
+  // 1. DD.MM.YYYY or DD/MM/YYYY
+  const dmyMatch = clean.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{4})/);
+  if (dmyMatch) {
+    const day = Number(dmyMatch[1]);
+    const month = Number(dmyMatch[2]) - 1;
+    const year = Number(dmyMatch[3]);
+    const [hh = 0, mm = 0] = (timeStr || '').split(/[:.]/).map(Number);
+    return new Date(year, month, day, hh || 0, mm || 0).getTime();
+  }
+
+  // 2. YYYY-MM-DD
+  const ymdMatch = clean.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (ymdMatch) {
+    const year = Number(ymdMatch[1]);
+    const month = Number(ymdMatch[2]) - 1;
+    const day = Number(ymdMatch[3]);
+    const [hh = 0, mm = 0] = (timeStr || '').split(/[:.]/).map(Number);
+    return new Date(year, month, day, hh || 0, mm || 0).getTime();
+  }
+
+  // 3. Turkish month names (e.g., "17 Ekim 2026")
+  const months: Record<string, number> = {
+    ocak: 0,
+    şubat: 1,
+    subat: 1,
+    mart: 2,
+    nisan: 3,
+    mayıs: 4,
+    mayis: 4,
+    haziran: 5,
+    temmuz: 6,
+    ağustos: 7,
+    agustos: 7,
+    eylül: 8,
+    eylul: 8,
+    ekim: 9,
+    kasım: 10,
+    kasim: 10,
+    aralık: 11,
+    aralik: 11
+  };
+  const trMatch = clean.toLowerCase().match(/(\d{1,2})\s+([a-zçğıöşü]+)\s*(\d{4})?/);
+  if (trMatch) {
+    const day = Number(trMatch[1]);
+    const month = months[trMatch[2]];
+    const year = trMatch[3] ? Number(trMatch[3]) : 2026;
+    if (month !== undefined) {
+      return new Date(year, month, day).getTime();
+    }
+  }
+
+  const parsed = Date.parse(clean);
+  return Number.isNaN(parsed) ? Number.MAX_SAFE_INTEGER : parsed;
+}
+
 export default function EtkinliklerSection({ events }: EtkinliklerSectionProps) {
   const [previewImage, setPreviewImage] = useState<{ url: string; title: string } | null>(null);
+
+  const sortedEvents = [...events].sort(
+    (a, b) => parseTurkishEventDate(a.date, a.time) - parseTurkishEventDate(b.date, b.time)
+  );
 
   return (
     <section
@@ -52,7 +115,7 @@ export default function EtkinliklerSection({ events }: EtkinliklerSectionProps) 
           </div>
         ) : (
           <div className="mt-8 space-y-8">
-            {events.map((ev) => {
+            {sortedEvents.map((ev) => {
               const ytEmbed = getYoutubeEmbedUrl(ev.videoUrl);
               return (
                 <div

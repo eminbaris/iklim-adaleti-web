@@ -52,6 +52,17 @@ const DEFAULT_CMS = {
   declarations: [],
   events: [
     {
+      id: 'ev-1792162131784',
+      title: 'Eskişehir İklim Adaleti Forumu',
+      date: '17.10.2026',
+      time: '14:00',
+      location: 'Eskişehir',
+      type: 'Forum',
+      description:
+        'Doğanın ve Yaşam Haklarımızın Yanındayız\n\nİklim krizi sadece derecelerin yükselmesinden ibaret değil, aşırı hava olayları, biyoçeşitlilik kaybı, gıda ve su krizi ile doğrudan yaşam hakkımızı tehdit eden toplumsal ve hukuki bir adalet meselesidir.\n\nKrizin etkilerini en derin hisseden toplulukların, yaşam alanlarının ve ekosistemlerin sesini yükseltmek, doğayı ve geleceğimizi hukuki ve ekolojik bir mücadele hattında savunmak için bir araya geliyoruz.\n\nEskişehir Ekoloji Derneği bünyesinde gerçekleştireceğimiz İklim Adaleti Forumu’nda, iklim krizine karşı hukuki haklarımızı, ekolojik mücadele yöntemlerini ve adil bir geleceğin nasıl inşa edileceğini konuşacağız.\n\nKonuşmacılarımız Avukat Onat Ötnü ve Avukat Mert Yedek’in katılımıyla gerçekleşecek bu önemli buluşmaya tüm yurttaşlarımızı bekliyoruz.\n\n📅 Tarih: 17 Ekim 2026\n🕑 Saat: 14.00\n📍 Yer: Taşbaşı Kültür Merkezi - Kırmızı Salon',
+      imageUrl: '/uploads/1792162144088-eski_ehir_17_10_2026.png'
+    },
+    {
       id: 'ev-1792161567412',
       title: 'Döşemealtı İklim Adaleti Forumu',
       date: '25.10.2026',
