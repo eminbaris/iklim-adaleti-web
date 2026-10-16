@@ -77,7 +77,7 @@ export default function AdminPanelModal({
   const [currentUserDisplay, setCurrentUserDisplay] = useState('Ana Yönetici');
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
   const [loginError, setLoginError] = useState('');
-  const [activeTab, setActiveTab] = useState<AdminTab>('forums');
+  const [activeTab, setActiveTab] = useState<AdminTab>('events');
   const [saving, setSaving] = useState(false);
   const [uploadingField, setUploadingField] = useState<string | null>(null);
   const [statusMsg, setStatusMsg] = useState<string | null>(null);
@@ -267,19 +267,21 @@ export default function AdminPanelModal({
   // Add Forum Item
   const handleAddForum = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fTitle.trim() || !fExcerpt.trim()) return;
+    if (!fTitle.trim()) return;
+    const summaryText = fExcerpt.trim() || fContent.trim().split('\n')[0] || fTitle.trim();
+    const fullText = fContent.trim() || summaryText;
     const item: Article = {
       id: `forum-${Date.now()}`,
       slug: `forum-${Date.now()}`,
       title: fTitle.trim(),
-      excerpt: fExcerpt.trim(),
-      content: (fContent.trim() || fExcerpt.trim()).split(/\n\s*\n/),
+      excerpt: summaryText,
+      content: fullText.split(/\n\s*\n/),
       category: fCategory,
       date: fDate || new Date().toISOString().split('T')[0],
       author: fAuthor.trim() || 'İklim Adaleti Forumu',
       authorRole: 'İklim Adaleti Forumu',
       readTimeMinutes: 3,
-      tags: ['Forum'],
+      tags: [fCategory || 'Forum'],
       imageUrl: fImageUrl.trim() || undefined,
       videoUrl: fVideoUrl.trim() || undefined,
       pdfUrl: fPdfUrl.trim() || undefined
@@ -297,12 +299,12 @@ export default function AdminPanelModal({
   // Add Working Group
   const handleAddGroup = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!gName.trim() || !gDesc.trim()) return;
+    if (!gName.trim()) return;
     const item: WorkingGroup = {
       id: `wg-${Date.now()}`,
       name: gName.trim(),
       slug: `wg-${Date.now()}`,
-      description: gDesc.trim(),
+      description: gDesc.trim() || gName.trim(),
       iconName: 'Users',
       memberCount: 0,
       coordinator: gCoord.trim(),
@@ -324,13 +326,15 @@ export default function AdminPanelModal({
   // Add Declaration
   const handleAddDeclaration = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!dTitle.trim() || !dExcerpt.trim()) return;
+    if (!dTitle.trim()) return;
+    const summaryText = dExcerpt.trim() || dContent.trim().split('\n')[0] || dTitle.trim();
+    const fullText = dContent.trim() || summaryText;
     const item: Article = {
       id: `decl-${Date.now()}`,
       slug: `decl-${Date.now()}`,
       title: dTitle.trim(),
-      excerpt: dExcerpt.trim(),
-      content: (dContent.trim() || dExcerpt.trim()).split(/\n\s*\n/),
+      excerpt: summaryText,
+      content: fullText.split(/\n\s*\n/),
       category: 'Sonuç Bildirgesi',
       date: dDate || new Date().toISOString().split('T')[0],
       author: dAuthor.trim() || 'İklim Adaleti Forumu',
@@ -356,13 +360,13 @@ export default function AdminPanelModal({
 
   const handleAddEvent = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!eTitle.trim() || !eDate.trim() || !eLocation.trim()) return;
+    if (!eTitle.trim()) return;
     const item: ForumEvent = {
       id: editingEventId || `ev-${Date.now()}`,
       title: eTitle.trim(),
-      date: eDate.trim(),
+      date: eDate.trim() || new Date().toLocaleDateString('tr-TR'),
       time: eTime.trim(),
-      location: eLocation.trim(),
+      location: eLocation.trim() || 'Türkiye',
       type: eType,
       description: eDesc.trim(),
       imageUrl: eImageUrl.trim() || undefined,
