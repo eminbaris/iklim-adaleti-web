@@ -44,7 +44,10 @@ export const INITIAL_SIGNATORY_ORGANIZATIONS: string[] = [
   'Kocaeli KHK Platformu',
   'Türkiye Yazarlar Sendikası',
   'Türetim Ağı Derneği',
-  'Murat Dağı Yok Olmasın Platformu'
+  'Murat Dağı Yok Olmasın Platformu',
+  'Marmara Ereğlisi Çevre Gönüllüleri',
+  'Tekirdağ Kent Konseyi',
+  'Kırsal Çevre ve Ormancılık Sorunları Araştırma Derneği'
 ];
 
 export const CALL_TEXT_FULL = `COP31'e DOĞRU İKLİM ADALETİ FORUMU

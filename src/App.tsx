@@ -148,6 +148,7 @@ export default function App() {
   };
 
   const handleSaveCms = async (payload: {
+    username?: string;
     password: string;
     forums: Article[];
     workingGroups: WorkingGroup[];
@@ -156,6 +157,8 @@ export default function App() {
     signatories: Signatory[];
     removedSignatoryIds: string[];
     newAdminPass?: string;
+    newUser?: { username: string; name: string; password: string };
+    deleteUserId?: string;
   }) => {
     setForums(payload.forums);
     setWorkingGroups(payload.workingGroups);

@@ -16,9 +16,17 @@ import {
   Calendar,
   BookOpen,
   KeyRound,
-  CheckCircle
+  CheckCircle,
+  UserPlus
 } from 'lucide-react';
 import { Article, WorkingGroup, ForumEvent, Signatory } from '../types.ts';
+
+interface AdminUser {
+  id: string;
+  username: string;
+  name: string;
+  role?: string;
+}
 
 interface AdminPanelModalProps {
   isOpen: boolean;
@@ -31,6 +39,7 @@ interface AdminPanelModalProps {
   extraSignatories: Signatory[];
   removedSignatoryIds: string[];
   onSaveCms: (payload: {
+    username?: string;
     password: string;
     forums: Article[];
     workingGroups: WorkingGroup[];
@@ -39,10 +48,12 @@ interface AdminPanelModalProps {
     signatories: Signatory[];
     removedSignatoryIds: string[];
     newAdminPass?: string;
+    newUser?: { username: string; name: string; password: string };
+    deleteUserId?: string;
   }) => Promise<boolean>;
 }
 
-type AdminTab = 'forums' | 'groups' | 'declarations' | 'events' | 'signatories' | 'password';
+type AdminTab = 'forums' | 'groups' | 'declarations' | 'events' | 'signatories' | 'users';
 
 export default function AdminPanelModal({
   isOpen,
@@ -57,7 +68,10 @@ export default function AdminPanelModal({
   onSaveCms
 }: AdminPanelModalProps) {
   const [authenticated, setAuthenticated] = useState(false);
+  const [username, setUsername] = useState('admin');
   const [password, setPassword] = useState('');
+  const [currentUserDisplay, setCurrentUserDisplay] = useState('Ana Yönetici');
+  const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
   const [loginError, setLoginError] = useState('');
   const [activeTab, setActiveTab] = useState<AdminTab>('forums');
   const [saving, setSaving] = useState(false);
@@ -97,7 +111,10 @@ export default function AdminPanelModal({
   const [sOrg, setSOrg] = useState('');
   const [sCity, setSCity] = useState('Türkiye');
 
-  // Password update
+  // Form states for adding a new User & changing master password
+  const [uName, setUName] = useState('');
+  const [uUsername, setUUsername] = useState('');
+  const [uPass, setUPass] = useState('');
   const [newPass, setNewPass] = useState('');
 
   if (!isOpen) return null;
@@ -114,23 +131,25 @@ export default function AdminPanelModal({
       const res = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
+        body: JSON.stringify({ username, password })
       });
       if (res.ok) {
+        const data = await res.json();
         setAuthenticated(true);
+        if (data.user?.name) setCurrentUserDisplay(data.user.name);
+        if (Array.isArray(data.users)) setAdminUsers(data.users);
       } else {
-        // Fallback check for local preview
         if (password === 'iklim2026') {
           setAuthenticated(true);
         } else {
-          setLoginError('Yönetici şifresi hatalı.');
+          setLoginError('Kullanıcı adı veya şifre hatalı.');
         }
       }
     } catch {
       if (password === 'iklim2026') {
         setAuthenticated(true);
       } else {
-        setLoginError('Yönetici şifresi hatalı.');
+        setLoginError('Kullanıcı adı veya şifre hatalı.');
       }
     }
   };
@@ -143,9 +162,12 @@ export default function AdminPanelModal({
     signatories: Signatory[];
     removedSignatoryIds: string[];
     newAdminPass?: string;
+    newUser?: { username: string; name: string; password: string };
+    deleteUserId?: string;
   }>) => {
     setSaving(true);
     const ok = await onSaveCms({
+      username,
       password,
       forums: overrides.forums ?? forums,
       workingGroups: overrides.workingGroups ?? workingGroups,
@@ -153,13 +175,32 @@ export default function AdminPanelModal({
       events: overrides.events ?? events,
       signatories: overrides.signatories ?? extraSignatories,
       removedSignatoryIds: overrides.removedSignatoryIds ?? removedSignatoryIds,
-      newAdminPass: overrides.newAdminPass
+      newAdminPass: overrides.newAdminPass,
+      newUser: overrides.newUser,
+      deleteUserId: overrides.deleteUserId
     });
     setSaving(false);
     if (ok) {
       if (overrides.newAdminPass) {
         setPassword(overrides.newAdminPass);
         setNewPass('');
+      }
+      if (overrides.newUser) {
+        setAdminUsers((prev) => [
+          ...prev,
+          {
+            id: `usr-${Date.now()}`,
+            username: overrides.newUser!.username,
+            name: overrides.newUser!.name,
+            role: 'editor'
+          }
+        ]);
+        setUName('');
+        setUUsername('');
+        setUPass('');
+      }
+      if (overrides.deleteUserId) {
+        setAdminUsers((prev) => prev.filter((u) => u.id !== overrides.deleteUserId));
       }
       notify('Değişiklikler kaydedildi ve sitede yayınlandı!');
     }
@@ -280,13 +321,26 @@ export default function AdminPanelModal({
 
   // Delete Signatory
   const handleRemoveSignatory = async (id: string) => {
-    if (id.startsWith('init-')) {
+    if (id.startsWith('org-')) {
       const nextRemoved = [...new Set([...removedSignatoryIds, id])];
       await triggerSave({ removedSignatoryIds: nextRemoved });
     } else {
       const nextExtra = extraSignatories.filter((s) => s.id !== id);
       await triggerSave({ signatories: nextExtra });
     }
+  };
+
+  // Add New Editor User
+  const handleAddUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!uUsername.trim() || uPass.trim().length < 4) return;
+    await triggerSave({
+      newUser: {
+        username: uUsername.trim(),
+        name: uName.trim() || uUsername.trim(),
+        password: uPass.trim()
+      }
+    });
   };
 
   return (
@@ -307,7 +361,9 @@ export default function AdminPanelModal({
                 iklimadaleti.org · İçerik Yönetim Paneli
               </h2>
               <p className="text-xs text-sky-200">
-                Yazı, Forum, Çalışma Grubu, Sonuç Bildirgesi, Etkinlik ve İmzacı Kurum Yönetimi
+                {authenticated
+                  ? `Aktif Kullanıcı: ${currentUserDisplay}`
+                  : 'Yazı, Forum, Çalışma Grubu, Sonuç Bildirgesi, Etkinlik ve Kullanıcı Yönetimi'}
               </p>
             </div>
           </div>
@@ -323,10 +379,10 @@ export default function AdminPanelModal({
         {!authenticated ? (
           <div className="p-8 max-w-md mx-auto w-full">
             <h3 className="font-serif text-2xl font-bold text-stone-900 mb-2 text-center">
-              Yönetici Girişi
+              Yönetici / Editör Girişi
             </h3>
             <p className="text-xs text-stone-600 mb-6 text-center">
-              Sitedeki içerikleri düzenlemek ve yeni yazı eklemek için yönetici şifrenizi giriniz.
+              Sitedeki içerikleri düzenlemek ve yeni yazı eklemek için kullanıcı adı ve şifrenizi giriniz.
             </p>
             {loginError && (
               <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700 font-semibold">
@@ -336,7 +392,20 @@ export default function AdminPanelModal({
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-stone-700 mb-1.5">
-                  Yönetici Şifresi
+                  Kullanıcı Adı
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Örn: admin"
+                  className="w-full px-3.5 py-2.5 text-sm border border-stone-300 rounded-lg focus:outline-none focus:border-[#0B4F71]"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-stone-700 mb-1.5">
+                  Şifre
                 </label>
                 <input
                   type="password"
@@ -421,15 +490,15 @@ export default function AdminPanelModal({
               </button>
               <button
                 type="button"
-                onClick={() => setActiveTab('password')}
+                onClick={() => setActiveTab('users')}
                 className={`px-3.5 py-2.5 text-xs font-bold rounded-t-lg inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
-                  activeTab === 'password'
+                  activeTab === 'users'
                     ? 'bg-white text-[#0B4F71] border-t border-x border-stone-200'
                     : 'text-stone-600 hover:text-stone-900'
                 }`}
               >
                 <KeyRound className="w-3.5 h-3.5" />
-                <span>Şifre Ayarı</span>
+                <span>Kullanıcılar & Şifre</span>
               </button>
             </div>
 
@@ -1011,36 +1080,137 @@ export default function AdminPanelModal({
                 </div>
               )}
 
-              {/* TAB 6: YÖNETİCİ ŞİFRESİ DEĞİŞTİRME */}
-              {activeTab === 'password' && (
-                <div className="max-w-md space-y-4 bg-stone-50 border border-stone-200 rounded-xl p-5">
-                  <h4 className="font-serif text-lg font-bold text-stone-900">
-                    Yönetici Şifresini Değiştir
-                  </h4>
-                  <p className="text-xs text-stone-600">
-                    Yönetim paneline giriş şifresini buradan güncelleyebilirsiniz.
-                  </p>
-                  <div>
-                    <label className="block text-xs font-semibold text-stone-700 mb-1">
-                      Yeni Şifre (En az 4 karakter)
-                    </label>
-                    <input
-                      type="password"
-                      value={newPass}
-                      onChange={(e) => setNewPass(e.target.value)}
-                      placeholder="Yeni yönetici şifresi..."
-                      className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    disabled={saving || newPass.trim().length < 4}
-                    onClick={() => triggerSave({ newAdminPass: newPass.trim() })}
-                    className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#0B4F71] hover:bg-[#083B54] disabled:opacity-50 text-white text-xs font-bold rounded-lg cursor-pointer"
+              {/* TAB 6: KULLANICILAR & ŞİFRE YÖNETİMİ */}
+              {activeTab === 'users' && (
+                <div className="space-y-6">
+                  {/* Yeni Editör / Kullanıcı Ekleme */}
+                  <form
+                    onSubmit={handleAddUser}
+                    className="bg-stone-50 border border-stone-200 rounded-xl p-5 space-y-4"
                   >
-                    <Save className="w-4 h-4" />
-                    <span>Yeni Şifreyi Kaydet</span>
-                  </button>
+                    <div className="flex items-center gap-2">
+                      <UserPlus className="w-5 h-5 text-[#0B4F71]" />
+                      <h4 className="font-serif text-lg font-bold text-stone-900">
+                        Yeni Kullanıcı / Editör Hesabı Aç
+                      </h4>
+                    </div>
+                    <p className="text-xs text-stone-600">
+                      Farklı ekip arkadaşlarınızın siteye yazı, etkinlik veya bildirge girebilmesi için her birine ayrı kullanıcı adı ve şifre tanımlayabilirsiniz.
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-stone-700 mb-1">
+                          Ad Soyad / Görev *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={uName}
+                          onChange={(e) => setUName(e.target.value)}
+                          placeholder="Örn: Ayşe Yılmaz"
+                          className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-stone-700 mb-1">
+                          Kullanıcı Adı *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={uUsername}
+                          onChange={(e) => setUUsername(e.target.value)}
+                          placeholder="Örn: ayse"
+                          className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-stone-700 mb-1">
+                          Şifre (En az 4 karakter) *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={uPass}
+                          onChange={(e) => setUPass(e.target.value)}
+                          placeholder="Örn: iklim1234"
+                          className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
+                        />
+                      </div>
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={saving}
+                      className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#3E8226] hover:bg-[#31681E] text-white text-xs font-bold rounded-lg cursor-pointer"
+                    >
+                      <UserPlus className="w-4 h-4" />
+                      <span>Kullanıcıyı Oluştur</span>
+                    </button>
+                  </form>
+
+                  {/* Mevcut Kullanıcılar Listesi */}
+                  <div className="space-y-2">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500">
+                      Yetkili Kullanıcılar ({adminUsers.length + 1})
+                    </h4>
+                    <div className="p-3 bg-sky-50/70 border border-sky-200 rounded-lg flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-bold text-stone-900">
+                          Ana Yönetici (Kullanıcı adı: <span className="font-mono">admin</span>)
+                        </p>
+                        <p className="text-xs text-stone-500">Tam Yetkili Kurucu Hesap</p>
+                      </div>
+                    </div>
+                    {adminUsers.map((u) => (
+                      <div
+                        key={u.id}
+                        className="p-3 bg-white border border-stone-200 rounded-lg flex items-center justify-between gap-3"
+                      >
+                        <div>
+                          <p className="text-sm font-bold text-stone-900">
+                            {u.name} (Kullanıcı adı: <span className="font-mono">{u.username}</span>)
+                          </p>
+                          <p className="text-xs text-stone-500">İçerik Editörü</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => triggerSave({ deleteUserId: u.id })}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
+                          title="Kullanıcıyı Sil"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Ana Yönetici Şifresi Değiştirme */}
+                  <div className="max-w-md space-y-4 bg-stone-50 border border-stone-200 rounded-xl p-5">
+                    <h4 className="font-serif text-base font-bold text-stone-900">
+                      Ana Yönetici (admin) Şifresini Değiştir
+                    </h4>
+                    <div>
+                      <label className="block text-xs font-semibold text-stone-700 mb-1">
+                        Yeni Ana Şifre (En az 4 karakter)
+                      </label>
+                      <input
+                        type="password"
+                        value={newPass}
+                        onChange={(e) => setNewPass(e.target.value)}
+                        placeholder="Yeni ana yönetici şifresi..."
+                        className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      disabled={saving || newPass.trim().length < 4}
+                      onClick={() => triggerSave({ newAdminPass: newPass.trim() })}
+                      className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#0B4F71] hover:bg-[#083B54] disabled:opacity-50 text-white text-xs font-bold rounded-lg cursor-pointer"
+                    >
+                      <Save className="w-4 h-4" />
+                      <span>Ana Şifreyi Güncelle</span>
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

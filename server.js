@@ -48,7 +48,8 @@ const DEFAULT_CMS = {
   declarations: [],
   events: [],
   removedSignatoryIds: [],
-  customAdminPass: null
+  customAdminPass: null,
+  users: []
 };
 
 function readCmsData() {
@@ -75,9 +76,51 @@ function writeCmsData(data) {
   }
 }
 
-function getAdminPassword() {
+function getMasterPassword() {
   const cms = readCmsData();
   return cms.customAdminPass || process.env.ADMIN_PASS || 'iklim2026';
+}
+
+function verifyCredentials(username, password) {
+  if (!password) return null;
+  const cms = readCmsData();
+  const masterPass = getMasterPassword();
+  const cleanUser = (username || '').trim().toLowerCase();
+  const cleanPass = String(password);
+
+  // Master admin check (username can be 'admin', 'yonetici', or left blank)
+  if (
+    (!cleanUser || cleanUser === 'admin' || cleanUser === 'yonetici') &&
+    cleanPass === masterPass
+  ) {
+    return { username: 'admin', name: 'Ana Yönetici', role: 'admin' };
+  }
+
+  // Check additional users created in the panel
+  const users = Array.isArray(cms.users) ? cms.users : [];
+  const matched = users.find(
+    (u) =>
+      u.username &&
+      u.username.trim().toLowerCase() === cleanUser &&
+      String(u.password) === cleanPass
+  );
+  if (matched) {
+    return { username: matched.username, name: matched.name || matched.username, role: 'editor' };
+  }
+
+  // Also allow logging in if only password matches a user when username is omitted
+  if (!cleanUser) {
+    const matchedByPass = users.find((u) => String(u.password) === cleanPass);
+    if (matchedByPass) {
+      return {
+        username: matchedByPass.username,
+        name: matchedByPass.name || matchedByPass.username,
+        role: 'editor'
+      };
+    }
+  }
+
+  return null;
 }
 
 function createServer() {
@@ -126,24 +169,45 @@ function createServer() {
     res.json({ ok: true, signatory: newSig, signatories: updated });
   });
 
-  // 4. Admin login check
+  // 4. Admin / Editor login check
   app.post('/api/admin/login', (req, res) => {
-    const { password } = req.body || {};
-    if (!password || String(password) !== getAdminPassword()) {
-      return res.status(401).json({ error: 'Yönetici şifresi hatalı.' });
+    const { username, password } = req.body || {};
+    const user = verifyCredentials(username, password);
+    if (!user) {
+      return res.status(401).json({ error: 'Kullanıcı adı veya şifre hatalı.' });
     }
-    res.json({ ok: true });
+    const cms = readCmsData();
+    const safeUsers = (cms.users || []).map((u) => ({
+      id: u.id,
+      username: u.username,
+      name: u.name,
+      role: u.role || 'editor'
+    }));
+    res.json({ ok: true, user, users: safeUsers });
   });
 
-  // 5. Admin save CMS content (forums, workingGroups, declarations, events, signatories, password)
+  // 5. Admin save CMS content
   app.post('/api/admin/save', (req, res) => {
-    const { password, forums, workingGroups, declarations, events, signatories, removedSignatoryIds, newAdminPass } =
-      req.body || {};
+    const {
+      username,
+      password,
+      forums,
+      workingGroups,
+      declarations,
+      events,
+      signatories,
+      removedSignatoryIds,
+      newAdminPass,
+      newUser,
+      deleteUserId
+    } = req.body || {};
 
-    if (!password || String(password) !== getAdminPassword()) {
-      return res.status(401).json({ error: 'Yetkisiz işlem: Yönetici şifresi hatalı.' });
+    const authUser = verifyCredentials(username, password);
+    if (!authUser) {
+      return res.status(401).json({ error: 'Yetkisiz işlem: Şifre hatalı.' });
     }
 
+    const currentCms = readCmsData();
     const updates = {};
     if (Array.isArray(forums)) updates.forums = forums;
     if (Array.isArray(workingGroups)) updates.workingGroups = workingGroups;
@@ -154,10 +218,39 @@ function createServer() {
       updates.customAdminPass = String(newAdminPass).trim();
     }
 
+    let currentUsers = Array.isArray(currentCms.users) ? [...currentCms.users] : [];
+    if (newUser && newUser.username && newUser.password) {
+      const exists = currentUsers.some(
+        (u) => u.username.toLowerCase() === String(newUser.username).trim().toLowerCase()
+      );
+      if (!exists) {
+        currentUsers.push({
+          id: `usr-${Date.now()}`,
+          username: String(newUser.username).trim(),
+          name: String(newUser.name || newUser.username).trim(),
+          password: String(newUser.password).trim(),
+          role: 'editor'
+        });
+      }
+      updates.users = currentUsers;
+    }
+
+    if (deleteUserId) {
+      currentUsers = currentUsers.filter((u) => u.id !== deleteUserId);
+      updates.users = currentUsers;
+    }
+
     const savedCms = writeCmsData(updates);
     if (Array.isArray(signatories)) {
       writeExtraSignatories(signatories);
     }
+
+    const safeUsers = (savedCms.users || []).map((u) => ({
+      id: u.id,
+      username: u.username,
+      name: u.name,
+      role: u.role || 'editor'
+    }));
 
     res.json({
       ok: true,
@@ -166,7 +259,8 @@ function createServer() {
       declarations: savedCms.declarations,
       events: savedCms.events,
       removedSignatoryIds: savedCms.removedSignatoryIds,
-      signatories: readExtraSignatories()
+      signatories: readExtraSignatories(),
+      users: safeUsers
     });
   });
 
