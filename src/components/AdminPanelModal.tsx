@@ -286,8 +286,28 @@ export default function AdminPanelModal({
       videoUrl: fVideoUrl.trim() || undefined,
       pdfUrl: fPdfUrl.trim() || undefined
     };
-    const next = [item, ...forums];
-    await triggerSave({ forums: next });
+    const nextForums = [item, ...forums];
+    const matchingEventExists = events.some(
+      (ev) => ev.title.toLowerCase() === item.title.toLowerCase()
+    );
+    const nextEvents = matchingEventExists
+      ? events
+      : [
+          ...events,
+          {
+            id: `ev-${Date.now()}`,
+            title: item.title,
+            date: item.date,
+            time: '',
+            location: item.author || 'Türkiye',
+            type: item.category || 'Forum',
+            description: fullText,
+            imageUrl: item.imageUrl,
+            videoUrl: item.videoUrl,
+            pdfUrl: item.pdfUrl
+          }
+        ];
+    await triggerSave({ forums: nextForums, events: nextEvents });
     setFTitle('');
     setFExcerpt('');
     setFContent('');
@@ -373,10 +393,34 @@ export default function AdminPanelModal({
       videoUrl: eVideoUrl.trim() || undefined,
       pdfUrl: ePdfUrl.trim() || undefined
     };
-    const next = editingEventId
+    const nextEvents = editingEventId
       ? events.map((ev) => (ev.id === editingEventId ? item : ev))
       : [...events, item];
-    await triggerSave({ events: next });
+    const matchingForumExists = forums.some(
+      (f) => f.title.toLowerCase() === item.title.toLowerCase()
+    );
+    const nextForums = matchingForumExists
+      ? forums
+      : [
+          {
+            id: `forum-${Date.now()}`,
+            slug: `forum-${Date.now()}`,
+            title: item.title,
+            excerpt: item.description.split('\n\n')[0] || item.title,
+            content: (item.description || item.title).split(/\n\s*\n/),
+            category: item.type || 'Forum',
+            date: item.date,
+            author: item.location || 'İklim Adaleti Forumu',
+            authorRole: 'İklim Adaleti Forumu',
+            readTimeMinutes: 3,
+            tags: [item.type || 'Forum'],
+            imageUrl: item.imageUrl,
+            videoUrl: item.videoUrl,
+            pdfUrl: item.pdfUrl
+          },
+          ...forums
+        ];
+    await triggerSave({ events: nextEvents, forums: nextForums });
     setEditingEventId(null);
     setETitle('');
     setEDate('');
