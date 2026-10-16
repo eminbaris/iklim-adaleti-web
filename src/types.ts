@@ -9,7 +9,7 @@ export interface Article {
   title: string;
   excerpt: string;
   content: string | string[];
-  category: 'Sonuç Bildirgesi' | 'Makale & Görüş' | 'Broşür & Yayın' | 'Hukuk & Rapor' | 'Haber & Duyuru';
+  category: string;
   tags: string[];
   author: string;
   authorRole?: string;

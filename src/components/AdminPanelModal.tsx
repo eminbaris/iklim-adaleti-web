@@ -84,7 +84,7 @@ export default function AdminPanelModal({
 
   // Form states for adding a Forum / Article
   const [fTitle, setFTitle] = useState('');
-  const [fCategory, setFCategory] = useState<Article['category']>('Haber & Duyuru');
+  const [fCategory, setFCategory] = useState<Article['category']>('Forum');
   const [fDate, setFDate] = useState(new Date().toISOString().split('T')[0]);
   const [fAuthor, setFAuthor] = useState('İklim Adaleti Forumu');
   const [fExcerpt, setFExcerpt] = useState('');
@@ -721,7 +721,7 @@ export default function AdminPanelModal({
                     className="bg-stone-50 border border-stone-200 rounded-xl p-5 space-y-4"
                   >
                     <h4 className="font-serif text-lg font-bold text-stone-900">
-                      Yeni Forum / Yazı / Broşür Ekle
+                      Yeni Forum / Panel / Basın Açıklaması / Duyuru Ekle
                     </h4>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div className="sm:col-span-2">
@@ -746,10 +746,15 @@ export default function AdminPanelModal({
                           onChange={(e) => setFCategory(e.target.value as Article['category'])}
                           className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
                         >
-                          <option value="Haber & Duyuru">Haber & Duyuru</option>
-                          <option value="Makale & Görüş">Makale & Görüş</option>
-                          <option value="Hukuk & Rapor">Hukuk & Rapor</option>
-                          <option value="Broşür & Yayın">Broşür & Yayın</option>
+                          <option value="Forum">Forum</option>
+                          <option value="Panel">Panel</option>
+                          <option value="Basın Açıklaması">Basın Açıklaması</option>
+                          <option value="Toplantı">Toplantı</option>
+                          <option value="Atölye & Çalıştay">Atölye & Çalıştay</option>
+                          <option value="Söyleşi & Seminer">Söyleşi & Seminer</option>
+                          <option value="Eylem & Buluşma">Eylem & Buluşma</option>
+                          <option value="Duyuru & Çağrı">Duyuru & Çağrı</option>
+                          <option value="Rapor & Belge">Rapor & Belge</option>
                         </select>
                       </div>
                     </div>
@@ -1112,7 +1117,7 @@ export default function AdminPanelModal({
                       </div>
                       <div>
                         <label className="block text-xs font-semibold text-stone-700 mb-1">
-                          Tür
+                          Kategori / Tür
                         </label>
                         <select
                           value={eType}
@@ -1120,9 +1125,13 @@ export default function AdminPanelModal({
                           className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
                         >
                           <option value="Forum">Forum</option>
-                          <option value="Atölye">Atölye</option>
                           <option value="Panel">Panel</option>
-                          <option value="Eylem">Eylem</option>
+                          <option value="Basın Açıklaması">Basın Açıklaması</option>
+                          <option value="Toplantı">Toplantı</option>
+                          <option value="Atölye & Çalıştay">Atölye & Çalıştay</option>
+                          <option value="Söyleşi & Seminer">Söyleşi & Seminer</option>
+                          <option value="Eylem & Buluşma">Eylem & Buluşma</option>
+                          <option value="Basın Toplantısı">Basın Toplantısı</option>
                         </select>
                       </div>
                     </div>
