@@ -74,7 +74,7 @@ function createServer() {
       return res.status(400).json({ error: 'E-posta ve kod gereklidir.' });
     }
 
-    const smtpUser = process.env.SMTP_USER || 'eminbaris33@gmail.com';
+    const smtpUser = process.env.SMTP_USER || 'iklimadaleti2026@gmail.com';
     const smtpPass = (process.env.SMTP_PASS || '').replace(/\s+/g, '');
 
     if (!smtpPass) {
