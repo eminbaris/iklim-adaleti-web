@@ -8,7 +8,7 @@ export interface Article {
   slug: string;
   title: string;
   excerpt: string;
-  content: string;
+  content: string | string[];
   category: 'Sonuç Bildirgesi' | 'Makale & Görüş' | 'Broşür & Yayın' | 'Hukuk & Rapor' | 'Haber & Duyuru';
   tags: string[];
   author: string;
@@ -16,6 +16,8 @@ export interface Article {
   date: string; // YYYY-MM-DD
   readTimeMinutes: number;
   featured?: boolean;
+  imageUrl?: string;
+  videoUrl?: string;
   pdfUrl?: string;
   documentNumber?: string;
   downloadCount?: number;
@@ -52,11 +54,18 @@ export interface Signatory {
 export interface WorkingGroup {
   id: string;
   name: string;
-  title: string;
+  slug?: string;
+  title?: string;
   coordinator: string;
   description: string;
-  focusAreas: string[];
-  meetingSchedule: string;
+  iconName?: string;
+  memberCount?: number;
+  topics?: string[];
+  focusAreas?: string[];
+  meetingSchedule?: string;
+  imageUrl?: string;
+  videoUrl?: string;
+  pdfUrl?: string;
 }
 
 export interface ForumEvent {
@@ -67,4 +76,7 @@ export interface ForumEvent {
   location: string;
   type: string;
   description: string;
+  imageUrl?: string;
+  videoUrl?: string;
+  pdfUrl?: string;
 }

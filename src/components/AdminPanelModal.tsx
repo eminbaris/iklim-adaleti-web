@@ -17,7 +17,11 @@ import {
   BookOpen,
   KeyRound,
   CheckCircle,
-  UserPlus
+  UserPlus,
+  Upload,
+  Image as ImageIcon,
+  Video,
+  ArrowLeft
 } from 'lucide-react';
 import { Article, WorkingGroup, ForumEvent, Signatory } from '../types.ts';
 
@@ -75,6 +79,7 @@ export default function AdminPanelModal({
   const [loginError, setLoginError] = useState('');
   const [activeTab, setActiveTab] = useState<AdminTab>('forums');
   const [saving, setSaving] = useState(false);
+  const [uploadingField, setUploadingField] = useState<string | null>(null);
   const [statusMsg, setStatusMsg] = useState<string | null>(null);
 
   // Form states for adding a Forum / Article
@@ -84,12 +89,17 @@ export default function AdminPanelModal({
   const [fAuthor, setFAuthor] = useState('İklim Adaleti Forumu');
   const [fExcerpt, setFExcerpt] = useState('');
   const [fContent, setFContent] = useState('');
+  const [fImageUrl, setFImageUrl] = useState('');
+  const [fVideoUrl, setFVideoUrl] = useState('');
   const [fPdfUrl, setFPdfUrl] = useState('');
 
   // Form states for adding a Working Group
   const [gName, setGName] = useState('');
   const [gDesc, setGDesc] = useState('');
   const [gCoord, setGCoord] = useState('');
+  const [gImageUrl, setGImageUrl] = useState('');
+  const [gVideoUrl, setGVideoUrl] = useState('');
+  const [gPdfUrl, setGPdfUrl] = useState('');
 
   // Form states for adding a Declaration (Sonuç Bildirgesi)
   const [dTitle, setDTitle] = useState('');
@@ -97,6 +107,8 @@ export default function AdminPanelModal({
   const [dAuthor, setDAuthor] = useState('İklim Adaleti Forumu');
   const [dExcerpt, setDExcerpt] = useState('');
   const [dContent, setDContent] = useState('');
+  const [dImageUrl, setDImageUrl] = useState('');
+  const [dVideoUrl, setDVideoUrl] = useState('');
   const [dPdfUrl, setDPdfUrl] = useState('');
 
   // Form states for adding an Event
@@ -106,6 +118,9 @@ export default function AdminPanelModal({
   const [eLocation, setELocation] = useState('');
   const [eType, setEType] = useState<ForumEvent['type']>('Forum');
   const [eDesc, setEDesc] = useState('');
+  const [eImageUrl, setEImageUrl] = useState('');
+  const [eVideoUrl, setEVideoUrl] = useState('');
+  const [ePdfUrl, setEPdfUrl] = useState('');
 
   // Form states for adding an Institutional Signatory manually
   const [sOrg, setSOrg] = useState('');
@@ -122,6 +137,49 @@ export default function AdminPanelModal({
   const notify = (msg: string) => {
     setStatusMsg(msg);
     setTimeout(() => setStatusMsg(null), 3500);
+  };
+
+  // Upload helper: converts file to base64 and sends to /api/admin/upload
+  const handleFileUpload = (
+    file: File | undefined,
+    fieldKey: string,
+    onUrlReady: (url: string) => void
+  ) => {
+    if (!file) return;
+    setUploadingField(fieldKey);
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const dataUrl = String(reader.result || '');
+      try {
+        const res = await fetch('/api/admin/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username,
+            password,
+            filename: file.name,
+            dataUrl
+          })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.url) {
+            onUrlReady(data.url);
+            notify(`"${file.name}" başarıyla yüklendi!`);
+          }
+        } else {
+          // Fallback to dataUrl in local preview
+          onUrlReady(dataUrl);
+          notify(`"${file.name}" eklendi!`);
+        }
+      } catch {
+        onUrlReady(dataUrl);
+        notify(`"${file.name}" eklendi!`);
+      } finally {
+        setUploadingField(null);
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -222,6 +280,8 @@ export default function AdminPanelModal({
       authorRole: 'İklim Adaleti Forumu',
       readTimeMinutes: 3,
       tags: ['Forum'],
+      imageUrl: fImageUrl.trim() || undefined,
+      videoUrl: fVideoUrl.trim() || undefined,
       pdfUrl: fPdfUrl.trim() || undefined
     };
     const next = [item, ...forums];
@@ -229,6 +289,8 @@ export default function AdminPanelModal({
     setFTitle('');
     setFExcerpt('');
     setFContent('');
+    setFImageUrl('');
+    setFVideoUrl('');
     setFPdfUrl('');
   };
 
@@ -244,13 +306,19 @@ export default function AdminPanelModal({
       iconName: 'Users',
       memberCount: 0,
       coordinator: gCoord.trim(),
-      topics: []
+      topics: [],
+      imageUrl: gImageUrl.trim() || undefined,
+      videoUrl: gVideoUrl.trim() || undefined,
+      pdfUrl: gPdfUrl.trim() || undefined
     };
     const next = [...workingGroups, item];
     await triggerSave({ workingGroups: next });
     setGName('');
     setGDesc('');
     setGCoord('');
+    setGImageUrl('');
+    setGVideoUrl('');
+    setGPdfUrl('');
   };
 
   // Add Declaration
@@ -269,6 +337,8 @@ export default function AdminPanelModal({
       authorRole: 'Sonuç Bildirgesi',
       readTimeMinutes: 5,
       tags: ['Sonuç Bildirgesi'],
+      imageUrl: dImageUrl.trim() || undefined,
+      videoUrl: dVideoUrl.trim() || undefined,
       pdfUrl: dPdfUrl.trim() || undefined
     };
     const next = [item, ...declarations];
@@ -276,6 +346,8 @@ export default function AdminPanelModal({
     setDTitle('');
     setDExcerpt('');
     setDContent('');
+    setDImageUrl('');
+    setDVideoUrl('');
     setDPdfUrl('');
   };
 
@@ -290,7 +362,10 @@ export default function AdminPanelModal({
       time: eTime.trim(),
       location: eLocation.trim(),
       type: eType,
-      description: eDesc.trim()
+      description: eDesc.trim(),
+      imageUrl: eImageUrl.trim() || undefined,
+      videoUrl: eVideoUrl.trim() || undefined,
+      pdfUrl: ePdfUrl.trim() || undefined
     };
     const next = [...events, item];
     await triggerSave({ events: next });
@@ -299,6 +374,9 @@ export default function AdminPanelModal({
     setETime('');
     setELocation('');
     setEDesc('');
+    setEImageUrl('');
+    setEVideoUrl('');
+    setEPdfUrl('');
   };
 
   // Add Institutional Signatory manually
@@ -343,37 +421,156 @@ export default function AdminPanelModal({
     });
   };
 
+  // Reusable Media Upload Box for Photo, Video, and PDF
+  const renderMediaInputs = (
+    prefix: string,
+    imageUrl: string,
+    setImageUrl: (v: string) => void,
+    videoUrl: string,
+    setVideoUrl: (v: string) => void,
+    pdfUrl: string,
+    setPdfUrl: (v: string) => void
+  ) => (
+    <div className="p-4 bg-white border border-stone-200 rounded-xl space-y-3">
+      <p className="text-xs font-bold text-[#0B4F71] uppercase tracking-wider">
+        Medya & Dosya Ekle (Fotoğraf, Video veya PDF — İsteğe Bağlı)
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {/* 1. Fotoğraf / Görsel */}
+        <div className="space-y-1.5">
+          <label className="block text-xs font-semibold text-stone-700">
+            Fotoğraf / Afiş Görseli
+          </label>
+          <input
+            type="text"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            placeholder="Görsel linki veya aşağıdan yükle"
+            className="w-full px-2.5 py-1.5 text-xs bg-stone-50 border border-stone-300 rounded-lg"
+          />
+          <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-50 hover:bg-sky-100 border border-sky-200 text-[#0B4F71] rounded-lg text-xs font-bold cursor-pointer w-full justify-center">
+            <ImageIcon className="w-3.5 h-3.5" />
+            <span>
+              {uploadingField === `${prefix}-img`
+                ? 'Yükleniyor...'
+                : 'Bilgisayardan Fotoğraf Seç'}
+            </span>
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) =>
+                handleFileUpload(e.target.files?.[0], `${prefix}-img`, setImageUrl)
+              }
+            />
+          </label>
+        </div>
+
+        {/* 2. Video / YouTube */}
+        <div className="space-y-1.5">
+          <label className="block text-xs font-semibold text-stone-700">
+            Video (YouTube Linki veya MP4)
+          </label>
+          <input
+            type="text"
+            value={videoUrl}
+            onChange={(e) => setVideoUrl(e.target.value)}
+            placeholder="YouTube linki veya video yükle"
+            className="w-full px-2.5 py-1.5 text-xs bg-stone-50 border border-stone-300 rounded-lg"
+          />
+          <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-800 rounded-lg text-xs font-bold cursor-pointer w-full justify-center">
+            <Video className="w-3.5 h-3.5" />
+            <span>
+              {uploadingField === `${prefix}-vid`
+                ? 'Yükleniyor...'
+                : 'Bilgisayardan Video Seç'}
+            </span>
+            <input
+              type="file"
+              accept="video/mp4,video/webm,video/*"
+              className="hidden"
+              onChange={(e) =>
+                handleFileUpload(e.target.files?.[0], `${prefix}-vid`, setVideoUrl)
+              }
+            />
+          </label>
+        </div>
+
+        {/* 3. PDF / Doküman */}
+        <div className="space-y-1.5">
+          <label className="block text-xs font-semibold text-stone-700">
+            PDF / Broşür / Rapor Dosyası
+          </label>
+          <input
+            type="text"
+            value={pdfUrl}
+            onChange={(e) => setPdfUrl(e.target.value)}
+            placeholder="PDF linki veya aşağıdan yükle"
+            className="w-full px-2.5 py-1.5 text-xs bg-stone-50 border border-stone-300 rounded-lg"
+          />
+          <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-[#3E8226] rounded-lg text-xs font-bold cursor-pointer w-full justify-center">
+            <Upload className="w-3.5 h-3.5" />
+            <span>
+              {uploadingField === `${prefix}-pdf`
+                ? 'Yükleniyor...'
+                : 'Bilgisayardan PDF Seç'}
+            </span>
+            <input
+              type="file"
+              accept=".pdf,application/pdf"
+              className="hidden"
+              onChange={(e) =>
+                handleFileUpload(e.target.files?.[0], `${prefix}-pdf`, setPdfUrl)
+              }
+            />
+          </label>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-5 overflow-y-auto">
       <div
         className="fixed inset-0 bg-stone-900/65 backdrop-blur-xs"
         onClick={onClose}
         aria-hidden="true"
       />
 
-      <div className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col z-10 border border-stone-200 overflow-hidden">
+      <div className="relative bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[92vh] flex flex-col z-10 border border-stone-200 overflow-hidden">
         {/* Top Header */}
-        <div className="px-6 py-4 bg-[#0B4F71] text-white flex items-center justify-between">
+        <div className="px-5 py-3.5 bg-[#0B4F71] text-white flex items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-2.5">
-            <Lock className="w-5 h-5 text-sky-200" />
+            <Lock className="w-5 h-5 text-sky-200 shrink-0" />
             <div>
-              <h2 className="font-serif text-lg sm:text-xl font-bold">
+              <h2 className="font-serif text-base sm:text-xl font-bold leading-tight">
                 iklimadaleti.org · İçerik Yönetim Paneli
               </h2>
-              <p className="text-xs text-sky-200">
+              <p className="text-[11px] text-sky-200">
                 {authenticated
                   ? `Aktif Kullanıcı: ${currentUserDisplay}`
                   : 'Yazı, Forum, Çalışma Grubu, Sonuç Bildirgesi, Etkinlik ve Kullanıcı Yönetimi'}
               </p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-1.5 rounded-lg text-sky-100 hover:bg-white/10 cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={onClose}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white text-[#0B4F71] hover:bg-sky-50 text-xs font-bold cursor-pointer shadow-xs"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Siteye Dön</span>
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-1.5 rounded-lg text-sky-100 hover:bg-white/10 cursor-pointer"
+              title="Kapat"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {!authenticated ? (
@@ -426,91 +623,91 @@ export default function AdminPanelModal({
           </div>
         ) : (
           <div className="flex-1 flex flex-col overflow-hidden">
-            {/* Navigation Tabs */}
-            <div className="px-6 pt-3 bg-stone-100 border-b border-stone-200 flex items-center gap-2 overflow-x-auto">
+            {/* Navigation Tabs - Wrapped cleanly with NO scrollbar covering buttons */}
+            <div className="px-5 py-3 bg-stone-100 border-b border-stone-200 flex flex-wrap items-center gap-2 shrink-0">
               <button
                 type="button"
                 onClick={() => setActiveTab('forums')}
-                className={`px-3.5 py-2.5 text-xs font-bold rounded-t-lg inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                className={`px-3.5 py-2 text-xs font-bold rounded-lg inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
                   activeTab === 'forums'
-                    ? 'bg-white text-[#0B4F71] border-t border-x border-stone-200'
-                    : 'text-stone-600 hover:text-stone-900'
+                    ? 'bg-[#0B4F71] text-white shadow-xs'
+                    : 'bg-white text-stone-700 border border-stone-200 hover:bg-stone-50'
                 }`}
               >
                 <BookOpen className="w-3.5 h-3.5" />
-                <span>Forumlar & Yazılar ({forums.length})</span>
+                <span>1. Forumlar & Yazılar ({forums.length})</span>
               </button>
               <button
                 type="button"
                 onClick={() => setActiveTab('groups')}
-                className={`px-3.5 py-2.5 text-xs font-bold rounded-t-lg inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                className={`px-3.5 py-2 text-xs font-bold rounded-lg inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
                   activeTab === 'groups'
-                    ? 'bg-white text-[#0B4F71] border-t border-x border-stone-200'
-                    : 'text-stone-600 hover:text-stone-900'
+                    ? 'bg-[#0B4F71] text-white shadow-xs'
+                    : 'bg-white text-stone-700 border border-stone-200 hover:bg-stone-50'
                 }`}
               >
                 <Users className="w-3.5 h-3.5" />
-                <span>Çalışma Grupları ({workingGroups.length})</span>
+                <span>2. Çalışma Grupları ({workingGroups.length})</span>
               </button>
               <button
                 type="button"
                 onClick={() => setActiveTab('declarations')}
-                className={`px-3.5 py-2.5 text-xs font-bold rounded-t-lg inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                className={`px-3.5 py-2 text-xs font-bold rounded-lg inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
                   activeTab === 'declarations'
-                    ? 'bg-white text-[#0B4F71] border-t border-x border-stone-200'
-                    : 'text-stone-600 hover:text-stone-900'
+                    ? 'bg-[#0B4F71] text-white shadow-xs'
+                    : 'bg-white text-stone-700 border border-stone-200 hover:bg-stone-50'
                 }`}
               >
                 <FileText className="w-3.5 h-3.5" />
-                <span>Sonuç Bildirgeleri ({declarations.length})</span>
+                <span>3. Sonuç Bildirgeleri ({declarations.length})</span>
               </button>
               <button
                 type="button"
                 onClick={() => setActiveTab('events')}
-                className={`px-3.5 py-2.5 text-xs font-bold rounded-t-lg inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                className={`px-3.5 py-2 text-xs font-bold rounded-lg inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
                   activeTab === 'events'
-                    ? 'bg-white text-[#0B4F71] border-t border-x border-stone-200'
-                    : 'text-stone-600 hover:text-stone-900'
+                    ? 'bg-[#0B4F71] text-white shadow-xs'
+                    : 'bg-white text-stone-700 border border-stone-200 hover:bg-stone-50'
                 }`}
               >
                 <Calendar className="w-3.5 h-3.5" />
-                <span>Etkinlik Takvimi ({events.length})</span>
+                <span>4. Etkinlik Takvimi ({events.length})</span>
               </button>
               <button
                 type="button"
                 onClick={() => setActiveTab('signatories')}
-                className={`px-3.5 py-2.5 text-xs font-bold rounded-t-lg inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                className={`px-3.5 py-2 text-xs font-bold rounded-lg inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
                   activeTab === 'signatories'
-                    ? 'bg-white text-[#0B4F71] border-t border-x border-stone-200'
-                    : 'text-stone-600 hover:text-stone-900'
+                    ? 'bg-[#0B4F71] text-white shadow-xs'
+                    : 'bg-white text-stone-700 border border-stone-200 hover:bg-stone-50'
                 }`}
               >
                 <Building2 className="w-3.5 h-3.5" />
-                <span>İmzacı Kurumlar ({allSignatories.length})</span>
+                <span>5. İmzacı Kurumlar ({allSignatories.length})</span>
               </button>
               <button
                 type="button"
                 onClick={() => setActiveTab('users')}
-                className={`px-3.5 py-2.5 text-xs font-bold rounded-t-lg inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                className={`px-3.5 py-2 text-xs font-bold rounded-lg inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
                   activeTab === 'users'
-                    ? 'bg-white text-[#0B4F71] border-t border-x border-stone-200'
-                    : 'text-stone-600 hover:text-stone-900'
+                    ? 'bg-[#0B4F71] text-white shadow-xs'
+                    : 'bg-white text-stone-700 border border-stone-200 hover:bg-stone-50'
                 }`}
               >
                 <KeyRound className="w-3.5 h-3.5" />
-                <span>Kullanıcılar & Şifre</span>
+                <span>6. Kullanıcılar & Şifre</span>
               </button>
             </div>
 
             {statusMsg && (
-              <div className="mx-6 mt-4 p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-xs font-bold text-[#3E8226] flex items-center gap-2">
+              <div className="mx-6 mt-3 p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-xs font-bold text-[#3E8226] flex items-center gap-2 shrink-0">
                 <CheckCircle className="w-4 h-4" />
                 <span>{statusMsg}</span>
               </div>
             )}
 
             {/* Tab Content Area */}
-            <div className="p-6 overflow-y-auto flex-1 space-y-6">
+            <div className="p-5 sm:p-6 overflow-y-auto flex-1 space-y-6">
               {/* TAB 1: FORUMLAR & YAZILAR */}
               {activeTab === 'forums' && (
                 <div className="space-y-6">
@@ -551,7 +748,7 @@ export default function AdminPanelModal({
                         </select>
                       </div>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-xs font-semibold text-stone-700 mb-1">
                           Tarih
@@ -575,19 +772,18 @@ export default function AdminPanelModal({
                           className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
                         />
                       </div>
-                      <div>
-                        <label className="block text-xs font-semibold text-stone-700 mb-1">
-                          PDF veya Dış Bağlantı Linki (İsteğe bağlı)
-                        </label>
-                        <input
-                          type="text"
-                          value={fPdfUrl}
-                          onChange={(e) => setFPdfUrl(e.target.value)}
-                          placeholder="https://..."
-                          className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
-                        />
-                      </div>
                     </div>
+
+                    {renderMediaInputs(
+                      'forum',
+                      fImageUrl,
+                      setFImageUrl,
+                      fVideoUrl,
+                      setFVideoUrl,
+                      fPdfUrl,
+                      setFPdfUrl
+                    )}
+
                     <div>
                       <label className="block text-xs font-semibold text-stone-700 mb-1">
                         Kısa Özet (Kartta görünecek metin) *
@@ -641,6 +837,9 @@ export default function AdminPanelModal({
                             <p className="text-sm font-bold text-stone-900">{item.title}</p>
                             <p className="text-xs text-stone-500">
                               {item.category} · {item.date}
+                              {item.imageUrl ? ' · [Fotoğraflı]' : ''}
+                              {item.videoUrl ? ' · [Videolu]' : ''}
+                              {item.pdfUrl ? ' · [PDF]' : ''}
                             </p>
                           </div>
                           <button
@@ -697,6 +896,17 @@ export default function AdminPanelModal({
                         />
                       </div>
                     </div>
+
+                    {renderMediaInputs(
+                      'group',
+                      gImageUrl,
+                      setGImageUrl,
+                      gVideoUrl,
+                      setGVideoUrl,
+                      gPdfUrl,
+                      setGPdfUrl
+                    )}
+
                     <div>
                       <label className="block text-xs font-semibold text-stone-700 mb-1">
                         Açıklama *
@@ -786,31 +996,28 @@ export default function AdminPanelModal({
                         />
                       </div>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs font-semibold text-stone-700 mb-1">
-                          Hazırlayan / Forum Adı
-                        </label>
-                        <input
-                          type="text"
-                          value={dAuthor}
-                          onChange={(e) => setDAuthor(e.target.value)}
-                          className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-semibold text-stone-700 mb-1">
-                          PDF Linki (İsteğe bağlı)
-                        </label>
-                        <input
-                          type="text"
-                          value={dPdfUrl}
-                          onChange={(e) => setDPdfUrl(e.target.value)}
-                          placeholder="https://..."
-                          className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
-                        />
-                      </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-stone-700 mb-1">
+                        Hazırlayan / Forum Adı
+                      </label>
+                      <input
+                        type="text"
+                        value={dAuthor}
+                        onChange={(e) => setDAuthor(e.target.value)}
+                        className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
+                      />
                     </div>
+
+                    {renderMediaInputs(
+                      'decl',
+                      dImageUrl,
+                      setDImageUrl,
+                      dVideoUrl,
+                      setDVideoUrl,
+                      dPdfUrl,
+                      setDPdfUrl
+                    )}
+
                     <div>
                       <label className="block text-xs font-semibold text-stone-700 mb-1">
                         Kısa Özet *
@@ -954,6 +1161,17 @@ export default function AdminPanelModal({
                         />
                       </div>
                     </div>
+
+                    {renderMediaInputs(
+                      'event',
+                      eImageUrl,
+                      setEImageUrl,
+                      eVideoUrl,
+                      setEVideoUrl,
+                      ePdfUrl,
+                      setEPdfUrl
+                    )}
+
                     <div>
                       <label className="block text-xs font-semibold text-stone-700 mb-1">
                         Açıklama

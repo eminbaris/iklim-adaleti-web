@@ -9,11 +9,15 @@ const __dirname = path.dirname(__filename);
 
 const distPath = path.join(__dirname, 'dist');
 const dataDir = path.join(__dirname, 'data');
+const uploadsDir = path.join(dataDir, 'uploads');
 const sigsFile = path.join(dataDir, 'signatories.json');
 const cmsFile = path.join(dataDir, 'cms-data.json');
 
 if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
+}
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
 function readExtraSignatories() {
@@ -88,7 +92,6 @@ function verifyCredentials(username, password) {
   const cleanUser = (username || '').trim().toLowerCase();
   const cleanPass = String(password);
 
-  // Master admin check (username can be 'admin', 'yonetici', or left blank)
   if (
     (!cleanUser || cleanUser === 'admin' || cleanUser === 'yonetici') &&
     cleanPass === masterPass
@@ -96,7 +99,6 @@ function verifyCredentials(username, password) {
     return { username: 'admin', name: 'Ana Yönetici', role: 'admin' };
   }
 
-  // Check additional users created in the panel
   const users = Array.isArray(cms.users) ? cms.users : [];
   const matched = users.find(
     (u) =>
@@ -108,7 +110,6 @@ function verifyCredentials(username, password) {
     return { username: matched.username, name: matched.name || matched.username, role: 'editor' };
   }
 
-  // Also allow logging in if only password matches a user when username is omitted
   if (!cleanUser) {
     const matchedByPass = users.find((u) => String(u.password) === cleanPass);
     if (matchedByPass) {
@@ -125,7 +126,10 @@ function verifyCredentials(username, password) {
 
 function createServer() {
   const app = express();
-  app.use(express.json({ limit: '10mb' }));
+  app.use(express.json({ limit: '50mb' }));
+
+  // Serve uploaded photos, videos, and PDFs
+  app.use('/uploads', express.static(uploadsDir));
 
   // 1. Public endpoint: get all CMS dynamic content + extra signatories
   app.get('/api/cms', (_req, res) => {
@@ -186,7 +190,36 @@ function createServer() {
     res.json({ ok: true, user, users: safeUsers });
   });
 
-  // 5. Admin save CMS content
+  // 5. Upload photo, video, or PDF file from Admin Panel
+  app.post('/api/admin/upload', (req, res) => {
+    const { username, password, filename, dataUrl } = req.body || {};
+    const authUser = verifyCredentials(username, password);
+    if (!authUser) {
+      return res.status(401).json({ error: 'Yetkisiz işlem.' });
+    }
+    if (!dataUrl || !filename) {
+      return res.status(400).json({ error: 'Dosya verisi eksik.' });
+    }
+    try {
+      const matches = String(dataUrl).match(/^data:([^;]+);base64,(.+)$/);
+      if (!matches) {
+        return res.status(400).json({ error: 'Geçersiz dosya formatı.' });
+      }
+      const buffer = Buffer.from(matches[2], 'base64');
+      const safeName = String(filename)
+        .replace(/[^a-zA-Z0-9._-]/g, '_')
+        .slice(-80);
+      const storedName = `${Date.now()}-${safeName}`;
+      const filePath = path.join(uploadsDir, storedName);
+      fs.writeFileSync(filePath, buffer);
+      return res.json({ ok: true, url: `/uploads/${storedName}` });
+    } catch (err) {
+      console.error('Upload error:', err);
+      return res.status(500).json({ error: 'Dosya yüklenemedi.' });
+    }
+  });
+
+  // 6. Admin save CMS content
   app.post('/api/admin/save', (req, res) => {
     const {
       username,
@@ -264,7 +297,7 @@ function createServer() {
     });
   });
 
-  // 6. Send 6-digit verification code via Gmail / SMTP
+  // 7. Send 6-digit verification code via Gmail / SMTP
   app.post('/api/send-verification-code', async (req, res) => {
     const { email, name, organization, code } = req.body || {};
     if (!email || !code) {

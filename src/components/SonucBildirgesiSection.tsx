@@ -5,6 +5,7 @@
 
 import { RefreshCw, FileText, ArrowUpRight } from 'lucide-react';
 import { Article } from '../types.ts';
+import { getYoutubeEmbedUrl } from './ArticleModal.tsx';
 
 interface SonucBildirgesiSectionProps {
   declarations?: Article[];
@@ -52,45 +53,78 @@ export default function SonucBildirgesiSection({
           </div>
         ) : (
           <div className="mt-8 space-y-6">
-            {declarations.map((decl) => (
-              <div
-                key={decl.id}
-                className="bg-[#FBF9F5] border border-stone-200 rounded-xl p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6"
-              >
-                <div className="space-y-2 max-w-3xl">
-                  <div className="flex items-center gap-2 text-xs font-bold text-[#0B4F71]">
-                    <span>{decl.date}</span>
-                    <span>·</span>
-                    <span>{decl.author}</span>
+            {declarations.map((decl) => {
+              const ytEmbed = getYoutubeEmbedUrl(decl.videoUrl);
+              return (
+                <div
+                  key={decl.id}
+                  className="bg-[#FBF9F5] border border-stone-200 rounded-xl p-6 sm:p-8 flex flex-col gap-6"
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                    <div className="space-y-2 max-w-3xl">
+                      <div className="flex items-center gap-2 text-xs font-bold text-[#0B4F71]">
+                        <span>{decl.date}</span>
+                        <span>·</span>
+                        <span>{decl.author}</span>
+                      </div>
+                      <h3 className="font-serif text-xl sm:text-2xl font-bold text-stone-900">
+                        {decl.title}
+                      </h3>
+                      <p className="text-sm text-stone-600 leading-relaxed">{decl.excerpt}</p>
+                    </div>
+                    <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
+                      {decl.pdfUrl && (
+                        <a
+                          href={decl.pdfUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-stone-300 bg-white text-xs font-bold text-stone-700 hover:border-[#0B4F71]"
+                        >
+                          <FileText className="w-4 h-4 text-[#3E8226]" />
+                          <span>PDF İndir / Görüntüle</span>
+                        </a>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => onReadFull(decl)}
+                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-[#0B4F71] text-white text-xs font-bold hover:bg-[#083B54] cursor-pointer"
+                      >
+                        <span>Tam Metni Oku</span>
+                        <ArrowUpRight className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
-                  <h3 className="font-serif text-xl sm:text-2xl font-bold text-stone-900">
-                    {decl.title}
-                  </h3>
-                  <p className="text-sm text-stone-600 leading-relaxed">{decl.excerpt}</p>
-                </div>
-                <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
-                  {decl.pdfUrl && (
-                    <a
-                      href={decl.pdfUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-stone-300 bg-white text-xs font-bold text-stone-700 hover:border-[#0B4F71]"
-                    >
-                      <FileText className="w-4 h-4 text-[#3E8226]" />
-                      <span>PDF İndir</span>
-                    </a>
+
+                  {(decl.imageUrl || decl.videoUrl) && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-stone-200/70">
+                      {decl.imageUrl && (
+                        <div className="rounded-lg overflow-hidden border border-stone-200 bg-white max-h-72">
+                          <img
+                            src={decl.imageUrl}
+                            alt={decl.title}
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                      )}
+                      {decl.videoUrl && (
+                        <div className="rounded-lg overflow-hidden border border-stone-200 bg-black aspect-video">
+                          {ytEmbed ? (
+                            <iframe
+                              src={ytEmbed}
+                              title={decl.title}
+                              className="w-full h-full"
+                              allowFullScreen
+                            />
+                          ) : (
+                            <video src={decl.videoUrl} controls className="w-full h-full" />
+                          )}
+                        </div>
+                      )}
+                    </div>
                   )}
-                  <button
-                    type="button"
-                    onClick={() => onReadFull(decl)}
-                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-[#0B4F71] text-white text-xs font-bold hover:bg-[#083B54] cursor-pointer"
-                  >
-                    <span>Tam Metni Oku</span>
-                    <ArrowUpRight className="w-4 h-4" />
-                  </button>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

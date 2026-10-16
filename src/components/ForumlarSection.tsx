@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { RefreshCw, Calendar, FileText, ArrowUpRight } from 'lucide-react';
+import { RefreshCw, Calendar, FileText, ArrowUpRight, Play } from 'lucide-react';
 import { Article } from '../types.ts';
+import { getYoutubeEmbedUrl } from './ArticleModal.tsx';
 
 interface ForumlarSectionProps {
   items?: Article[];
@@ -48,57 +49,95 @@ export default function ForumlarSection({ items = [], onReadArticle }: ForumlarS
           </div>
         ) : (
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {items.map((item) => (
-              <article
-                key={item.id}
-                className="bg-[#FBF9F5] border border-stone-200 rounded-xl p-6 flex flex-col justify-between hover:border-[#0B4F71]/40 hover:shadow-md transition-all"
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2 text-xs text-stone-500 mb-3">
-                    <span className="px-2.5 py-0.5 rounded-full bg-sky-50 border border-sky-200 text-[#0B4F71] font-bold">
-                      {item.category || 'Forum'}
-                    </span>
-                    <span className="inline-flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5" />
-                      {item.date}
-                    </span>
+            {items.map((item) => {
+              const ytEmbed = getYoutubeEmbedUrl(item.videoUrl);
+              return (
+                <article
+                  key={item.id}
+                  className="bg-[#FBF9F5] border border-stone-200 rounded-xl overflow-hidden flex flex-col justify-between hover:border-[#0B4F71]/40 hover:shadow-md transition-all"
+                >
+                  <div>
+                    {item.imageUrl && (
+                      <div className="w-full h-48 bg-stone-100 border-b border-stone-200 overflow-hidden">
+                        <img
+                          src={item.imageUrl}
+                          alt={item.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    {!item.imageUrl && item.videoUrl && (
+                      <div className="w-full aspect-video bg-black border-b border-stone-200 overflow-hidden">
+                        {ytEmbed ? (
+                          <iframe
+                            src={ytEmbed}
+                            title={item.title}
+                            className="w-full h-full"
+                            allowFullScreen
+                          />
+                        ) : (
+                          <video src={item.videoUrl} controls className="w-full h-full" />
+                        )}
+                      </div>
+                    )}
+                    <div className="p-6">
+                      <div className="flex items-center justify-between gap-2 text-xs text-stone-500 mb-3">
+                        <span className="px-2.5 py-0.5 rounded-full bg-sky-50 border border-sky-200 text-[#0B4F71] font-bold">
+                          {item.category || 'Forum'}
+                        </span>
+                        <span className="inline-flex items-center gap-1">
+                          <Calendar className="w-3.5 h-3.5" />
+                          {item.date}
+                        </span>
+                      </div>
+                      <h3 className="font-serif text-xl font-bold text-stone-900 mb-2 leading-snug">
+                        {item.title}
+                      </h3>
+                      <p className="text-sm text-stone-600 leading-relaxed line-clamp-4">
+                        {item.excerpt}
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="font-serif text-xl font-bold text-stone-900 mb-2 leading-snug">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-stone-600 leading-relaxed line-clamp-4">
-                    {item.excerpt}
-                  </p>
-                </div>
 
-                <div className="mt-5 pt-4 border-t border-stone-200/80 flex items-center justify-between">
-                  <span className="text-xs font-medium text-stone-500">{item.author}</span>
-                  <div className="flex items-center gap-2">
-                    {item.pdfUrl && (
-                      <a
-                        href={item.pdfUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-xs font-bold text-[#3E8226] hover:underline"
-                      >
-                        <FileText className="w-3.5 h-3.5" />
-                        <span>PDF / Bağlantı</span>
-                      </a>
-                    )}
-                    {onReadArticle && (
-                      <button
-                        type="button"
-                        onClick={() => onReadArticle(item)}
-                        className="inline-flex items-center gap-1 text-xs font-bold text-[#0B4F71] hover:underline cursor-pointer"
-                      >
-                        <span>Detayları Oku</span>
-                        <ArrowUpRight className="w-3.5 h-3.5" />
-                      </button>
-                    )}
+                  <div className="px-6 pb-5 pt-4 border-t border-stone-200/80 flex flex-wrap items-center justify-between gap-2">
+                    <span className="text-xs font-medium text-stone-500">{item.author}</span>
+                    <div className="flex items-center gap-3">
+                      {item.videoUrl && item.imageUrl && (
+                        <button
+                          type="button"
+                          onClick={() => onReadArticle && onReadArticle(item)}
+                          className="inline-flex items-center gap-1 text-xs font-bold text-rose-700 hover:underline cursor-pointer"
+                        >
+                          <Play className="w-3.5 h-3.5" />
+                          <span>Video</span>
+                        </button>
+                      )}
+                      {item.pdfUrl && (
+                        <a
+                          href={item.pdfUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-xs font-bold text-[#3E8226] hover:underline"
+                        >
+                          <FileText className="w-3.5 h-3.5" />
+                          <span>PDF</span>
+                        </a>
+                      )}
+                      {onReadArticle && (
+                        <button
+                          type="button"
+                          onClick={() => onReadArticle(item)}
+                          className="inline-flex items-center gap-1 text-xs font-bold text-[#0B4F71] hover:underline cursor-pointer"
+                        >
+                          <span>Detayları Oku</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         )}
       </div>

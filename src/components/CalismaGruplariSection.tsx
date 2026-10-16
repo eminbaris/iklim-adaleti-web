@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { RefreshCw, Users } from 'lucide-react';
+import { RefreshCw, Users, FileText } from 'lucide-react';
 import { WorkingGroup } from '../types.ts';
+import { getYoutubeEmbedUrl } from './ArticleModal.tsx';
 
 interface CalismaGruplariSectionProps {
   groups: WorkingGroup[];
@@ -48,26 +49,64 @@ export default function CalismaGruplariSection({ groups }: CalismaGruplariSectio
           </div>
         ) : (
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {groups.map((g) => (
-              <div
-                key={g.id}
-                className="bg-white border border-stone-200 rounded-xl p-6 flex flex-col justify-between shadow-2xs"
-              >
-                <div>
-                  <div className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#3E8226] mb-4">
-                    <Users className="w-5 h-5" />
+            {groups.map((g) => {
+              const ytEmbed = getYoutubeEmbedUrl(g.videoUrl);
+              return (
+                <div
+                  key={g.id}
+                  className="bg-white border border-stone-200 rounded-xl overflow-hidden flex flex-col justify-between shadow-2xs"
+                >
+                  <div>
+                    {g.imageUrl && (
+                      <div className="w-full h-44 bg-stone-100 border-b border-stone-200 overflow-hidden">
+                        <img src={g.imageUrl} alt={g.name} className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                    {!g.imageUrl && g.videoUrl && (
+                      <div className="w-full aspect-video bg-black border-b border-stone-200 overflow-hidden">
+                        {ytEmbed ? (
+                          <iframe src={ytEmbed} title={g.name} className="w-full h-full" allowFullScreen />
+                        ) : (
+                          <video src={g.videoUrl} controls className="w-full h-full" />
+                        )}
+                      </div>
+                    )}
+                    <div className="p-6">
+                      <div className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#3E8226] mb-4">
+                        <Users className="w-5 h-5" />
+                      </div>
+                      <h3 className="font-serif text-xl font-bold text-stone-900 mb-2">{g.name}</h3>
+                      <p className="text-sm text-stone-600 leading-relaxed whitespace-pre-line">
+                        {g.description}
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="font-serif text-xl font-bold text-stone-900 mb-2">{g.name}</h3>
-                  <p className="text-sm text-stone-600 leading-relaxed">{g.description}</p>
+                  {(g.coordinator || g.pdfUrl) && (
+                    <div className="px-6 pb-5 pt-3 border-t border-stone-100 flex items-center justify-between gap-2 text-xs text-stone-500">
+                      {g.coordinator ? (
+                        <div>
+                          <span className="font-semibold text-stone-700">Koordinasyon:</span>{' '}
+                          {g.coordinator}
+                        </div>
+                      ) : (
+                        <span />
+                      )}
+                      {g.pdfUrl && (
+                        <a
+                          href={g.pdfUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 font-bold text-[#3E8226] hover:underline"
+                        >
+                          <FileText className="w-3.5 h-3.5" />
+                          <span>PDF / Doküman</span>
+                        </a>
+                      )}
+                    </div>
+                  )}
                 </div>
-                {g.coordinator && (
-                  <div className="mt-4 pt-3 border-t border-stone-100 text-xs text-stone-500">
-                    <span className="font-semibold text-stone-700">Koordinasyon / İletişim:</span>{' '}
-                    {g.coordinator}
-                  </div>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

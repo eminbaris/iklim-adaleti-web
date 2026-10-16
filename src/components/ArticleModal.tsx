@@ -4,7 +4,7 @@
  */
 
 import { useState } from 'react';
-import { X, Calendar, Clock, Share2, Printer, Check, Tag } from 'lucide-react';
+import { X, Calendar, Clock, Share2, Printer, Check, Tag, FileText } from 'lucide-react';
 import { Article } from '../types.ts';
 import { formatTurkishDate } from '../utils/contentLogic.ts';
 
@@ -12,6 +12,13 @@ interface ArticleModalProps {
   article: Article | null;
   onClose: () => void;
   onOpenSignModal?: () => void;
+}
+
+export function getYoutubeEmbedUrl(url?: string): string | null {
+  if (!url) return null;
+  const regExp = /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+  const match = url.match(regExp);
+  return match ? `https://www.youtube.com/embed/${match[1]}` : null;
 }
 
 export default function ArticleModal({
@@ -33,6 +40,12 @@ export default function ArticleModal({
     window.print();
   };
 
+  const paragraphs = Array.isArray(article.content)
+    ? article.content
+    : String(article.content || '').split('\n\n');
+
+  const ytEmbed = getYoutubeEmbedUrl(article.videoUrl);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
       {/* Backdrop */}
@@ -44,11 +57,10 @@ export default function ArticleModal({
 
       {/* Modal Dialog */}
       <div className="relative bg-[#FAF8F5] rounded-xl shadow-2xl max-w-3xl w-full p-6 sm:p-10 z-10 border border-stone-300 max-h-[92vh] flex flex-col overflow-hidden">
-        
         {/* Top Header Actions */}
-        <div className="flex items-center justify-between pb-4 border-b border-stone-200">
+        <div className="flex items-center justify-between pb-4 border-b border-stone-200 shrink-0">
           <div className="flex items-center gap-2 text-xs text-stone-500">
-            <span className="font-semibold text-emerald-900">{article.category}</span>
+            <span className="font-semibold text-[#0B4F71]">{article.category}</span>
             {article.documentNumber && (
               <>
                 <span aria-hidden="true" className="text-stone-300">·</span>
@@ -58,10 +70,21 @@ export default function ArticleModal({
           </div>
 
           <div className="flex items-center gap-2">
+            {article.pdfUrl && (
+              <a
+                href={article.pdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#3E8226] text-white rounded-lg text-xs font-bold hover:bg-[#31681E]"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>PDF İndir / Aç</span>
+              </a>
+            )}
             <button
               type="button"
               onClick={handlePrint}
-              className="p-2 text-stone-600 hover:text-stone-900 hover:bg-stone-200 rounded transition-colors"
+              className="p-2 text-stone-600 hover:text-stone-900 hover:bg-stone-200 rounded transition-colors cursor-pointer"
               title="Yazdır / PDF Olarak Kaydet"
             >
               <Printer className="w-4 h-4" />
@@ -69,7 +92,7 @@ export default function ArticleModal({
             <button
               type="button"
               onClick={handleShare}
-              className="p-2 text-stone-600 hover:text-stone-900 hover:bg-stone-200 rounded transition-colors"
+              className="p-2 text-stone-600 hover:text-stone-900 hover:bg-stone-200 rounded transition-colors cursor-pointer"
               title="Bağlantıyı Paylaş"
             >
               {copied ? <Check className="w-4 h-4 text-emerald-800" /> : <Share2 className="w-4 h-4" />}
@@ -77,7 +100,7 @@ export default function ArticleModal({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 text-stone-500 hover:text-stone-900 rounded-md focus-visible:outline-2 focus-visible:outline-emerald-800"
+              className="p-2 text-stone-500 hover:text-stone-900 rounded-md cursor-pointer"
               aria-label="Kapat"
             >
               <X className="w-5 h-5" />
@@ -106,10 +129,42 @@ export default function ArticleModal({
               <span aria-hidden="true" className="text-stone-300">·</span>
               <span className="flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5 text-stone-400" />
-                {article.readTimeMinutes} dakika okuma
+                {article.readTimeMinutes || 3} dakika okuma
               </span>
             </div>
           </div>
+
+          {/* Optional Featured Photo / Image */}
+          {article.imageUrl && (
+            <div className="mb-6 rounded-xl overflow-hidden border border-stone-200 bg-white">
+              <img
+                src={article.imageUrl}
+                alt={article.title}
+                className="w-full max-h-[460px] object-contain mx-auto"
+              />
+            </div>
+          )}
+
+          {/* Optional Video (YouTube or uploaded MP4) */}
+          {article.videoUrl && (
+            <div className="mb-6 rounded-xl overflow-hidden border border-stone-200 bg-black">
+              {ytEmbed ? (
+                <iframe
+                  src={ytEmbed}
+                  title={article.title}
+                  className="w-full aspect-video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <video
+                  src={article.videoUrl}
+                  controls
+                  className="w-full max-h-[440px] mx-auto"
+                />
+              )}
+            </div>
+          )}
 
           {/* Excerpt Lead */}
           <div className="p-4 bg-white rounded-md border border-stone-200 mb-6 text-sm sm:text-base text-stone-800 italic font-serif leading-relaxed">
@@ -118,8 +173,7 @@ export default function ArticleModal({
 
           {/* Article Full Content with Editorial Paragraphs */}
           <div className="text-stone-800 text-sm sm:text-base leading-relaxed space-y-4 font-sans">
-            {article.content.split('\n\n').map((paragraph, idx) => {
-              // Opening paragraph gets drop-cap
+            {paragraphs.map((paragraph, idx) => {
               if (idx === 0) {
                 return (
                   <p key={idx} className="editorial-drop-cap">
@@ -128,8 +182,11 @@ export default function ArticleModal({
                 );
               }
 
-              // Heading lines
-              if (paragraph.startsWith('TEMEL TALEPLERİMİZ') || paragraph.startsWith('Önerdiğimiz') || paragraph.startsWith('Bizler')) {
+              if (
+                paragraph.startsWith('TEMEL TALEPLERİMİZ') ||
+                paragraph.startsWith('Önerdiğimiz') ||
+                paragraph.startsWith('Bizler')
+              ) {
                 return (
                   <h4 key={idx} className="font-serif text-lg font-bold text-stone-900 pt-3">
                     {paragraph}
@@ -137,11 +194,7 @@ export default function ArticleModal({
                 );
               }
 
-              return (
-                <p key={idx}>
-                  {paragraph}
-                </p>
-              );
+              return <p key={idx}>{paragraph}</p>;
             })}
           </div>
 
@@ -162,7 +215,7 @@ export default function ArticleModal({
                   onClose();
                   onOpenSignModal();
                 }}
-                className="px-4 py-2.5 text-xs font-semibold text-white bg-[#16423C] hover:bg-[#0F2C26] rounded shadow-xs whitespace-nowrap self-start sm:self-auto"
+                className="px-4 py-2.5 text-xs font-semibold text-white bg-[#16423C] hover:bg-[#0F2C26] rounded shadow-xs whitespace-nowrap self-start sm:self-auto cursor-pointer"
               >
                 Bildirgeyi İmzala
               </button>
@@ -170,30 +223,31 @@ export default function ArticleModal({
           )}
 
           {/* Tags */}
-          <div className="mt-8 pt-4 border-t border-stone-200 flex flex-wrap items-center gap-2">
-            <span className="text-xs font-medium text-stone-500 flex items-center gap-1">
-              <Tag className="w-3 h-3" /> Etiketler:
-            </span>
-            {article.tags.map((t) => (
-              <span key={t} className="text-xs text-stone-600 bg-stone-100 px-2 py-0.5 rounded">
-                #{t}
+          {article.tags && article.tags.length > 0 && (
+            <div className="mt-8 pt-4 border-t border-stone-200 flex flex-wrap items-center gap-2">
+              <span className="text-xs font-medium text-stone-500 flex items-center gap-1">
+                <Tag className="w-3 h-3" /> Etiketler:
               </span>
-            ))}
-          </div>
+              {article.tags.map((t) => (
+                <span key={t} className="text-xs text-stone-600 bg-stone-100 px-2 py-0.5 rounded">
+                  #{t}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Modal Footer */}
-        <div className="pt-4 border-t border-stone-200 flex items-center justify-between text-xs text-stone-500">
+        <div className="pt-4 border-t border-stone-200 flex items-center justify-between text-xs text-stone-500 shrink-0">
           <span>iklimadaleti.org · Resmi Yayın Arşivi</span>
           <button
             type="button"
             onClick={onClose}
-            className="px-3 py-1.5 bg-stone-200/80 hover:bg-stone-300 rounded font-medium text-stone-700"
+            className="px-4 py-2 bg-stone-200/80 hover:bg-stone-300 rounded-lg font-bold text-stone-700 cursor-pointer"
           >
             Kapat
           </button>
         </div>
-
       </div>
     </div>
   );
