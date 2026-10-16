@@ -3,15 +3,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Instagram, Mail, ArrowUp, PenTool } from 'lucide-react';
+import { Instagram, Mail, ArrowUp, PenTool, Lock } from 'lucide-react';
 import ForumLogo from './ForumLogo.tsx';
 
 interface FooterProps {
   onOpenSignModal: () => void;
+  onOpenAdminModal?: () => void;
 }
 
 export default function Footer({
-  onOpenSignModal
+  onOpenSignModal,
+  onOpenAdminModal
 }: FooterProps) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -128,9 +130,21 @@ export default function Footer({
           <p>
             © {new Date().getFullYear()} iklimadaleti.org · İklim Adaleti Forumu
           </p>
-          <p className="text-[11px]">
-            Başka bir dünyayı birlikte kuralım!
-          </p>
+          <div className="flex items-center gap-4">
+            <p className="text-[11px]">
+              Başka bir dünyayı birlikte kuralım!
+            </p>
+            {onOpenAdminModal && (
+              <button
+                type="button"
+                onClick={onOpenAdminModal}
+                className="inline-flex items-center gap-1 text-[11px] text-stone-500 hover:text-stone-300 cursor-pointer"
+              >
+                <Lock className="w-3 h-3" />
+                <span>Yönetici Girişi</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </footer>

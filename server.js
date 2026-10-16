@@ -10,6 +10,7 @@ const __dirname = path.dirname(__filename);
 const distPath = path.join(__dirname, 'dist');
 const dataDir = path.join(__dirname, 'data');
 const sigsFile = path.join(dataDir, 'signatories.json');
+const cmsFile = path.join(dataDir, 'cms-data.json');
 
 if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
@@ -26,28 +27,86 @@ function readExtraSignatories() {
   return [];
 }
 
-function saveExtraSignatory(sig) {
+function writeExtraSignatories(list) {
   try {
-    const current = readExtraSignatories();
-    current.push(sig);
-    fs.writeFileSync(sigsFile, JSON.stringify(current, null, 2), 'utf-8');
-    return current;
+    fs.writeFileSync(sigsFile, JSON.stringify(list, null, 2), 'utf-8');
   } catch (err) {
-    console.error('Error saving signatory:', err);
-    return [];
+    console.error('Error writing signatories:', err);
   }
+}
+
+function saveExtraSignatory(sig) {
+  const current = readExtraSignatories();
+  current.push(sig);
+  writeExtraSignatories(current);
+  return current;
+}
+
+const DEFAULT_CMS = {
+  forums: [],
+  workingGroups: [],
+  declarations: [],
+  events: [],
+  removedSignatoryIds: [],
+  customAdminPass: null
+};
+
+function readCmsData() {
+  try {
+    if (fs.existsSync(cmsFile)) {
+      const parsed = JSON.parse(fs.readFileSync(cmsFile, 'utf-8'));
+      return { ...DEFAULT_CMS, ...parsed };
+    }
+  } catch (err) {
+    console.error('Error reading CMS data:', err);
+  }
+  return { ...DEFAULT_CMS };
+}
+
+function writeCmsData(data) {
+  try {
+    const current = readCmsData();
+    const merged = { ...current, ...data };
+    fs.writeFileSync(cmsFile, JSON.stringify(merged, null, 2), 'utf-8');
+    return merged;
+  } catch (err) {
+    console.error('Error writing CMS data:', err);
+    return readCmsData();
+  }
+}
+
+function getAdminPassword() {
+  const cms = readCmsData();
+  return cms.customAdminPass || process.env.ADMIN_PASS || 'iklim2026';
 }
 
 function createServer() {
   const app = express();
-  app.use(express.json());
+  app.use(express.json({ limit: '10mb' }));
 
-  // 1. Get verified extra signatories saved on the server
-  app.get('/api/signatories', (_req, res) => {
-    res.json({ signatories: readExtraSignatories() });
+  // 1. Public endpoint: get all CMS dynamic content + extra signatories
+  app.get('/api/cms', (_req, res) => {
+    const cms = readCmsData();
+    res.json({
+      forums: cms.forums || [],
+      workingGroups: cms.workingGroups || [],
+      declarations: cms.declarations || [],
+      events: cms.events || [],
+      removedSignatoryIds: cms.removedSignatoryIds || [],
+      signatories: readExtraSignatories()
+    });
   });
 
-  // 2. Save a newly verified signatory on the server
+  // 2. Get verified extra signatories saved on the server
+  app.get('/api/signatories', (_req, res) => {
+    const cms = readCmsData();
+    res.json({
+      signatories: readExtraSignatories(),
+      removedSignatoryIds: cms.removedSignatoryIds || []
+    });
+  });
+
+  // 3. Save a newly verified signatory on the server
   app.post('/api/signatories', (req, res) => {
     const { name, organization, city, message, type } = req.body || {};
     if (!name || !city) {
@@ -67,7 +126,51 @@ function createServer() {
     res.json({ ok: true, signatory: newSig, signatories: updated });
   });
 
-  // 3. Send 6-digit verification code via Gmail / SMTP
+  // 4. Admin login check
+  app.post('/api/admin/login', (req, res) => {
+    const { password } = req.body || {};
+    if (!password || String(password) !== getAdminPassword()) {
+      return res.status(401).json({ error: 'Yönetici şifresi hatalı.' });
+    }
+    res.json({ ok: true });
+  });
+
+  // 5. Admin save CMS content (forums, workingGroups, declarations, events, signatories, password)
+  app.post('/api/admin/save', (req, res) => {
+    const { password, forums, workingGroups, declarations, events, signatories, removedSignatoryIds, newAdminPass } =
+      req.body || {};
+
+    if (!password || String(password) !== getAdminPassword()) {
+      return res.status(401).json({ error: 'Yetkisiz işlem: Yönetici şifresi hatalı.' });
+    }
+
+    const updates = {};
+    if (Array.isArray(forums)) updates.forums = forums;
+    if (Array.isArray(workingGroups)) updates.workingGroups = workingGroups;
+    if (Array.isArray(declarations)) updates.declarations = declarations;
+    if (Array.isArray(events)) updates.events = events;
+    if (Array.isArray(removedSignatoryIds)) updates.removedSignatoryIds = removedSignatoryIds;
+    if (newAdminPass && String(newAdminPass).trim().length >= 4) {
+      updates.customAdminPass = String(newAdminPass).trim();
+    }
+
+    const savedCms = writeCmsData(updates);
+    if (Array.isArray(signatories)) {
+      writeExtraSignatories(signatories);
+    }
+
+    res.json({
+      ok: true,
+      forums: savedCms.forums,
+      workingGroups: savedCms.workingGroups,
+      declarations: savedCms.declarations,
+      events: savedCms.events,
+      removedSignatoryIds: savedCms.removedSignatoryIds,
+      signatories: readExtraSignatories()
+    });
+  });
+
+  // 6. Send 6-digit verification code via Gmail / SMTP
   app.post('/api/send-verification-code', async (req, res) => {
     const { email, name, organization, code } = req.body || {};
     if (!email || !code) {
@@ -81,7 +184,6 @@ function createServer() {
     const smtpPass = (process.env.SMTP_PASS || '').replace(/\s+/g, '');
 
     if (!smtpPass) {
-      // If SMTP_PASS is not set yet in Coolify Environment Variables, fallback to preview code
       return res.json({ ok: true, previewCode: code });
     }
 

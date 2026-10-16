@@ -14,45 +14,50 @@ import EtkinliklerSection from './components/EtkinliklerSection.tsx';
 import Footer from './components/Footer.tsx';
 import ArticleModal from './components/ArticleModal.tsx';
 import SignDeclarationModal from './components/SignDeclarationModal.tsx';
+import AdminPanelModal from './components/AdminPanelModal.tsx';
 
-import {
-  INITIAL_ARTICLES,
-  INITIAL_SIGNATORIES,
-  WORKING_GROUPS,
-  UPCOMING_EVENTS
-} from './data/forumData.ts';
+import { INITIAL_SIGNATORIES } from './data/forumData.ts';
 import { Article, WorkingGroup, ForumEvent, Signatory } from './types.ts';
 
 const STORAGE_KEY = 'iklimadaleti_verified_signatories_v1';
 
 export default function App() {
-  const [articles] = useState<Article[]>(INITIAL_ARTICLES);
-  const [workingGroups] = useState<WorkingGroup[]>(WORKING_GROUPS);
-  const [events] = useState<ForumEvent[]>(UPCOMING_EVENTS);
-  const [signatories, setSignatories] = useState<Signatory[]>(() => {
+  const [forums, setForums] = useState<Article[]>([]);
+  const [workingGroups, setWorkingGroups] = useState<WorkingGroup[]>([]);
+  const [declarations, setDeclarations] = useState<Article[]>([]);
+  const [events, setEvents] = useState<ForumEvent[]>([]);
+  const [removedSignatoryIds, setRemovedSignatoryIds] = useState<string[]>([]);
+  const [extraSignatories, setExtraSignatories] = useState<Signatory[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed: Signatory[] = JSON.parse(saved);
         const existingNames = new Set(INITIAL_SIGNATORIES.map((s) => s.organization || s.name));
-        const extra = parsed.filter((s) => !existingNames.has(s.organization || s.name));
-        return [...INITIAL_SIGNATORIES, ...extra];
+        return parsed.filter((s) => !existingNames.has(s.organization || s.name));
       }
     } catch {
       // ignore storage errors
     }
-    return INITIAL_SIGNATORIES;
+    return [];
   });
 
   // Modals & UI States
   const [signModalOpen, setSignModalOpen] = useState(false);
+  const [adminModalOpen, setAdminModalOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return (
+        window.location.pathname === '/admin' ||
+        window.location.pathname === '/yonetim' ||
+        window.location.hash === '#admin'
+      );
+    }
+    return false;
+  });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
 
   const [activeSection, setActiveSection] = useState('anasayfa');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-
-  const declarationArticle = articles[0];
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -60,6 +65,34 @@ export default function App() {
       setToastMessage(null);
     }, 4000);
   };
+
+  // Load CMS data & server-persisted signatories on mount
+  useEffect(() => {
+    fetch('/api/cms')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!data) return;
+        if (Array.isArray(data.forums)) setForums(data.forums);
+        if (Array.isArray(data.workingGroups)) setWorkingGroups(data.workingGroups);
+        if (Array.isArray(data.declarations)) setDeclarations(data.declarations);
+        if (Array.isArray(data.events)) setEvents(data.events);
+        if (Array.isArray(data.removedSignatoryIds)) {
+          setRemovedSignatoryIds(data.removedSignatoryIds);
+        }
+        if (Array.isArray(data.signatories)) {
+          setExtraSignatories(data.signatories);
+        }
+      })
+      .catch(() => {
+        // ignore in offline/static mode
+      });
+  }, []);
+
+  // Combined signatories list (39 founding + extra verified - removed)
+  const signatories: Signatory[] = [
+    ...INITIAL_SIGNATORIES.filter((s) => !removedSignatoryIds.includes(s.id)),
+    ...extraSignatories.filter((s) => !removedSignatoryIds.includes(s.id))
+  ];
 
   const handleJoinWorkingGroup = (group: WorkingGroup) => {
     setSignModalOpen(true);
@@ -69,26 +102,6 @@ export default function App() {
   const handleRegisterEvent = (_event: ForumEvent) => {
     setSignModalOpen(true);
   };
-
-  // Load server-persisted signatories on mount so all visitors see newly added institutions
-  useEffect(() => {
-    fetch('/api/signatories')
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data && Array.isArray(data.signatories) && data.signatories.length > 0) {
-          setSignatories((prev) => {
-            const existingNames = new Set(prev.map((s) => s.organization || s.name));
-            const extra = data.signatories.filter(
-              (s: Signatory) => !existingNames.has(s.organization || s.name)
-            );
-            return extra.length > 0 ? [...prev, ...extra] : prev;
-          });
-        }
-      })
-      .catch(() => {
-        // ignore in offline/static mode
-      });
-  }, []);
 
   const handleAddSignatory = (newSignatory: Omit<Signatory, 'id' | 'date'>) => {
     const added: Signatory = {
@@ -101,7 +114,7 @@ export default function App() {
       type: newSignatory.type || (newSignatory.organization ? 'institutional' : 'individual'),
       emailVerified: true
     };
-    setSignatories((prev) => {
+    setExtraSignatories((prev) => {
       const updated = [...prev, added];
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
@@ -116,15 +129,51 @@ export default function App() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newSignatory)
-    }).catch(() => {
-      // ignore offline
-    });
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data.signatories)) {
+          setExtraSignatories(data.signatories);
+        }
+      })
+      .catch(() => {
+        // ignore offline
+      });
 
     showToast(
       added.type === 'institutional' && added.organization
         ? `E-posta doğrulandı! "${added.organization}" İmzacı Kurumlar listesine eklendi.`
         : `E-posta doğrulandı! Teşekkürler ${added.name}, imzanız listeye eklendi.`
     );
+  };
+
+  const handleSaveCms = async (payload: {
+    password: string;
+    forums: Article[];
+    workingGroups: WorkingGroup[];
+    declarations: Article[];
+    events: ForumEvent[];
+    signatories: Signatory[];
+    removedSignatoryIds: string[];
+    newAdminPass?: string;
+  }) => {
+    setForums(payload.forums);
+    setWorkingGroups(payload.workingGroups);
+    setDeclarations(payload.declarations);
+    setEvents(payload.events);
+    setExtraSignatories(payload.signatories);
+    setRemovedSignatoryIds(payload.removedSignatoryIds);
+
+    try {
+      const res = await fetch('/api/admin/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      return res.ok;
+    } catch {
+      return true;
+    }
   };
 
   // Scroll spy to track active section among the 5 menu items
@@ -184,7 +233,10 @@ export default function App() {
         />
 
         {/* 2. Forumlar */}
-        <ForumlarSection />
+        <ForumlarSection
+          items={forums}
+          onReadArticle={(art) => setSelectedArticle(art)}
+        />
 
         {/* 3. Çalışma Grupları */}
         <CalismaGruplariSection
@@ -194,7 +246,7 @@ export default function App() {
 
         {/* 4. Sonuç Bildirgeleri */}
         <SonucBildirgesiSection
-          declaration={declarationArticle}
+          declarations={declarations}
           onReadFull={(art) => setSelectedArticle(art)}
           onOpenSignModal={() => setSignModalOpen(true)}
         />
@@ -209,6 +261,7 @@ export default function App() {
       {/* Institutional Footer */}
       <Footer
         onOpenSignModal={() => setSignModalOpen(true)}
+        onOpenAdminModal={() => setAdminModalOpen(true)}
       />
 
       {/* Modals */}
@@ -216,6 +269,24 @@ export default function App() {
         isOpen={signModalOpen}
         onClose={() => setSignModalOpen(false)}
         onAddSignatory={handleAddSignatory}
+      />
+
+      <AdminPanelModal
+        isOpen={adminModalOpen}
+        onClose={() => {
+          setAdminModalOpen(false);
+          if (window.location.pathname === '/admin' || window.location.pathname === '/yonetim') {
+            window.history.replaceState({}, '', '/');
+          }
+        }}
+        forums={forums}
+        workingGroups={workingGroups}
+        declarations={declarations}
+        events={events}
+        allSignatories={signatories}
+        extraSignatories={extraSignatories}
+        removedSignatoryIds={removedSignatoryIds}
+        onSaveCms={handleSaveCms}
       />
 
       <ArticleModal
