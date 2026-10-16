@@ -10,6 +10,7 @@ import HeroBanner from './components/HeroBanner.tsx';
 import ForumlarSection from './components/ForumlarSection.tsx';
 import CalismaGruplariSection from './components/CalismaGruplariSection.tsx';
 import SonucBildirgesiSection from './components/SonucBildirgesiSection.tsx';
+import PolitikaProgramSection from './components/PolitikaProgramSection.tsx';
 import EtkinliklerSection from './components/EtkinliklerSection.tsx';
 import Footer from './components/Footer.tsx';
 import ArticleModal from './components/ArticleModal.tsx';
@@ -25,6 +26,7 @@ export default function App() {
   const [forums, setForums] = useState<Article[]>([]);
   const [workingGroups, setWorkingGroups] = useState<WorkingGroup[]>([]);
   const [declarations, setDeclarations] = useState<Article[]>([]);
+  const [policies, setPolicies] = useState<Article[]>([]);
   const [events, setEvents] = useState<ForumEvent[]>([]);
   const [removedSignatoryIds, setRemovedSignatoryIds] = useState<string[]>([]);
   const [extraSignatories, setExtraSignatories] = useState<Signatory[]>(() => {
@@ -75,6 +77,7 @@ export default function App() {
         if (Array.isArray(data.forums)) setForums(data.forums);
         if (Array.isArray(data.workingGroups)) setWorkingGroups(data.workingGroups);
         if (Array.isArray(data.declarations)) setDeclarations(data.declarations);
+        if (Array.isArray(data.policies)) setPolicies(data.policies);
         if (Array.isArray(data.events)) setEvents(data.events);
         if (Array.isArray(data.removedSignatoryIds)) {
           setRemovedSignatoryIds(data.removedSignatoryIds);
@@ -153,6 +156,7 @@ export default function App() {
     forums: Article[];
     workingGroups: WorkingGroup[];
     declarations: Article[];
+    policies: Article[];
     events: ForumEvent[];
     signatories: Signatory[];
     removedSignatoryIds: string[];
@@ -164,6 +168,7 @@ export default function App() {
     setForums(payload.forums);
     setWorkingGroups(payload.workingGroups);
     setDeclarations(payload.declarations);
+    setPolicies(payload.policies);
     setEvents(payload.events);
     setExtraSignatories(payload.signatories);
     setRemovedSignatoryIds(payload.removedSignatoryIds);
@@ -179,6 +184,7 @@ export default function App() {
         if (Array.isArray(data.forums)) setForums(data.forums);
         if (Array.isArray(data.workingGroups)) setWorkingGroups(data.workingGroups);
         if (Array.isArray(data.declarations)) setDeclarations(data.declarations);
+        if (Array.isArray(data.policies)) setPolicies(data.policies);
         if (Array.isArray(data.events)) setEvents(data.events);
         if (Array.isArray(data.removedSignatoryIds)) setRemovedSignatoryIds(data.removedSignatoryIds);
         if (Array.isArray(data.signatories)) setExtraSignatories(data.signatories);
@@ -190,10 +196,17 @@ export default function App() {
     }
   };
 
-  // Scroll spy to track active section among the 5 menu items
+  // Scroll spy to track active section among the 6 menu items
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['anasayfa', 'forumlar', 'calisma-gruplari', 'sonuc-bildirgeleri', 'etkinlik-takvimi'];
+      const sections = [
+        'anasayfa',
+        'forumlar',
+        'calisma-gruplari',
+        'sonuc-bildirgeleri',
+        'politika-program',
+        'etkinlik-takvimi'
+      ];
       const scrollPosition = window.scrollY + 140;
 
       for (const sectionId of sections) {
@@ -220,7 +233,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#FBF9F5] text-stone-900 flex flex-col font-sans selection:bg-[#0B4F71] selection:text-white">
-      {/* Top Bar Header with official logo & exact 5 menu items */}
+      {/* Top Bar Header with official logo & menu items */}
       <Header
         onOpenSignModal={() => setSignModalOpen(true)}
         mobileMenuOpen={mobileMenuOpen}
@@ -235,7 +248,7 @@ export default function App() {
         onOpenSignModal={() => setSignModalOpen(true)}
       />
 
-      {/* Main Content Areas matching the exact 5 menu sections */}
+      {/* Main Content Areas matching the menu sections */}
       <main className="flex-1">
         {/* 1. Anasayfa (COP31'e Doğru Görsel + Çağrı Metni + İmzacı Kurumlar + İmzala Butonu) */}
         <HeroBanner
@@ -265,7 +278,13 @@ export default function App() {
           onOpenSignModal={() => setSignModalOpen(true)}
         />
 
-        {/* 5. Etkinlik Takvimi */}
+        {/* 5. Politika / Program */}
+        <PolitikaProgramSection
+          policies={policies}
+          onReadFull={(art) => setSelectedArticle(art)}
+        />
+
+        {/* 6. Etkinlik Takvimi */}
         <EtkinliklerSection
           events={events}
           onRegisterEvent={handleRegisterEvent}
@@ -296,6 +315,7 @@ export default function App() {
         forums={forums}
         workingGroups={workingGroups}
         declarations={declarations}
+        policies={policies}
         events={events}
         allSignatories={signatories}
         extraSignatories={extraSignatories}

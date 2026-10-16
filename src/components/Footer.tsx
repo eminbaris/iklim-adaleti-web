@@ -84,6 +84,11 @@ export default function Footer({
                 </a>
               </li>
               <li>
+                <a href="#politika-program" className="hover:text-white transition-colors">
+                  Politika / Program
+                </a>
+              </li>
+              <li>
                 <a href="#etkinlik-takvimi" className="hover:text-white transition-colors">
                   Etkinlik Takvimi
                 </a>

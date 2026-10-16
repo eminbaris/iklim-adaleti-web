@@ -24,12 +24,13 @@ export default function Header({
     { label: 'Forumlar', href: '#forumlar' },
     { label: 'Çalışma Grupları', href: '#calisma-gruplari' },
     { label: 'Sonuç Bildirgeleri', href: '#sonuc-bildirgeleri' },
+    { label: 'Politika / Program', href: '#politika-program' },
     { label: 'Etkinlik Takvimi', href: '#etkinlik-takvimi' }
   ];
 
   return (
     <header className="sticky top-0 z-40 bg-[#FBF9F5]/95 backdrop-blur-md border-b border-stone-200/90 transition-all shadow-2xs">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-3.5 min-h-[84px] sm:min-h-[96px] lg:min-h-[104px] flex items-center justify-between gap-4 lg:gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-3.5 min-h-[84px] sm:min-h-[96px] lg:min-h-[104px] flex items-center justify-between gap-3 lg:gap-5">
         
         {/* Official Logo Lockup */}
         <a
@@ -43,9 +44,9 @@ export default function Header({
           />
         </a>
 
-        {/* Navigation Links (Anasayfa - Forumlar - Çalışma Grupları - Sonuç Bildirgeleri - Etkinlik Takvimi) */}
+        {/* Navigation Links */}
         <nav
-          className="hidden lg:flex items-center gap-6 xl:gap-8 text-[15px] font-semibold text-stone-700"
+          className="hidden lg:flex items-center gap-4 xl:gap-6 text-[14px] xl:text-[15px] font-semibold text-stone-700"
           aria-label="Ana Menü"
         >
           {navLinks.map((link) => {

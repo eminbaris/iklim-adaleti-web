@@ -38,6 +38,7 @@ interface AdminPanelModalProps {
   forums: Article[];
   workingGroups: WorkingGroup[];
   declarations: Article[];
+  policies: Article[];
   events: ForumEvent[];
   allSignatories: Signatory[];
   extraSignatories: Signatory[];
@@ -48,6 +49,7 @@ interface AdminPanelModalProps {
     forums: Article[];
     workingGroups: WorkingGroup[];
     declarations: Article[];
+    policies: Article[];
     events: ForumEvent[];
     signatories: Signatory[];
     removedSignatoryIds: string[];
@@ -58,7 +60,7 @@ interface AdminPanelModalProps {
   }) => Promise<boolean>;
 }
 
-type AdminTab = 'forums' | 'groups' | 'declarations' | 'events' | 'signatories' | 'users';
+type AdminTab = 'forums' | 'groups' | 'declarations' | 'policies' | 'events' | 'signatories' | 'users';
 
 export default function AdminPanelModal({
   isOpen,
@@ -66,6 +68,7 @@ export default function AdminPanelModal({
   forums,
   workingGroups,
   declarations,
+  policies,
   events,
   allSignatories,
   extraSignatories,
@@ -111,6 +114,16 @@ export default function AdminPanelModal({
   const [dImageUrl, setDImageUrl] = useState('');
   const [dVideoUrl, setDVideoUrl] = useState('');
   const [dPdfUrl, setDPdfUrl] = useState('');
+
+  // Form states for adding a Policy / Program (Politika / Program)
+  const [pTitle, setPTitle] = useState('');
+  const [pDate, setPDate] = useState(new Date().toISOString().split('T')[0]);
+  const [pAuthor, setPAuthor] = useState('İklim Adaleti Forumu');
+  const [pExcerpt, setPExcerpt] = useState('');
+  const [pContent, setPContent] = useState('');
+  const [pImageUrl, setPImageUrl] = useState('');
+  const [pVideoUrl, setPVideoUrl] = useState('');
+  const [pPdfUrl, setPPdfUrl] = useState('');
 
   // Form states for adding an Event
   const [eTitle, setETitle] = useState('');
@@ -210,6 +223,7 @@ export default function AdminPanelModal({
     forums: Article[];
     workingGroups: WorkingGroup[];
     declarations: Article[];
+    policies: Article[];
     events: ForumEvent[];
     signatories: Signatory[];
     removedSignatoryIds: string[];
@@ -225,6 +239,7 @@ export default function AdminPanelModal({
       forums: overrides.forums ?? forums,
       workingGroups: overrides.workingGroups ?? workingGroups,
       declarations: overrides.declarations ?? declarations,
+      policies: overrides.policies ?? policies,
       events: overrides.events ?? events,
       signatories: overrides.signatories ?? extraSignatories,
       removedSignatoryIds: overrides.removedSignatoryIds ?? removedSignatoryIds,
@@ -369,6 +384,38 @@ export default function AdminPanelModal({
     setDImageUrl('');
     setDVideoUrl('');
     setDPdfUrl('');
+  };
+
+  // Add Policy / Program Document
+  const handleAddPolicy = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!pTitle.trim()) return;
+    const summaryText = pExcerpt.trim() || pContent.trim().split('\n')[0] || pTitle.trim();
+    const fullText = pContent.trim() || summaryText;
+    const item: Article = {
+      id: `pol-${Date.now()}`,
+      slug: `pol-${Date.now()}`,
+      title: pTitle.trim(),
+      excerpt: summaryText,
+      content: fullText.split(/\n\s*\n/),
+      category: 'Politika & Program',
+      date: pDate || new Date().toISOString().split('T')[0],
+      author: pAuthor.trim() || 'İklim Adaleti Forumu',
+      authorRole: 'Politika / Program',
+      readTimeMinutes: 10,
+      tags: ['Politika / Program'],
+      imageUrl: pImageUrl.trim() || undefined,
+      videoUrl: pVideoUrl.trim() || undefined,
+      pdfUrl: pPdfUrl.trim() || undefined
+    };
+    const next = [item, ...policies];
+    await triggerSave({ policies: next });
+    setPTitle('');
+    setPExcerpt('');
+    setPContent('');
+    setPImageUrl('');
+    setPVideoUrl('');
+    setPPdfUrl('');
   };
 
   // Add or Update Event
@@ -712,6 +759,18 @@ export default function AdminPanelModal({
               </button>
               <button
                 type="button"
+                onClick={() => setActiveTab('policies')}
+                className={`px-3.5 py-2 text-xs font-bold rounded-lg inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
+                  activeTab === 'policies'
+                    ? 'bg-[#0B4F71] text-white shadow-xs'
+                    : 'bg-white text-stone-700 border border-stone-200 hover:bg-stone-50'
+                }`}
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>4. Politika / Program ({policies.length})</span>
+              </button>
+              <button
+                type="button"
                 onClick={() => setActiveTab('events')}
                 className={`px-3.5 py-2 text-xs font-bold rounded-lg inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
                   activeTab === 'events'
@@ -720,7 +779,7 @@ export default function AdminPanelModal({
                 }`}
               >
                 <Calendar className="w-3.5 h-3.5" />
-                <span>4. Etkinlik Takvimi ({events.length})</span>
+                <span>5. Etkinlik Takvimi ({events.length})</span>
               </button>
               <button
                 type="button"
@@ -732,7 +791,7 @@ export default function AdminPanelModal({
                 }`}
               >
                 <Building2 className="w-3.5 h-3.5" />
-                <span>5. İmzacı Kurumlar ({allSignatories.length})</span>
+                <span>6. İmzacı Kurumlar ({allSignatories.length})</span>
               </button>
               <button
                 type="button"
@@ -744,7 +803,7 @@ export default function AdminPanelModal({
                 }`}
               >
                 <KeyRound className="w-3.5 h-3.5" />
-                <span>6. Kullanıcılar & Şifre</span>
+                <span>7. Kullanıcılar & Şifre</span>
               </button>
             </div>
 
@@ -1141,7 +1200,164 @@ export default function AdminPanelModal({
                 </div>
               )}
 
-              {/* TAB 4: ETKİNLİK TAKVİMİ */}
+              {/* TAB 4: POLİTİKA / PROGRAM */}
+              {activeTab === 'policies' && (
+                <div className="space-y-6">
+                  <form
+                    onSubmit={handleAddPolicy}
+                    className="bg-stone-50 border border-stone-200 rounded-xl p-5 space-y-4"
+                  >
+                    <h4 className="font-serif text-lg font-bold text-stone-900">
+                      Politika / Program Belgesi veya PDF Ekle
+                    </h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="sm:col-span-2">
+                        <label className="block text-xs font-semibold text-stone-700 mb-1">
+                          Başlık *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={pTitle}
+                          onChange={(e) => setPTitle(e.target.value)}
+                          placeholder="Örn: İklim Adaleti Politika ve Eylem Programı"
+                          className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-stone-700 mb-1">
+                          Tarih
+                        </label>
+                        <input
+                          type="text"
+                          value={pDate}
+                          onChange={(e) => setPDate(e.target.value)}
+                          placeholder="Örn: Ekim 2026"
+                          className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-stone-700 mb-1">
+                        Kısa Açıklama / Özet *
+                      </label>
+                      <textarea
+                        rows={3}
+                        required
+                        value={pExcerpt}
+                        onChange={(e) => setPExcerpt(e.target.value)}
+                        placeholder="Politika / Program belgesi hakkında kısa açıklama..."
+                        className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
+                      />
+                    </div>
+
+                    {/* Öne Çıkan PDF Yükleme Alanı */}
+                    <div className="p-4 bg-emerald-50/70 border-2 border-emerald-200 rounded-xl space-y-2.5">
+                      <label className="block text-xs font-bold text-[#3E8226] uppercase tracking-wider">
+                        Uzun PDF Belgesi Yükle (Sayfada Doğrudan Okunabilir ve İndirilebilir)
+                      </label>
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                        <input
+                          type="text"
+                          value={pPdfUrl}
+                          onChange={(e) => setPPdfUrl(e.target.value)}
+                          placeholder="PDF dosya adresi veya sağdaki butondan bilgisayarınızdan seçin..."
+                          className="flex-1 px-3 py-2 text-xs bg-white border border-stone-300 rounded-lg"
+                        />
+                        <label className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#3E8226] hover:bg-[#31681E] text-white rounded-lg text-xs font-bold cursor-pointer justify-center shrink-0 shadow-xs">
+                          <Upload className="w-4 h-4" />
+                          <span>
+                            {uploadingField === 'policy-pdf'
+                              ? 'PDF Yükleniyor...'
+                              : 'Bilgisayardan PDF Dosyası Seç'}
+                          </span>
+                          <input
+                            type="file"
+                            accept=".pdf,application/pdf"
+                            className="hidden"
+                            onChange={(e) =>
+                              handleFileUpload(e.target.files?.[0], 'policy-pdf', setPPdfUrl)
+                            }
+                          />
+                        </label>
+                      </div>
+                    </div>
+
+                    {renderMediaInputs(
+                      'policy',
+                      pImageUrl,
+                      setPImageUrl,
+                      pVideoUrl,
+                      setPVideoUrl,
+                      pPdfUrl,
+                      setPPdfUrl
+                    )}
+
+                    <div>
+                      <label className="block text-xs font-semibold text-stone-700 mb-1">
+                        Ek Metin (İsteğe Bağlı — PDF dışında sayfa içinde yazı da göstermek isterseniz)
+                      </label>
+                      <textarea
+                        rows={4}
+                        value={pContent}
+                        onChange={(e) => setPContent(e.target.value)}
+                        placeholder="İsteğe bağlı ek açıklama veya tam metin..."
+                        className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={saving}
+                      className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#3E8226] hover:bg-[#31681E] text-white text-xs font-bold rounded-lg cursor-pointer"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>Politika / Program Bölümüne Ekle ve Yayınla</span>
+                    </button>
+                  </form>
+
+                  <div className="space-y-2">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500">
+                      Mevcut Politika / Program Belgeleri ({policies.length})
+                    </h4>
+                    {policies.length === 0 ? (
+                      <p className="text-xs text-stone-500 italic">
+                        Henüz Politika / Program belgesi eklenmedi.
+                      </p>
+                    ) : (
+                      policies.map((p) => (
+                        <div
+                          key={p.id}
+                          className="p-3 bg-white border border-stone-200 rounded-lg flex items-center justify-between gap-3"
+                        >
+                          <div>
+                            <p className="text-sm font-bold text-stone-900">{p.title}</p>
+                            <p className="text-xs text-stone-500">
+                              {p.date}
+                              {p.pdfUrl ? ` · PDF: ${p.pdfUrl}` : ''}
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              triggerSave({
+                                policies: policies.filter((item) => item.id !== p.id)
+                              })
+                            }
+                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
+                            title="Sil"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 5: ETKİNLİK TAKVİMİ */}
               {activeTab === 'events' && (
                 <div className="space-y-6">
                   <form

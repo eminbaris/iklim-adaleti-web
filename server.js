@@ -51,6 +51,7 @@ const DEFAULT_CMS = {
   forums: [],
   workingGroups: [],
   declarations: [],
+  policies: [],
   events: [
     {
       id: 'ev-1792164191275',
@@ -373,7 +374,7 @@ const ALLOWED_EXTENSIONS = new Set([
 function createServer() {
   const app = express();
   app.disable('x-powered-by');
-  app.use(express.json({ limit: '35mb' }));
+  app.use(express.json({ limit: '75mb' }));
 
   // Global HTTP Security Headers
   app.use((_req, res, next) => {
@@ -386,14 +387,15 @@ function createServer() {
     next();
   });
 
-  // Serve uploaded photos, videos, and PDFs with sandbox headers
+  // Serve uploaded photos, videos, and PDFs (allowing same-origin PDF viewer iframe)
   app.use(
     '/uploads',
     (_req, res, next) => {
       res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.setHeader('X-Frame-Options', 'SAMEORIGIN');
       res.setHeader(
         'Content-Security-Policy',
-        "default-src 'none'; img-src 'self'; media-src 'self'; style-src 'unsafe-inline'; sandbox"
+        "default-src 'self'; object-src 'self'; img-src 'self' data:; media-src 'self'; style-src 'unsafe-inline'"
       );
       next();
     },
@@ -407,6 +409,7 @@ function createServer() {
       forums: cms.forums || [],
       workingGroups: cms.workingGroups || [],
       declarations: cms.declarations || [],
+      policies: cms.policies || [],
       events: cms.events || [],
       removedSignatoryIds: cms.removedSignatoryIds || [],
       signatories: readExtraSignatories()
@@ -516,8 +519,8 @@ function createServer() {
         });
       }
       const buffer = Buffer.from(matches[2], 'base64');
-      if (buffer.length > 25 * 1024 * 1024) {
-        return res.status(400).json({ error: 'Dosya boyutu 25 MB sınırını aşıyor.' });
+      if (buffer.length > 50 * 1024 * 1024) {
+        return res.status(400).json({ error: 'Dosya boyutu 50 MB sınırını aşıyor.' });
       }
       const baseSafe = path
         .basename(String(filename), path.extname(String(filename)))
@@ -544,6 +547,7 @@ function createServer() {
       forums,
       workingGroups,
       declarations,
+      policies,
       events,
       signatories,
       removedSignatoryIds,
@@ -582,6 +586,14 @@ function createServer() {
         imageUrl: sanitizeUrl(d.imageUrl),
         videoUrl: sanitizeUrl(d.videoUrl),
         pdfUrl: sanitizeUrl(d.pdfUrl)
+      }));
+    }
+    if (Array.isArray(policies)) {
+      updates.policies = policies.map((p) => ({
+        ...p,
+        imageUrl: sanitizeUrl(p.imageUrl),
+        videoUrl: sanitizeUrl(p.videoUrl),
+        pdfUrl: sanitizeUrl(p.pdfUrl)
       }));
     }
     if (Array.isArray(events)) {
@@ -643,6 +655,7 @@ function createServer() {
       forums: savedCms.forums,
       workingGroups: savedCms.workingGroups,
       declarations: savedCms.declarations,
+      policies: savedCms.policies,
       events: savedCms.events,
       removedSignatoryIds: savedCms.removedSignatoryIds,
       signatories: readExtraSignatories(),

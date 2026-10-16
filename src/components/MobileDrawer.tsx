@@ -24,6 +24,7 @@ export default function MobileDrawer({
     { label: 'Forumlar', href: '#forumlar', icon: Users },
     { label: 'Çalışma Grupları', href: '#calisma-gruplari', icon: Users },
     { label: 'Sonuç Bildirgeleri', href: '#sonuc-bildirgeleri', icon: FileText },
+    { label: 'Politika / Program', href: '#politika-program', icon: FileText },
     { label: 'Etkinlik Takvimi', href: '#etkinlik-takvimi', icon: Calendar }
   ];
 
