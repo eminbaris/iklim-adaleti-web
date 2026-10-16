@@ -1,6 +1,7 @@
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import { fileURLToPath } from 'url';
 
@@ -253,6 +254,56 @@ function writeCmsData(data) {
   }
 }
 
+function safeCompare(a, b) {
+  const bufA = Buffer.from(String(a || ''), 'utf-8');
+  const bufB = Buffer.from(String(b || ''), 'utf-8');
+  if (bufA.length !== bufB.length) return false;
+  return crypto.timingSafeEqual(bufA, bufB);
+}
+
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function sanitizeUrl(url) {
+  if (!url) return undefined;
+  const clean = String(url).trim();
+  if (
+    clean.startsWith('/uploads/') ||
+    clean.startsWith('https://') ||
+    clean.startsWith('http://')
+  ) {
+    return clean;
+  }
+  return undefined;
+}
+
+// In-memory rate limiter for brute-force & spam protection
+const rateBuckets = new Map();
+function checkRateLimit(req, bucketName, maxRequests, windowMs) {
+  const ip =
+    String(req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown')
+      .split(',')[0]
+      .trim();
+  const key = `${bucketName}:${ip}`;
+  const now = Date.now();
+  const entry = rateBuckets.get(key);
+  if (!entry || now > entry.resetAt) {
+    rateBuckets.set(key, { count: 1, resetAt: now + windowMs });
+    return true;
+  }
+  if (entry.count >= maxRequests) {
+    return false;
+  }
+  entry.count += 1;
+  return true;
+}
+
 function getMasterPassword() {
   const cms = readCmsData();
   return cms.customAdminPass || process.env.ADMIN_PASS || 'iklim2026';
@@ -267,7 +318,7 @@ function verifyCredentials(username, password) {
 
   if (
     (!cleanUser || cleanUser === 'admin' || cleanUser === 'yonetici') &&
-    cleanPass === masterPass
+    safeCompare(cleanPass, masterPass)
   ) {
     return { username: 'admin', name: 'Ana Yönetici', role: 'admin' };
   }
@@ -277,14 +328,14 @@ function verifyCredentials(username, password) {
     (u) =>
       u.username &&
       u.username.trim().toLowerCase() === cleanUser &&
-      String(u.password) === cleanPass
+      safeCompare(String(u.password), cleanPass)
   );
   if (matched) {
     return { username: matched.username, name: matched.name || matched.username, role: 'editor' };
   }
 
   if (!cleanUser) {
-    const matchedByPass = users.find((u) => String(u.password) === cleanPass);
+    const matchedByPass = users.find((u) => safeCompare(String(u.password), cleanPass));
     if (matchedByPass) {
       return {
         username: matchedByPass.username,
@@ -297,12 +348,57 @@ function verifyCredentials(username, password) {
   return null;
 }
 
+const ALLOWED_MIME_TYPES = new Set([
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
+  'image/gif',
+  'video/mp4',
+  'video/webm',
+  'application/pdf'
+]);
+
+const ALLOWED_EXTENSIONS = new Set([
+  '.jpg',
+  '.jpeg',
+  '.png',
+  '.webp',
+  '.gif',
+  '.mp4',
+  '.webm',
+  '.pdf'
+]);
+
 function createServer() {
   const app = express();
-  app.use(express.json({ limit: '50mb' }));
+  app.disable('x-powered-by');
+  app.use(express.json({ limit: '35mb' }));
 
-  // Serve uploaded photos, videos, and PDFs
-  app.use('/uploads', express.static(uploadsDir));
+  // Global HTTP Security Headers
+  app.use((_req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    next();
+  });
+
+  // Serve uploaded photos, videos, and PDFs with sandbox headers
+  app.use(
+    '/uploads',
+    (_req, res, next) => {
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.setHeader(
+        'Content-Security-Policy',
+        "default-src 'none'; img-src 'self'; media-src 'self'; style-src 'unsafe-inline'; sandbox"
+      );
+      next();
+    },
+    express.static(uploadsDir)
+  );
 
   // 1. Public endpoint: get all CMS dynamic content + extra signatories
   app.get('/api/cms', (_req, res) => {
@@ -328,18 +424,44 @@ function createServer() {
 
   // 3. Save a newly verified signatory on the server
   app.post('/api/signatories', (req, res) => {
+    if (!checkRateLimit(req, 'signatories', 10, 15 * 60 * 1000)) {
+      return res.status(429).json({ error: 'Çok fazla istek gönderildi. Lütfen biraz bekleyin.' });
+    }
     const { name, organization, city, message, type } = req.body || {};
     if (!name || !city) {
       return res.status(400).json({ error: 'Eksik bilgi' });
     }
+    const cleanName = String(name).replace(/[<>]/g, '').trim().slice(0, 150);
+    const cleanOrg = organization
+      ? String(organization).replace(/[<>]/g, '').trim().slice(0, 150)
+      : undefined;
+    const cleanCity = String(city).replace(/[<>]/g, '').trim().slice(0, 80);
+    const cleanMsg = message
+      ? String(message).replace(/[<>]/g, '').trim().slice(0, 500)
+      : undefined;
+
+    if (!cleanName || !cleanCity) {
+      return res.status(400).json({ error: 'Geçersiz bilgi' });
+    }
+
+    const existing = readExtraSignatories();
+    const isDuplicate = existing.some(
+      (s) =>
+        String(s.name || '').toLowerCase() === cleanName.toLowerCase() &&
+        String(s.city || '').toLowerCase() === cleanCity.toLowerCase()
+    );
+    if (isDuplicate) {
+      return res.json({ ok: true, signatories: existing });
+    }
+
     const newSig = {
       id: `sig-${Date.now()}`,
-      name: String(name).trim(),
-      organization: organization ? String(organization).trim() : undefined,
-      city: String(city).trim(),
-      message: message ? String(message).trim() : undefined,
+      name: cleanName,
+      organization: cleanOrg,
+      city: cleanCity,
+      message: cleanMsg,
       date: new Date().toISOString().split('T')[0],
-      type: type || (organization ? 'institutional' : 'individual'),
+      type: type === 'individual' ? 'individual' : cleanOrg ? 'institutional' : 'individual',
       emailVerified: true
     };
     const updated = saveExtraSignatory(newSig);
@@ -348,6 +470,11 @@ function createServer() {
 
   // 4. Admin / Editor login check
   app.post('/api/admin/login', (req, res) => {
+    if (!checkRateLimit(req, 'admin-login', 12, 15 * 60 * 1000)) {
+      return res.status(429).json({
+        error: 'Çok fazla başarısız giriş denemesi. Lütfen 15 dakika sonra tekrar deneyin.'
+      });
+    }
     const { username, password } = req.body || {};
     const user = verifyCredentials(username, password);
     if (!user) {
@@ -363,8 +490,11 @@ function createServer() {
     res.json({ ok: true, user, users: safeUsers });
   });
 
-  // 5. Upload photo, video, or PDF file from Admin Panel
+  // 5. Upload photo, video, or PDF file from Admin Panel (strictly whitelisted)
   app.post('/api/admin/upload', (req, res) => {
+    if (!checkRateLimit(req, 'admin-upload', 30, 15 * 60 * 1000)) {
+      return res.status(429).json({ error: 'Çok fazla yükleme isteği.' });
+    }
     const { username, password, filename, dataUrl } = req.body || {};
     const authUser = verifyCredentials(username, password);
     if (!authUser) {
@@ -378,11 +508,22 @@ function createServer() {
       if (!matches) {
         return res.status(400).json({ error: 'Geçersiz dosya formatı.' });
       }
+      const mimeType = matches[1].toLowerCase().trim();
+      const ext = path.extname(String(filename)).toLowerCase();
+      if (!ALLOWED_MIME_TYPES.has(mimeType) || !ALLOWED_EXTENSIONS.has(ext)) {
+        return res.status(400).json({
+          error: 'Yalnızca fotoğraf (JPG, PNG, WEBP), video (MP4, WEBM) ve PDF yüklenebilir.'
+        });
+      }
       const buffer = Buffer.from(matches[2], 'base64');
-      const safeName = String(filename)
-        .replace(/[^a-zA-Z0-9._-]/g, '_')
-        .slice(-80);
-      const storedName = `${Date.now()}-${safeName}`;
+      if (buffer.length > 25 * 1024 * 1024) {
+        return res.status(400).json({ error: 'Dosya boyutu 25 MB sınırını aşıyor.' });
+      }
+      const baseSafe = path
+        .basename(String(filename), path.extname(String(filename)))
+        .replace(/[^a-zA-Z0-9_-]/g, '_')
+        .slice(0, 60);
+      const storedName = `${Date.now()}-${baseSafe || 'medya'}${ext}`;
       const filePath = path.join(uploadsDir, storedName);
       fs.writeFileSync(filePath, buffer);
       return res.json({ ok: true, url: `/uploads/${storedName}` });
@@ -394,6 +535,9 @@ function createServer() {
 
   // 6. Admin save CMS content
   app.post('/api/admin/save', (req, res) => {
+    if (!checkRateLimit(req, 'admin-save', 40, 15 * 60 * 1000)) {
+      return res.status(429).json({ error: 'Çok fazla kayıt isteği.' });
+    }
     const {
       username,
       password,
@@ -416,38 +560,70 @@ function createServer() {
 
     const currentCms = readCmsData();
     const updates = {};
-    if (Array.isArray(forums)) updates.forums = forums;
-    if (Array.isArray(workingGroups)) updates.workingGroups = workingGroups;
-    if (Array.isArray(declarations)) updates.declarations = declarations;
-    if (Array.isArray(events)) updates.events = events;
+    if (Array.isArray(forums)) {
+      updates.forums = forums.map((f) => ({
+        ...f,
+        imageUrl: sanitizeUrl(f.imageUrl),
+        videoUrl: sanitizeUrl(f.videoUrl),
+        pdfUrl: sanitizeUrl(f.pdfUrl)
+      }));
+    }
+    if (Array.isArray(workingGroups)) {
+      updates.workingGroups = workingGroups.map((g) => ({
+        ...g,
+        imageUrl: sanitizeUrl(g.imageUrl),
+        videoUrl: sanitizeUrl(g.videoUrl),
+        pdfUrl: sanitizeUrl(g.pdfUrl)
+      }));
+    }
+    if (Array.isArray(declarations)) {
+      updates.declarations = declarations.map((d) => ({
+        ...d,
+        imageUrl: sanitizeUrl(d.imageUrl),
+        videoUrl: sanitizeUrl(d.videoUrl),
+        pdfUrl: sanitizeUrl(d.pdfUrl)
+      }));
+    }
+    if (Array.isArray(events)) {
+      updates.events = events.map((ev) => ({
+        ...ev,
+        imageUrl: sanitizeUrl(ev.imageUrl),
+        videoUrl: sanitizeUrl(ev.videoUrl),
+        pdfUrl: sanitizeUrl(ev.pdfUrl)
+      }));
+    }
     if (Array.isArray(removedSignatoryIds)) updates.removedSignatoryIds = removedSignatoryIds;
     if (deleteItemKey) {
       updates.deletedItemKeys = [...(currentCms.deletedItemKeys || []), String(deleteItemKey)];
     }
-    if (newAdminPass && String(newAdminPass).trim().length >= 4) {
-      updates.customAdminPass = String(newAdminPass).trim();
-    }
 
-    let currentUsers = Array.isArray(currentCms.users) ? [...currentCms.users] : [];
-    if (newUser && newUser.username && newUser.password) {
-      const exists = currentUsers.some(
-        (u) => u.username.toLowerCase() === String(newUser.username).trim().toLowerCase()
-      );
-      if (!exists) {
-        currentUsers.push({
-          id: `usr-${Date.now()}`,
-          username: String(newUser.username).trim(),
-          name: String(newUser.name || newUser.username).trim(),
-          password: String(newUser.password).trim(),
-          role: 'editor'
-        });
+    // Only master admin can change master password or manage users
+    if (authUser.role === 'admin') {
+      if (newAdminPass && String(newAdminPass).trim().length >= 4) {
+        updates.customAdminPass = String(newAdminPass).trim();
       }
-      updates.users = currentUsers;
-    }
 
-    if (deleteUserId) {
-      currentUsers = currentUsers.filter((u) => u.id !== deleteUserId);
-      updates.users = currentUsers;
+      let currentUsers = Array.isArray(currentCms.users) ? [...currentCms.users] : [];
+      if (newUser && newUser.username && newUser.password) {
+        const exists = currentUsers.some(
+          (u) => u.username.toLowerCase() === String(newUser.username).trim().toLowerCase()
+        );
+        if (!exists) {
+          currentUsers.push({
+            id: `usr-${Date.now()}`,
+            username: String(newUser.username).trim().slice(0, 50),
+            name: String(newUser.name || newUser.username).trim().slice(0, 80),
+            password: String(newUser.password).trim(),
+            role: 'editor'
+          });
+        }
+        updates.users = currentUsers;
+      }
+
+      if (deleteUserId) {
+        currentUsers = currentUsers.filter((u) => u.id !== deleteUserId);
+        updates.users = currentUsers;
+      }
     }
 
     const savedCms = writeCmsData(updates);
@@ -476,9 +652,21 @@ function createServer() {
 
   // 7. Send 6-digit verification code via Gmail / SMTP
   app.post('/api/send-verification-code', async (req, res) => {
+    if (!checkRateLimit(req, 'send-otp', 8, 15 * 60 * 1000)) {
+      return res
+        .status(429)
+        .json({ error: 'Çok fazla kod isteği gönderildi. Lütfen birkaç dakika bekleyin.' });
+    }
     const { email, name, organization, code } = req.body || {};
-    if (!email || !code) {
-      return res.status(400).json({ error: 'E-posta ve kod gereklidir.' });
+    const cleanEmail = String(email || '').trim();
+    const cleanCode = String(code || '').trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!cleanEmail || cleanEmail.length > 120 || !emailRegex.test(cleanEmail)) {
+      return res.status(400).json({ error: 'Geçerli bir e-posta adresi giriniz.' });
+    }
+    if (!/^\d{6}$/.test(cleanCode)) {
+      return res.status(400).json({ error: 'Geçersiz doğrulama kodu formatı.' });
     }
 
     const candidateUsers = process.env.SMTP_USER
@@ -488,10 +676,12 @@ function createServer() {
     const smtpPass = (process.env.SMTP_PASS || '').replace(/\s+/g, '');
 
     if (!smtpPass) {
-      return res.json({ ok: true, previewCode: code });
+      return res.json({ ok: true, previewCode: cleanCode });
     }
 
-    const signerTitle = organization ? `${organization} (${name})` : name;
+    const safeName = escapeHtml(String(name || '').slice(0, 120));
+    const safeOrg = escapeHtml(String(organization || '').slice(0, 150));
+    const signerTitle = safeOrg ? `${safeOrg} (${safeName})` : safeName;
     const htmlBody = `
       <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 24px; border: 1px solid #e5e7eb; border-radius: 12px; background-color: #fbf9f5;">
         <h2 style="color: #0B4F71; margin-top: 0;">COP31'e Doğru İklim Adaleti Forumu</h2>
@@ -502,7 +692,7 @@ function createServer() {
           İklim Adaleti Forumu Çağrı Metni'ni imzalamak için tek kullanımlık 6 haneli e-posta doğrulama kodunuz aşağıdadır:
         </p>
         <div style="margin: 24px 0; padding: 16px; background-color: #ffffff; border: 2px solid #0B4F71; border-radius: 10px; text-align: center;">
-          <span style="font-family: monospace; font-size: 28px; font-weight: bold; letter-spacing: 8px; color: #0B4F71;">${code}</span>
+          <span style="font-family: monospace; font-size: 28px; font-weight: bold; letter-spacing: 8px; color: #0B4F71;">${cleanCode}</span>
         </div>
         <p style="color: #78716c; font-size: 12px; line-height: 1.5;">
           Bu kodu web sayfasındaki doğrulama ekranına girerek imzanızı tamamlayabilirsiniz.<br/>
@@ -525,8 +715,8 @@ function createServer() {
         await transporter.sendMail({
           from: `"İklim Adaleti Forumu" <${smtpUser}>`,
           replyTo: 'iklimadaleti2026@gmail.com',
-          to: email,
-          subject: `İklim Adaleti Forumu - İmza Onay Kodunuz: ${code}`,
+          to: cleanEmail,
+          subject: `İklim Adaleti Forumu - İmza Onay Kodunuz: ${cleanCode}`,
           html: htmlBody
         });
 
@@ -537,7 +727,7 @@ function createServer() {
     }
 
     console.error('SMTP error:', lastErr);
-    return res.status(500).json({ error: 'E-posta gönderilemedi', previewCode: code });
+    return res.status(500).json({ error: 'E-posta gönderilemedi' });
   });
 
   app.use(express.static(distPath));

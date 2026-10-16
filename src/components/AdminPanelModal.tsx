@@ -198,18 +198,11 @@ export default function AdminPanelModal({
         if (data.user?.name) setCurrentUserDisplay(data.user.name);
         if (Array.isArray(data.users)) setAdminUsers(data.users);
       } else {
-        if (password === 'iklim2026') {
-          setAuthenticated(true);
-        } else {
-          setLoginError('Kullanıcı adı veya şifre hatalı.');
-        }
+        const errData = await res.json().catch(() => ({}));
+        setLoginError(errData.error || 'Kullanıcı adı veya şifre hatalı.');
       }
     } catch {
-      if (password === 'iklim2026') {
-        setAuthenticated(true);
-      } else {
-        setLoginError('Kullanıcı adı veya şifre hatalı.');
-      }
+      setLoginError('Sunucu bağlantısı kurulamadı. Lütfen tekrar deneyin.');
     }
   };
 
