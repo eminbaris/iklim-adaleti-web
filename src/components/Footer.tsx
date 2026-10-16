@@ -1,0 +1,138 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { Instagram, Mail, ArrowUp, PenTool } from 'lucide-react';
+import ForumLogo from './ForumLogo.tsx';
+
+interface FooterProps {
+  onOpenSignModal: () => void;
+}
+
+export default function Footer({
+  onOpenSignModal
+}: FooterProps) {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <footer className="bg-[#051C26] text-[#FBF9F5] border-t border-sky-950/60">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-10 border-b border-white/10">
+          
+          {/* Col 1: Identity & Description (5 cols) */}
+          <div className="lg:col-span-5">
+            <div className="mb-4 bg-[#FBF9F5] px-4 py-3 rounded-xl inline-block shadow-sm">
+              <ForumLogo className="h-14 sm:h-16 w-auto" variant="full" />
+            </div>
+
+            <p className="text-xs sm:text-sm text-stone-300/90 leading-relaxed max-w-sm mb-6">
+              <strong>iklimadaleti.org</strong> — COP31’e Doğru İklim Adaleti Forumu. Zamanımızı, yaşamımızı, geleceğimizi istiyoruz; başka bir dünyayı birlikte kuralım!
+            </p>
+
+            {/* Social links */}
+            <div className="flex flex-wrap items-center gap-3">
+              <a
+                href="https://www.instagram.com/iklimadaletiforumu"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-semibold text-stone-200 transition-colors"
+                title="Instagram: @iklimadaletiforumu"
+              >
+                <Instagram className="w-4 h-4 text-pink-400" />
+                <span>@iklimadaletiforumu</span>
+              </a>
+
+              <a
+                href="mailto:iletisim@iklimadaleti.org"
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-medium text-stone-200 transition-colors"
+              >
+                <Mail className="w-4 h-4 text-stone-300" />
+                <span>iletisim@iklimadaleti.org</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Col 2: Navigation Links (3 cols) */}
+          <div className="lg:col-span-3">
+            <h4 className="text-xs font-bold tracking-wider uppercase text-sky-400 mb-4">
+              Menü
+            </h4>
+            <ul className="space-y-2.5 text-xs sm:text-sm text-stone-300 font-medium">
+              <li>
+                <a href="#anasayfa" className="hover:text-white transition-colors">
+                  Anasayfa
+                </a>
+              </li>
+              <li>
+                <a href="#forumlar" className="hover:text-white transition-colors">
+                  Forumlar
+                </a>
+              </li>
+              <li>
+                <a href="#calisma-gruplari" className="hover:text-white transition-colors">
+                  Çalışma Grupları
+                </a>
+              </li>
+              <li>
+                <a href="#sonuc-bildirgeleri" className="hover:text-white transition-colors">
+                  Sonuç Bildirgeleri
+                </a>
+              </li>
+              <li>
+                <a href="#etkinlik-takvimi" className="hover:text-white transition-colors">
+                  Etkinlik Takvimi
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 3: Call to Action (4 cols) */}
+          <div className="lg:col-span-4 flex flex-col justify-between">
+            <div>
+              <h4 className="text-xs font-bold tracking-wider uppercase text-emerald-400 mb-3">
+                15–16–17 Kasım’da Antalya’da Buluşuyoruz!
+              </h4>
+              <p className="text-xs sm:text-sm text-stone-300 leading-relaxed mb-5">
+                COP31 Şirketlerin Değil, Emeğin ve Halklarındır! Çağrı metnini imzalayarak dayanışmayı büyütün.
+              </p>
+
+              <button
+                type="button"
+                onClick={onOpenSignModal}
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#0B4F71] hover:bg-[#0D628C] text-xs sm:text-sm font-bold text-white transition-colors shadow-sm cursor-pointer"
+              >
+                <PenTool className="w-4 h-4 text-sky-200" />
+                <span>Çağrı Metnini İmzala</span>
+              </button>
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-end">
+              <button
+                type="button"
+                onClick={scrollToTop}
+                className="text-xs text-stone-400 hover:text-white flex items-center gap-1 cursor-pointer"
+              >
+                <span>Yukarı Çık</span>
+                <ArrowUp className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Bottom copyright */}
+        <div className="pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-stone-400">
+          <p>
+            © {new Date().getFullYear()} iklimadaleti.org · İklim Adaleti Forumu
+          </p>
+          <p className="text-[11px]">
+            Başka bir dünyayı birlikte kuralım!
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}

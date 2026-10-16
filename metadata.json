@@ -1,0 +1,6 @@
+{
+  "name": "İklim Adaleti Forumu",
+  "description": "iklimadaleti.org - Ekolojik haklar, adil geçiş, iklim tazminatı, sonuç bildirgeleri ve yayınlar için İklim Adaleti Forumu resmi web platformu.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
