@@ -448,6 +448,25 @@ const DEFAULT_SIGNATORIES = [
     date: '2026-10-17',
     type: 'institutional',
     emailVerified: true
+  },
+  {
+    id: 'sig-1792248490763',
+    name: 'Nezih Yağar',
+    organization: 'emekli',
+    city: 'antalya',
+    message: 'sermayenin zehrinin sonuçlarını çekmek istemiyoruz',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792248768499',
+    name: 'Merve Avcı',
+    organization: 'Avukat',
+    city: 'İstanbul',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
   }
 ];
 
