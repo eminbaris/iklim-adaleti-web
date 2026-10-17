@@ -4,13 +4,30 @@
  */
 
 import { useState } from 'react';
-import { RefreshCw, Calendar, Clock, MapPin, FileText, X, ZoomIn } from 'lucide-react';
+import { RefreshCw, Calendar, Clock, MapPin, FileText, X, ZoomIn, Share2, Check, ArrowLeft, ExternalLink } from 'lucide-react';
 import { ForumEvent } from '../types.ts';
 import { getYoutubeEmbedUrl } from './ArticleModal.tsx';
+
+export function toEventSlug(text: string): string {
+  return String(text || '')
+    .trim()
+    .toLowerCase()
+    .replace(/ğ/g, 'g')
+    .replace(/ü/g, 'u')
+    .replace(/ş/g, 's')
+    .replace(/ı/g, 'i')
+    .replace(/i̇/g, 'i')
+    .replace(/ö/g, 'o')
+    .replace(/ç/g, 'c')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
 
 interface EtkinliklerSectionProps {
   events: ForumEvent[];
   onRegisterEvent: (event: ForumEvent) => void;
+  selectedEventSlug?: string | null;
+  onSelectEventSlug?: (slug: string | null) => void;
 }
 
 function parseTurkishEventDate(dateStr: string, timeStr?: string): number {
@@ -72,12 +89,37 @@ function parseTurkishEventDate(dateStr: string, timeStr?: string): number {
   return Number.isNaN(parsed) ? Number.MAX_SAFE_INTEGER : parsed;
 }
 
-export default function EtkinliklerSection({ events }: EtkinliklerSectionProps) {
+export default function EtkinliklerSection({
+  events,
+  selectedEventSlug,
+  onSelectEventSlug
+}: EtkinliklerSectionProps) {
   const [previewImage, setPreviewImage] = useState<{ url: string; title: string } | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const sortedEvents = [...events].sort(
     (a, b) => parseTurkishEventDate(a.date, a.time) - parseTurkishEventDate(b.date, b.time)
   );
+
+  const matchedSingleEvent = selectedEventSlug
+    ? sortedEvents.find(
+        (ev) =>
+          toEventSlug(ev.title) === selectedEventSlug ||
+          ev.id.toLowerCase() === selectedEventSlug.toLowerCase()
+      )
+    : null;
+
+  const displayedEvents = matchedSingleEvent ? [matchedSingleEvent] : sortedEvents;
+
+  const handleCopyEventLink = (ev: ForumEvent) => {
+    const slug = toEventSlug(ev.title);
+    const url = `${window.location.origin}/etkinlikler/${slug}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url);
+      setCopiedId(ev.id);
+      setTimeout(() => setCopiedId(null), 2500);
+    }
+  };
 
   return (
     <section
@@ -95,13 +137,25 @@ export default function EtkinliklerSection({ events }: EtkinliklerSectionProps) 
               id="events-heading"
               className="font-serif text-2xl sm:text-3xl font-bold text-stone-900 tracking-tight"
             >
-              Etkinlik Takvimi
+              {matchedSingleEvent ? matchedSingleEvent.title : 'Etkinlik Takvimi'}
             </h2>
           </div>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-stone-200 text-stone-600 text-xs font-semibold">
-            <RefreshCw className="w-3.5 h-3.5 text-[#3E8226]" />
-            <span>{events.length > 0 ? `${events.length} Etkinlik` : 'Güncelleniyor'}</span>
-          </span>
+          <div className="flex flex-wrap items-center gap-2.5">
+            {matchedSingleEvent && onSelectEventSlug && (
+              <button
+                type="button"
+                onClick={() => onSelectEventSlug(null)}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#0B4F71] hover:bg-[#083B54] text-white text-xs font-bold cursor-pointer shadow-2xs transition-colors"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Tüm Etkinlik Takvimini Gör ({events.length})</span>
+              </button>
+            )}
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-stone-200 text-stone-600 text-xs font-semibold">
+              <RefreshCw className="w-3.5 h-3.5 text-[#3E8226]" />
+              <span>{events.length > 0 ? `${events.length} Etkinlik` : 'Güncelleniyor'}</span>
+            </span>
+          </div>
         </div>
 
         {events.length === 0 ? (
@@ -115,8 +169,9 @@ export default function EtkinliklerSection({ events }: EtkinliklerSectionProps) 
           </div>
         ) : (
           <div className="mt-8 space-y-8">
-            {sortedEvents.map((ev) => {
+            {displayedEvents.map((ev) => {
               const ytEmbed = getYoutubeEmbedUrl(ev.videoUrl);
+              const slug = toEventSlug(ev.title);
               return (
                 <div
                   key={ev.id}
@@ -147,24 +202,75 @@ export default function EtkinliklerSection({ events }: EtkinliklerSectionProps) 
                   {/* Sağ / Alt Kısım: Etkinlik Bilgileri ve Açıklama */}
                   <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between">
                     <div>
-                      <div className="flex flex-wrap items-center gap-2.5 text-xs text-stone-600 mb-4">
-                        <span className="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[#3E8226] font-bold">
-                          {ev.type}
-                        </span>
-                        <span className="inline-flex items-center gap-1.5 font-bold text-[#0B4F71] bg-sky-50 border border-sky-200 px-3 py-1 rounded-full">
-                          <Calendar className="w-3.5 h-3.5" />
-                          {ev.date}
-                        </span>
-                        {ev.time && (
-                          <span className="inline-flex items-center gap-1 font-semibold bg-stone-100 px-3 py-1 rounded-full text-stone-700">
-                            <Clock className="w-3.5 h-3.5 text-[#0B4F71]" />
-                            {ev.time}
+                      <div className="flex flex-wrap items-center justify-between gap-2.5 text-xs text-stone-600 mb-4">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[#3E8226] font-bold">
+                            {ev.type}
                           </span>
-                        )}
+                          <span className="inline-flex items-center gap-1.5 font-bold text-[#0B4F71] bg-sky-50 border border-sky-200 px-3 py-1 rounded-full">
+                            <Calendar className="w-3.5 h-3.5" />
+                            {ev.date}
+                          </span>
+                          {ev.time && (
+                            <span className="inline-flex items-center gap-1 font-semibold bg-stone-100 px-3 py-1 rounded-full text-stone-700">
+                              <Clock className="w-3.5 h-3.5 text-[#0B4F71]" />
+                              {ev.time}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Doğrudan Etkinlik Linkini Paylaş / Tek Sayfada Aç */}
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => handleCopyEventLink(ev)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-xs transition-colors cursor-pointer"
+                            title="Sadece bu etkinliğin doğrudan paylaşım linkini kopyala"
+                          >
+                            {copiedId === ev.id ? (
+                              <>
+                                <Check className="w-3.5 h-3.5 text-[#3E8226]" />
+                                <span className="text-[#3E8226]">Link Kopyalandı!</span>
+                              </>
+                            ) : (
+                              <>
+                                <Share2 className="w-3.5 h-3.5 text-[#0B4F71]" />
+                                <span>Etkinlik Linkini Paylaş</span>
+                              </>
+                            )}
+                          </button>
+                          {!matchedSingleEvent && onSelectEventSlug && (
+                            <a
+                              href={`/etkinlikler/${slug}`}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                onSelectEventSlug(slug);
+                              }}
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-sky-50 hover:bg-sky-100 border border-sky-200 text-[#0B4F71] font-bold text-xs transition-colors"
+                              title="Bu etkinliği tek başına ayrı sayfada aç"
+                            >
+                              <ExternalLink className="w-3.5 h-3.5" />
+                              <span>Tek Sayfa</span>
+                            </a>
+                          )}
+                        </div>
                       </div>
 
                       <h3 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900 mb-4 leading-snug">
-                        {ev.title}
+                        {!matchedSingleEvent && onSelectEventSlug ? (
+                          <a
+                            href={`/etkinlikler/${slug}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              onSelectEventSlug(slug);
+                            }}
+                            className="hover:text-[#0B4F71] transition-colors"
+                          >
+                            {ev.title}
+                          </a>
+                        ) : (
+                          ev.title
+                        )}
                       </h3>
 
                       <p className="text-sm sm:text-base text-stone-700 leading-relaxed whitespace-pre-line mb-6">

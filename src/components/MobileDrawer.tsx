@@ -10,22 +10,26 @@ interface MobileDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenSignModal: () => void;
+  activeSection?: string;
+  onNavigate?: (sectionId: string, path: string) => void;
 }
 
 export default function MobileDrawer({
   isOpen,
   onClose,
-  onOpenSignModal
+  onOpenSignModal,
+  activeSection,
+  onNavigate
 }: MobileDrawerProps) {
   if (!isOpen) return null;
 
   const links = [
-    { label: 'Anasayfa', href: '#anasayfa', icon: ArrowRight },
-    { label: 'Forumlar', href: '#forumlar', icon: Users },
-    { label: 'Çalışma Grupları', href: '#calisma-gruplari', icon: Users },
-    { label: 'Sonuç Bildirgeleri', href: '#sonuc-bildirgeleri', icon: FileText },
-    { label: 'Politika / Program', href: '#politika-program', icon: FileText },
-    { label: 'Etkinlik Takvimi', href: '#etkinlik-takvimi', icon: Calendar }
+    { id: 'anasayfa', label: 'Anasayfa', href: '/', icon: ArrowRight },
+    { id: 'forumlar', label: 'Forumlar', href: '/forumlar', icon: Users },
+    { id: 'calisma-gruplari', label: 'Çalışma Grupları', href: '/calisma-gruplari', icon: Users },
+    { id: 'sonuc-bildirgeleri', label: 'Sonuç Bildirgeleri', href: '/sonuc-bildirgeleri', icon: FileText },
+    { id: 'politika-program', label: 'Politika / Program', href: '/politika-program', icon: FileText },
+    { id: 'etkinlik-takvimi', label: 'Etkinlik Takvimi', href: '/etkinlikler', icon: Calendar }
   ];
 
   return (
@@ -57,18 +61,29 @@ export default function MobileDrawer({
           <nav className="mt-5 flex flex-col gap-1.5" aria-label="Mobil Menü">
             {links.map((link) => {
               const Icon = link.icon;
+              const isActive = activeSection === link.id;
               return (
                 <a
-                  key={link.href}
+                  key={link.id}
                   href={link.href}
-                  onClick={onClose}
-                  className="flex items-center justify-between px-3.5 py-3 rounded-lg text-sm font-semibold text-stone-800 hover:bg-stone-200/60 transition-colors min-h-[44px]"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (onNavigate) {
+                      onNavigate(link.id, link.href);
+                    }
+                    onClose();
+                  }}
+                  className={`flex items-center justify-between px-3.5 py-3 rounded-lg text-sm font-semibold transition-colors min-h-[44px] ${
+                    isActive
+                      ? 'bg-[#0B4F71] text-white'
+                      : 'text-stone-800 hover:bg-stone-200/60'
+                  }`}
                 >
                   <span className="flex items-center gap-3">
-                    <Icon className="w-4 h-4 text-[#0B4F71]" />
+                    <Icon className={`w-4 h-4 ${isActive ? 'text-sky-200' : 'text-[#0B4F71]'}`} />
                     <span>{link.label}</span>
                   </span>
-                  <span className="text-xs text-stone-400">→</span>
+                  <span className={`text-xs ${isActive ? 'text-sky-200' : 'text-stone-400'}`}>→</span>
                 </a>
               );
             })}

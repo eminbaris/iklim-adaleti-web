@@ -3,9 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { RefreshCw, Calendar, FileText, ArrowUpRight, Play } from 'lucide-react';
+import { useState } from 'react';
+import { RefreshCw, Calendar, FileText, ArrowUpRight, Play, Share2, Check } from 'lucide-react';
 import { Article } from '../types.ts';
 import { getYoutubeEmbedUrl } from './ArticleModal.tsx';
+import { toEventSlug } from './EtkinliklerSection.tsx';
 
 interface ForumlarSectionProps {
   items?: Article[];
@@ -13,6 +15,18 @@ interface ForumlarSectionProps {
 }
 
 export default function ForumlarSection({ items = [], onReadArticle }: ForumlarSectionProps) {
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopyForumLink = (item: Article) => {
+    const slug = toEventSlug(item.title);
+    const url = `${window.location.origin}/etkinlikler/${slug}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url);
+      setCopiedId(item.id);
+      setTimeout(() => setCopiedId(null), 2500);
+    }
+  };
+
   return (
     <section
       id="forumlar"
@@ -100,7 +114,24 @@ export default function ForumlarSection({ items = [], onReadArticle }: ForumlarS
                   </div>
 
                   <div className="px-6 pb-5 pt-4 border-t border-stone-200/80 flex flex-wrap items-center justify-between gap-2">
-                    <span className="text-xs font-medium text-stone-500">{item.author}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleCopyForumLink(item)}
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-stone-600 hover:text-[#0B4F71] cursor-pointer"
+                      title="Bu forumun doğrudan linkini kopyala"
+                    >
+                      {copiedId === item.id ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-[#3E8226]" />
+                          <span className="text-[#3E8226] font-bold">Link Kopyalandı</span>
+                        </>
+                      ) : (
+                        <>
+                          <Share2 className="w-3.5 h-3.5" />
+                          <span>Linki Paylaş</span>
+                        </>
+                      )}
+                    </button>
                     <div className="flex items-center gap-3">
                       {item.videoUrl && item.imageUrl && (
                         <button

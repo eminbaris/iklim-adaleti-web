@@ -11,21 +11,23 @@ interface HeaderProps {
   mobileMenuOpen: boolean;
   setMobileMenuOpen: (open: boolean) => void;
   activeSection: string;
+  onNavigate: (sectionId: string, path: string) => void;
 }
 
 export default function Header({
   onOpenSignModal,
   mobileMenuOpen,
   setMobileMenuOpen,
-  activeSection
+  activeSection,
+  onNavigate
 }: HeaderProps) {
   const navLinks = [
-    { label: 'Anasayfa', href: '#anasayfa' },
-    { label: 'Forumlar', href: '#forumlar' },
-    { label: 'Çalışma Grupları', href: '#calisma-gruplari' },
-    { label: 'Sonuç Bildirgeleri', href: '#sonuc-bildirgeleri' },
-    { label: 'Politika / Program', href: '#politika-program' },
-    { label: 'Etkinlik Takvimi', href: '#etkinlik-takvimi' }
+    { id: 'anasayfa', label: 'Anasayfa', href: '/' },
+    { id: 'forumlar', label: 'Forumlar', href: '/forumlar' },
+    { id: 'calisma-gruplari', label: 'Çalışma Grupları', href: '/calisma-gruplari' },
+    { id: 'sonuc-bildirgeleri', label: 'Sonuç Bildirgeleri', href: '/sonuc-bildirgeleri' },
+    { id: 'politika-program', label: 'Politika / Program', href: '/politika-program' },
+    { id: 'etkinlik-takvimi', label: 'Etkinlik Takvimi', href: '/etkinlikler' }
   ];
 
   return (
@@ -34,7 +36,11 @@ export default function Header({
         
         {/* Official Logo Lockup */}
         <a
-          href="#anasayfa"
+          href="/"
+          onClick={(e) => {
+            e.preventDefault();
+            onNavigate('anasayfa', '/');
+          }}
           className="flex items-center shrink-0 focus-visible:outline-2 focus-visible:outline-[#0B4F71] rounded-sm py-0.5 transition-opacity hover:opacity-95"
           aria-label="İklim Adaleti Forumu Anasayfa"
         >
@@ -50,11 +56,15 @@ export default function Header({
           aria-label="Ana Menü"
         >
           {navLinks.map((link) => {
-            const isActive = activeSection === link.href.replace('#', '');
+            const isActive = activeSection === link.id;
             return (
               <a
-                key={link.href}
+                key={link.id}
                 href={link.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onNavigate(link.id, link.href);
+                }}
                 className={`whitespace-nowrap shrink-0 transition-colors py-1.5 border-b-2 ${
                   isActive
                     ? 'text-[#0B4F71] font-bold border-[#0B4F71]'

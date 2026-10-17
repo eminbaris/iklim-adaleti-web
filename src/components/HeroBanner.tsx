@@ -26,6 +26,8 @@ interface HeroBannerProps {
   onExploreForums: () => void;
   onExploreWorkingGroups: () => void;
   onExploreDeclarations: () => void;
+  onExplorePolicies?: () => void;
+  onExploreEvents?: () => void;
 }
 
 export default function HeroBanner({
@@ -33,7 +35,9 @@ export default function HeroBanner({
   signatories,
   onExploreForums,
   onExploreWorkingGroups,
-  onExploreDeclarations
+  onExploreDeclarations,
+  onExplorePolicies,
+  onExploreEvents
 }: HeroBannerProps) {
   const [copied, setCopied] = useState(false);
 
@@ -417,31 +421,47 @@ export default function HeroBanner({
         </article>
 
         {/* Quick Navigation Bar Below Call Text */}
-        <div className="flex flex-wrap items-center justify-center gap-3 text-xs sm:text-sm font-medium text-stone-600">
-          <span className="text-stone-400">Diğer Bölümler:</span>
+        <div className="flex flex-wrap items-center justify-center gap-2.5 text-xs sm:text-sm font-semibold text-stone-700">
+          <span className="text-stone-400 mr-1">Sayfalar:</span>
           <button
             type="button"
             onClick={onExploreForums}
-            className="hover:text-[#0B4F71] underline underline-offset-4 cursor-pointer"
+            className="px-3.5 py-2 rounded-lg bg-white border border-stone-200 hover:border-[#0B4F71] hover:text-[#0B4F71] transition-colors cursor-pointer shadow-2xs"
           >
-            Forumlar
+            Forumlar →
           </button>
-          <span className="text-stone-300">·</span>
           <button
             type="button"
             onClick={onExploreWorkingGroups}
-            className="hover:text-[#0B4F71] underline underline-offset-4 cursor-pointer"
+            className="px-3.5 py-2 rounded-lg bg-white border border-stone-200 hover:border-[#0B4F71] hover:text-[#0B4F71] transition-colors cursor-pointer shadow-2xs"
           >
-            Çalışma Grupları
+            Çalışma Grupları →
           </button>
-          <span className="text-stone-300">·</span>
           <button
             type="button"
             onClick={onExploreDeclarations}
-            className="hover:text-[#0B4F71] underline underline-offset-4 cursor-pointer"
+            className="px-3.5 py-2 rounded-lg bg-white border border-stone-200 hover:border-[#0B4F71] hover:text-[#0B4F71] transition-colors cursor-pointer shadow-2xs"
           >
-            Sonuç Bildirgeleri
+            Sonuç Bildirgeleri →
           </button>
+          {onExplorePolicies && (
+            <button
+              type="button"
+              onClick={onExplorePolicies}
+              className="px-3.5 py-2 rounded-lg bg-white border border-stone-200 hover:border-[#0B4F71] hover:text-[#0B4F71] transition-colors cursor-pointer shadow-2xs"
+            >
+              Politika / Program →
+            </button>
+          )}
+          {onExploreEvents && (
+            <button
+              type="button"
+              onClick={onExploreEvents}
+              className="px-3.5 py-2 rounded-lg bg-white border border-stone-200 hover:border-[#0B4F71] hover:text-[#0B4F71] transition-colors cursor-pointer shadow-2xs"
+            >
+              Etkinlik Takvimi →
+            </button>
+          )}
         </div>
 
       </div>

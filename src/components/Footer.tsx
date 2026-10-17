@@ -9,11 +9,13 @@ import ForumLogo from './ForumLogo.tsx';
 interface FooterProps {
   onOpenSignModal: () => void;
   onOpenAdminModal?: () => void;
+  onNavigate?: (sectionId: string, path: string) => void;
 }
 
 export default function Footer({
   onOpenSignModal,
-  onOpenAdminModal
+  onOpenAdminModal,
+  onNavigate
 }: FooterProps) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -63,36 +65,29 @@ export default function Footer({
               Menü
             </h4>
             <ul className="space-y-2.5 text-xs sm:text-sm text-stone-300 font-medium">
-              <li>
-                <a href="#anasayfa" className="hover:text-white transition-colors">
-                  Anasayfa
-                </a>
-              </li>
-              <li>
-                <a href="#forumlar" className="hover:text-white transition-colors">
-                  Forumlar
-                </a>
-              </li>
-              <li>
-                <a href="#calisma-gruplari" className="hover:text-white transition-colors">
-                  Çalışma Grupları
-                </a>
-              </li>
-              <li>
-                <a href="#sonuc-bildirgeleri" className="hover:text-white transition-colors">
-                  Sonuç Bildirgeleri
-                </a>
-              </li>
-              <li>
-                <a href="#politika-program" className="hover:text-white transition-colors">
-                  Politika / Program
-                </a>
-              </li>
-              <li>
-                <a href="#etkinlik-takvimi" className="hover:text-white transition-colors">
-                  Etkinlik Takvimi
-                </a>
-              </li>
+              {[
+                { id: 'anasayfa', label: 'Anasayfa', href: '/' },
+                { id: 'forumlar', label: 'Forumlar', href: '/forumlar' },
+                { id: 'calisma-gruplari', label: 'Çalışma Grupları', href: '/calisma-gruplari' },
+                { id: 'sonuc-bildirgeleri', label: 'Sonuç Bildirgeleri', href: '/sonuc-bildirgeleri' },
+                { id: 'politika-program', label: 'Politika / Program', href: '/politika-program' },
+                { id: 'etkinlik-takvimi', label: 'Etkinlik Takvimi', href: '/etkinlikler' }
+              ].map((link) => (
+                <li key={link.id}>
+                  <a
+                    href={link.href}
+                    onClick={(e) => {
+                      if (onNavigate) {
+                        e.preventDefault();
+                        onNavigate(link.id, link.href);
+                      }
+                    }}
+                    className="hover:text-white transition-colors"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 

@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { ArrowLeft, Share2, Check } from 'lucide-react';
 import Header from './components/Header.tsx';
 import MobileDrawer from './components/MobileDrawer.tsx';
 import HeroBanner from './components/HeroBanner.tsx';
@@ -27,6 +28,47 @@ import {
 import { Article, WorkingGroup, ForumEvent, Signatory } from './types.ts';
 
 const STORAGE_KEY = 'iklimadaleti_verified_signatories_v1';
+
+const SECTION_LABELS: Record<string, string> = {
+  anasayfa: 'Anasayfa',
+  forumlar: 'Forumlar',
+  'calisma-gruplari': 'Çalışma Grupları',
+  'sonuc-bildirgeleri': 'Sonuç Bildirgeleri',
+  'politika-program': 'Politika / Program',
+  'etkinlik-takvimi': 'Etkinlik Takvimi'
+};
+
+function resolveRouteFromLocation(): { section: string; eventSlug: string | null } {
+  if (typeof window === 'undefined') {
+    return { section: 'anasayfa', eventSlug: null };
+  }
+  const path = window.location.pathname.replace(/\/+$/, '') || '/';
+  const hash = window.location.hash.replace(/^#/, '');
+
+  if (path.startsWith('/etkinlikler/') || path.startsWith('/etkinlik/') || path.startsWith('/etkinlik-takvimi/')) {
+    const parts = path.split('/').filter(Boolean);
+    const slug = parts[1] ? decodeURIComponent(parts[1]) : null;
+    return { section: 'etkinlik-takvimi', eventSlug: slug };
+  }
+
+  if (path === '/etkinlikler' || path === '/etkinlik-takvimi' || hash === 'etkinlik-takvimi' || hash === 'etkinlikler') {
+    return { section: 'etkinlik-takvimi', eventSlug: null };
+  }
+  if (path === '/forumlar' || hash === 'forumlar') {
+    return { section: 'forumlar', eventSlug: null };
+  }
+  if (path === '/calisma-gruplari' || hash === 'calisma-gruplari') {
+    return { section: 'calisma-gruplari', eventSlug: null };
+  }
+  if (path === '/sonuc-bildirgeleri' || hash === 'sonuc-bildirgeleri') {
+    return { section: 'sonuc-bildirgeleri', eventSlug: null };
+  }
+  if (path === '/politika-program' || path === '/politika' || hash === 'politika-program') {
+    return { section: 'politika-program', eventSlug: null };
+  }
+
+  return { section: 'anasayfa', eventSlug: null };
+}
 
 function getSignatoryIdentityKey(sig: Signatory): string {
   const isInst =
@@ -114,7 +156,11 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
 
-  const [activeSection, setActiveSection] = useState('anasayfa');
+  const [activeSection, setActiveSection] = useState<string>(() => resolveRouteFromLocation().section);
+  const [selectedEventSlug, setSelectedEventSlug] = useState<string | null>(
+    () => resolveRouteFromLocation().eventSlug
+  );
+  const [copiedPageLink, setCopiedPageLink] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -287,39 +333,47 @@ export default function App() {
     }
   };
 
-  // Scroll spy to track active section among the 6 menu items
+  // Listen to browser Back/Forward buttons and hash changes
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = [
-        'anasayfa',
-        'forumlar',
-        'calisma-gruplari',
-        'sonuc-bildirgeleri',
-        'politika-program',
-        'etkinlik-takvimi'
-      ];
-      const scrollPosition = window.scrollY + 140;
-
-      for (const sectionId of sections) {
-        const el = document.getElementById(sectionId);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(sectionId);
-            break;
-          }
-        }
-      }
+    const syncFromUrl = () => {
+      const route = resolveRouteFromLocation();
+      setActiveSection(route.section);
+      setSelectedEventSlug(route.eventSlug);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('popstate', syncFromUrl);
+    window.addEventListener('hashchange', syncFromUrl);
+    return () => {
+      window.removeEventListener('popstate', syncFromUrl);
+      window.removeEventListener('hashchange', syncFromUrl);
+    };
   }, []);
 
-  const scrollTo = (id: string) => {
-    const el = document.getElementById(id);
-    el?.scrollIntoView({ behavior: 'smooth' });
+  const handleNavigate = (sectionId: string, path: string) => {
+    setActiveSection(sectionId);
+    setSelectedEventSlug(null);
+    if (typeof window !== 'undefined' && window.location.pathname !== path) {
+      window.history.pushState({}, '', path);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSelectEventSlug = (slug: string | null) => {
+    setSelectedEventSlug(slug);
+    setActiveSection('etkinlik-takvimi');
+    if (typeof window !== 'undefined') {
+      const nextPath = slug ? `/etkinlikler/${slug}` : '/etkinlikler';
+      window.history.pushState({}, '', nextPath);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleCopyCurrentPageUrl = () => {
+    if (typeof window !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href);
+      setCopiedPageLink(true);
+      setTimeout(() => setCopiedPageLink(false), 2500);
+    }
   };
 
   return (
@@ -330,6 +384,7 @@ export default function App() {
         mobileMenuOpen={mobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
         activeSection={activeSection}
+        onNavigate={handleNavigate}
       />
 
       {/* Mobile Drawer */}
@@ -337,55 +392,115 @@ export default function App() {
         isOpen={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
         onOpenSignModal={() => setSignModalOpen(true)}
+        activeSection={activeSection}
+        onNavigate={handleNavigate}
       />
 
-      {/* Main Content Areas matching the menu sections */}
+      {/* Subpage Breadcrumb & Share Bar when viewing an independent page */}
+      {activeSection !== 'anasayfa' && (
+        <div className="bg-white border-b border-stone-200/90">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-stone-600">
+              <button
+                type="button"
+                onClick={() => handleNavigate('anasayfa', '/')}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-[#0B4F71] font-bold transition-colors cursor-pointer"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Anasayfaya Dön</span>
+              </button>
+              <span className="text-stone-300">/</span>
+              <span className="text-stone-900 font-bold">
+                {SECTION_LABELS[activeSection] || 'Sayfa'}
+              </span>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleCopyCurrentPageUrl}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-sky-50 hover:bg-sky-100 border border-sky-200 text-[#0B4F71] text-xs font-bold transition-colors cursor-pointer"
+              title="Bu sayfanın doğrudan bağlantısını kopyala"
+            >
+              {copiedPageLink ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-[#3E8226]" />
+                  <span className="text-[#3E8226]">Sayfa Linki Kopyalandı!</span>
+                </>
+              ) : (
+                <>
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>Bu Sayfanın Linkini Paylaş</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content Area: renders ONLY the selected page cleanly */}
       <main className="flex-1">
         {/* 1. Anasayfa (COP31'e Doğru Görsel + Çağrı Metni + İmzacı Kurumlar + İmzala Butonu) */}
-        <HeroBanner
-          onOpenSignModal={() => setSignModalOpen(true)}
-          signatories={signatories}
-          onExploreForums={() => scrollTo('forumlar')}
-          onExploreWorkingGroups={() => scrollTo('calisma-gruplari')}
-          onExploreDeclarations={() => scrollTo('sonuc-bildirgeleri')}
-        />
+        {activeSection === 'anasayfa' && (
+          <HeroBanner
+            onOpenSignModal={() => setSignModalOpen(true)}
+            signatories={signatories}
+            onExploreForums={() => handleNavigate('forumlar', '/forumlar')}
+            onExploreWorkingGroups={() => handleNavigate('calisma-gruplari', '/calisma-gruplari')}
+            onExploreDeclarations={() => handleNavigate('sonuc-bildirgeleri', '/sonuc-bildirgeleri')}
+            onExplorePolicies={() => handleNavigate('politika-program', '/politika-program')}
+            onExploreEvents={() => handleNavigate('etkinlik-takvimi', '/etkinlikler')}
+          />
+        )}
 
         {/* 2. Forumlar */}
-        <ForumlarSection
-          items={forums}
-          onReadArticle={(art) => setSelectedArticle(art)}
-        />
+        {activeSection === 'forumlar' && (
+          <ForumlarSection
+            items={forums}
+            onReadArticle={(art) => setSelectedArticle(art)}
+          />
+        )}
 
         {/* 3. Çalışma Grupları */}
-        <CalismaGruplariSection
-          groups={workingGroups}
-          onJoinGroup={handleJoinWorkingGroup}
-        />
+        {activeSection === 'calisma-gruplari' && (
+          <CalismaGruplariSection
+            groups={workingGroups}
+            onJoinGroup={handleJoinWorkingGroup}
+          />
+        )}
 
         {/* 4. Sonuç Bildirgeleri */}
-        <SonucBildirgesiSection
-          declarations={declarations}
-          onReadFull={(art) => setSelectedArticle(art)}
-          onOpenSignModal={() => setSignModalOpen(true)}
-        />
+        {activeSection === 'sonuc-bildirgeleri' && (
+          <SonucBildirgesiSection
+            declarations={declarations}
+            onReadFull={(art) => setSelectedArticle(art)}
+            onOpenSignModal={() => setSignModalOpen(true)}
+          />
+        )}
 
         {/* 5. Politika / Program */}
-        <PolitikaProgramSection
-          policies={policies}
-          onReadFull={(art) => setSelectedArticle(art)}
-        />
+        {activeSection === 'politika-program' && (
+          <PolitikaProgramSection
+            policies={policies}
+            onReadFull={(art) => setSelectedArticle(art)}
+          />
+        )}
 
         {/* 6. Etkinlik Takvimi */}
-        <EtkinliklerSection
-          events={events}
-          onRegisterEvent={handleRegisterEvent}
-        />
+        {activeSection === 'etkinlik-takvimi' && (
+          <EtkinliklerSection
+            events={events}
+            onRegisterEvent={handleRegisterEvent}
+            selectedEventSlug={selectedEventSlug}
+            onSelectEventSlug={handleSelectEventSlug}
+          />
+        )}
       </main>
 
       {/* Institutional Footer */}
       <Footer
         onOpenSignModal={() => setSignModalOpen(true)}
         onOpenAdminModal={() => setAdminModalOpen(true)}
+        onNavigate={handleNavigate}
       />
 
       {/* Modals */}
