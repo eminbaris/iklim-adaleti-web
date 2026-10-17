@@ -355,6 +355,16 @@ const DEFAULT_SIGNATORIES = [
     date: '2026-10-17',
     type: 'individual',
     emailVerified: true
+  },
+  {
+    id: 'sig-1792237242014',
+    name: 'Orhun Çoban',
+    organization: 'Emekli/Gazeteci',
+    city: 'Denizli',
+    message: 'Birlikte kazanacağız...',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
   }
 ];
 
