@@ -91,6 +91,16 @@
     "emailVerified": true
   },
   {
+    "id": "sig-1792231166730",
+    "name": "Varto Ekoloji platformu",
+    "organization": "Varto Ekoloji platformu",
+    "city": "Muş Varto",
+    "message": "İmzalıyorum çünkü;\nBizler Varto Ekoloji Platformu çatısı altında, toprağına, merasına ve suyuna sahip çıkan üretici kadınlarız. Coğrafyamızda doğamızı ve yaşam alanlarımızı hedef alan talana karşı bir yıla yakındır kurduğumuz Direniş Çadırı'nda gece gündüz nöbetteyiz. O çadır sadece bir nöbet yeri değil; toprağını, merasını ve suyunu rant projelerine teslim etmeyenlerin ortak iradesi ve direniş kalemizdir.\nİklim krizini ve doğa tahribatını en çok hisseden biz üretici kadınlar; Varto'nun yaylalar",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
     "id": "sig-1792174998011",
     "name": "Necdet Demirci",
     "organization": "Mimar",
@@ -157,6 +167,14 @@
     "id": "sig-1792227068065",
     "name": "Önder İşleyen",
     "city": "Ankara",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792231606688",
+    "name": "Ebru delice",
+    "city": "Antalya",
     "date": "2026-10-17",
     "type": "individual",
     "emailVerified": true

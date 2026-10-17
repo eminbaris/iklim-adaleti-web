@@ -57,13 +57,15 @@ export const INITIAL_SIGNATORY_ORGANIZATIONS: string[] = [
   'Çiftçiler Sendikası (Çiftçi-Sen)',
   'Validebağ Gönüllüleri Derneği',
   'Vaminon (Arhavi Maden İstemiyor)',
-  'Fethiye Kent Konseyi'
+  'Fethiye Kent Konseyi',
+  'Varto Ekoloji platformu'
 ];
 
 const INITIAL_ORGANIZATION_CITIES: Record<string, string> = {
   'Antalya Sanatçılar Derneği': 'Antalya',
   'Yeşil Artvin Derneği': 'Artvin',
-  'Derelerin Kardeşliği Platformu (DEKAP)': 'Artvin-Rize-Trabzon-Giresun-Ordu-Samsun'
+  'Derelerin Kardeşliği Platformu (DEKAP)': 'Artvin-Rize-Trabzon-Giresun-Ordu-Samsun',
+  'Varto Ekoloji platformu': 'Muş Varto'
 };
 
 export const CALL_TEXT_FULL = `COP31'e DOĞRU İKLİM ADALETİ FORUMU
@@ -233,6 +235,14 @@ export const INITIAL_EXTRA_SIGNATORIES: Signatory[] = [
     id: 'sig-1792227068065',
     name: 'Önder İşleyen',
     city: 'Ankara',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792231606688',
+    name: 'Ebru delice',
+    city: 'Antalya',
     date: '2026-10-17',
     type: 'individual',
     emailVerified: true
