@@ -467,6 +467,79 @@ const DEFAULT_SIGNATORIES = [
     date: '2026-10-17',
     type: 'individual',
     emailVerified: true
+  },
+  {
+    id: 'sig-1792249092242',
+    name: 'Sedat Gül',
+    organization: 'Emekli',
+    city: 'Balıkesir',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792251973360',
+    name: 'Nuran Kamalı Şahin',
+    organization: 'Emekli',
+    city: 'Balıkesir',
+    message: 'Emperyalist talana karşı iklim adalet formunu destekliyorum',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792252055323',
+    name: 'İrfan Akkaya',
+    organization: 'Eskişehir Gıda Topluluğu',
+    city: 'Eskişehir',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792252689953',
+    name: 'Yalçın Ünal',
+    organization: 'Avukat',
+    city: 'Balıkesir',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792252720745',
+    name: 'Rıza kurt',
+    organization: 'Emekli',
+    city: 'İstanbul',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792252723621',
+    name: 'Mehmet Ali Sönmez',
+    organization: 'Enekli',
+    city: 'Balikesir',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792253109581',
+    name: 'Hayrettin uluman',
+    organization: 'Emekli gazeteci, yazar',
+    city: 'Balıkesir',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792253333311',
+    name: 'Şenol Yıldırım',
+    organization: 'Emekli',
+    city: 'Balıkesir',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
   }
 ];
 
