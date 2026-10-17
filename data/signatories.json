@@ -215,6 +215,15 @@
     "emailVerified": true
   },
   {
+    "id": "org-55",
+    "name": "Validebağ Savunması",
+    "organization": "Validebağ Savunması",
+    "city": "İstanbul",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
     "id": "sig-rec-asli-odman",
     "name": "Aslı Odman",
     "organization": "Akademisyen",
@@ -224,10 +233,10 @@
     "emailVerified": true
   },
   {
-    "id": "sig-rec-alev-yilmaz",
-    "name": "Alev Yılmaz",
-    "organization": "Üretici / Varto Ekoloji Platformu",
-    "city": "Muş Varto",
+    "id": "sig-rec-ziya-gokerkucuk",
+    "name": "Ziya Gökerküçük",
+    "organization": "Eğitimci",
+    "city": "",
     "date": "2026-10-17",
     "type": "individual",
     "emailVerified": true
@@ -276,27 +285,9 @@
     "emailVerified": true
   },
   {
-    "id": "sig-rec-mustafa-kolcu",
-    "name": "Mustafa Kolcu",
-    "organization": "Toroçder",
-    "city": "",
-    "date": "2026-10-17",
-    "type": "individual",
-    "emailVerified": true
-  },
-  {
     "id": "sig-rec-ali-merdan-celik",
     "name": "Ali Merdan Çelik",
     "city": "",
-    "date": "2026-10-17",
-    "type": "individual",
-    "emailVerified": true
-  },
-  {
-    "id": "sig-rec-dogukan-onder",
-    "name": "Doğukan Önder",
-    "organization": "İzmir Varto Ekoloji",
-    "city": "İzmir",
     "date": "2026-10-17",
     "type": "individual",
     "emailVerified": true

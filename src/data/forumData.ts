@@ -59,6 +59,7 @@ export const INITIAL_SIGNATORY_ORGANIZATIONS: string[] = [
   'Vaminon (Arhavi Maden İstemiyor)',
   'Fethiye Kent Konseyi',
   'Varto Ekoloji platformu',
+  'Validebağ Savunması',
   'Toroçder',
   'İzmir Varto Ekoloji'
 ];
@@ -68,6 +69,7 @@ const INITIAL_ORGANIZATION_CITIES: Record<string, string> = {
   'Yeşil Artvin Derneği': 'Artvin',
   'Derelerin Kardeşliği Platformu (DEKAP)': 'Artvin-Rize-Trabzon-Giresun-Ordu-Samsun',
   'Varto Ekoloji platformu': 'Muş Varto',
+  'Validebağ Savunması': 'İstanbul',
   'İzmir Varto Ekoloji': 'İzmir'
 };
 
@@ -277,10 +279,10 @@ export const INITIAL_EXTRA_SIGNATORIES: Signatory[] = [
     emailVerified: true
   },
   {
-    id: 'sig-rec-alev-yilmaz',
-    name: 'Alev Yılmaz',
-    organization: 'Üretici / Varto Ekoloji Platformu',
-    city: 'Muş Varto',
+    id: 'sig-rec-ziya-gokerkucuk',
+    name: 'Ziya Gökerküçük',
+    organization: 'Eğitimci',
+    city: '',
     date: '2026-10-17',
     type: 'individual',
     emailVerified: true
@@ -329,27 +331,9 @@ export const INITIAL_EXTRA_SIGNATORIES: Signatory[] = [
     emailVerified: true
   },
   {
-    id: 'sig-rec-mustafa-kolcu',
-    name: 'Mustafa Kolcu',
-    organization: 'Toroçder',
-    city: '',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
-  },
-  {
     id: 'sig-rec-ali-merdan-celik',
     name: 'Ali Merdan Çelik',
     city: '',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
-  },
-  {
-    id: 'sig-rec-dogukan-onder',
-    name: 'Doğukan Önder',
-    organization: 'İzmir Varto Ekoloji',
-    city: 'İzmir',
     date: '2026-10-17',
     type: 'individual',
     emailVerified: true

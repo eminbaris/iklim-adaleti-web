@@ -70,14 +70,27 @@ function resolveRouteFromLocation(): { section: string; eventSlug: string | null
   return { section: 'anasayfa', eventSlug: null };
 }
 
+const OBSOLETE_DUPLICATE_IDS = new Set([
+  'sig-rec-alev-yilmaz',
+  'sig-rec-mustafa-kolcu',
+  'sig-rec-dogukan-onder'
+]);
+
+function normalizeTrKey(str: string | undefined): string {
+  return String(str || '')
+    .trim()
+    .toLocaleLowerCase('tr-TR')
+    .replace(/\s+/g, ' ');
+}
+
 function getSignatoryIdentityKey(sig: Signatory): string {
   const isInst =
     sig.type === 'institutional' ||
     Boolean(sig.organization && sig.organization === sig.name);
   if (isInst) {
-    return `inst:${String(sig.organization || sig.name || '').trim().toLowerCase()}`;
+    return `inst:${normalizeTrKey(sig.organization || sig.name)}`;
   }
-  return `ind:${String(sig.name || '').trim().toLowerCase()}`;
+  return `ind:${normalizeTrKey(sig.name)}`;
 }
 
 function mergeAndDeduplicateSignatories(
@@ -91,6 +104,7 @@ function mergeAndDeduplicateSignatories(
     for (const sig of list) {
       if (!sig || (!sig.name && !sig.organization)) continue;
       const idKey = String(sig.id || '').trim().toLowerCase();
+      if (OBSOLETE_DUPLICATE_IDS.has(idKey)) continue;
       const nameKey = String(sig.organization || sig.name || '').trim().toLowerCase();
       const identityKey = getSignatoryIdentityKey(sig);
       if (

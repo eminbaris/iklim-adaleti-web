@@ -14,7 +14,7 @@ interface SignDeclarationModalProps {
 }
 
 const INDIVIDUAL_PROFESSION_PATTERN =
-  /^(emekli|yazar|birey|bireysel|kişi|kisi|vatandaş|vatandas|yurttaş|yurttas|işçi|isci|memur|öğretmen|ogretmen|eğitimci|egitimci|akademisyen|avukat|hukukçu|hukukcu|mimar|mühendis|muhendis|doktor|hekim|hemşire|hemsire|sağlık emekçisi|saglik emekcisi|sağlıkçı|saglikci|öğrenci|ogrenci|gazeteci|araştırmacı|arastirmaci|sanatçı|sanatci|müzisyen|muzisyen|oyuncu|yönetmen|yonetmen|çiftçi|ciftci|çiftlik|ciftlik|üretici|uretici|ev hanımı|ev hanimi|ev kadını|ev kadini|serbest|serbest meslek|esnaf|psikolog|sosyolog|ekonomist|siyaset bilimci|aktivist|ekolojist|yaşam savunucusu|yasam savunucusu|sendika emekçisi|kamu emekçisi|işsiz|issiz|yok|bağımsız|bagimsiz|-|\.)(\s*[\/,-]\s*.*)?$/i;
+  /^(emekli|yazar|birey|bireysel|şahıs|sahis|kişi|kisi|kişisel|kisisel|vatandaş|vatandas|yurttaş|yurttas|işçi|isci|memur|öğretmen|ogretmen|eğitim|egitim|eğitimci|egitimci|akademisyen|akademi|avukat|hukuk|hukukçu|hukukcu|mimar|mimarlık|mühendis|muhendis|mühendislik|doktor|hekim|hemşire|hemsire|sağlık|saglik|sağlık emekçisi|saglik emekcisi|sağlıkçı|saglikci|öğrenci|ogrenci|gazeteci|basın|basin|medya|araştırmacı|arastirmaci|yazar ve araştırmacı|araştırmacı ve yazar|sanatçı|sanatci|sanat|müzisyen|muzisyen|oyuncu|yönetmen|yonetmen|çiftçi|ciftci|çiftlik|ciftlik|tarım|tarim|üretici|uretici|ev hanımı|ev hanimi|ev kadını|ev kadini|serbest|serbest meslek|esnaf|psikolog|sosyolog|ekonomist|siyaset bilimci|aktivist|ekolojist|yaşam savunucusu|yasam savunucusu|sendika emekçisi|kamu emekçisi|işsiz|issiz|yok|bağımsız|bagimsiz|-|\.)(\s*[\/,-]\s*.*)?$/i;
 
 export function classifySignatoryInput(input: {
   signType: 'institutional' | 'individual';

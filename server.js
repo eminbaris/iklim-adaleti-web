@@ -243,6 +243,15 @@ const DEFAULT_SIGNATORIES = [
     emailVerified: true
   },
   {
+    id: 'org-55',
+    name: 'Validebağ Savunması',
+    organization: 'Validebağ Savunması',
+    city: 'İstanbul',
+    date: '2026-10-17',
+    type: 'institutional',
+    emailVerified: true
+  },
+  {
     id: 'sig-rec-asli-odman',
     name: 'Aslı Odman',
     organization: 'Akademisyen',
@@ -252,10 +261,10 @@ const DEFAULT_SIGNATORIES = [
     emailVerified: true
   },
   {
-    id: 'sig-rec-alev-yilmaz',
-    name: 'Alev Yılmaz',
-    organization: 'Üretici / Varto Ekoloji Platformu',
-    city: 'Muş Varto',
+    id: 'sig-rec-ziya-gokerkucuk',
+    name: 'Ziya Gökerküçük',
+    organization: 'Eğitimci',
+    city: '',
     date: '2026-10-17',
     type: 'individual',
     emailVerified: true
@@ -304,27 +313,9 @@ const DEFAULT_SIGNATORIES = [
     emailVerified: true
   },
   {
-    id: 'sig-rec-mustafa-kolcu',
-    name: 'Mustafa Kolcu',
-    organization: 'Toroçder',
-    city: '',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
-  },
-  {
     id: 'sig-rec-ali-merdan-celik',
     name: 'Ali Merdan Çelik',
     city: '',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
-  },
-  {
-    id: 'sig-rec-dogukan-onder',
-    name: 'Doğukan Önder',
-    organization: 'İzmir Varto Ekoloji',
-    city: 'İzmir',
     date: '2026-10-17',
     type: 'individual',
     emailVerified: true
@@ -368,8 +359,14 @@ const DEFAULT_SIGNATORIES = [
   }
 ];
 
+const OBSOLETE_DUPLICATE_IDS = new Set([
+  'sig-rec-alev-yilmaz',
+  'sig-rec-mustafa-kolcu',
+  'sig-rec-dogukan-onder'
+]);
+
 const INDIVIDUAL_PROFESSION_REGEX =
-  /^(emekli|yazar|birey|bireysel|kişi|kisi|vatandaş|vatandas|yurttaş|yurttas|işçi|isci|memur|öğretmen|ogretmen|eğitimci|egitimci|akademisyen|avukat|hukukçu|hukukcu|mimar|mühendis|muhendis|doktor|hekim|hemşire|hemsire|sağlık emekçisi|saglik emekcisi|sağlıkçı|saglikci|öğrenci|ogrenci|gazeteci|araştırmacı|arastirmaci|sanatçı|sanatci|müzisyen|muzisyen|oyuncu|yönetmen|yonetmen|çiftçi|ciftci|çiftlik|ciftlik|üretici|uretici|ev hanımı|ev hanimi|ev kadını|ev kadini|serbest|serbest meslek|esnaf|psikolog|sosyolog|ekonomist|siyaset bilimci|aktivist|ekolojist|yaşam savunucusu|yasam savunucusu|sendika emekçisi|kamu emekçisi|işsiz|issiz|yok|bağımsız|bagimsiz|-|\.)(\s*[\/,-]\s*.*)?$/i;
+  /^(emekli|yazar|birey|bireysel|şahıs|sahis|kişi|kisi|kişisel|kisisel|vatandaş|vatandas|yurttaş|yurttas|işçi|isci|memur|öğretmen|ogretmen|eğitim|egitim|eğitimci|egitimci|akademisyen|akademi|avukat|hukuk|hukukçu|hukukcu|mimar|mimarlık|mühendis|muhendis|mühendislik|doktor|hekim|hemşire|hemsire|sağlık|saglik|sağlık emekçisi|saglik emekcisi|sağlıkçı|saglikci|öğrenci|ogrenci|gazeteci|basın|basin|medya|araştırmacı|arastirmaci|yazar ve araştırmacı|araştırmacı ve yazar|sanatçı|sanatci|sanat|müzisyen|muzisyen|oyuncu|yönetmen|yonetmen|çiftçi|ciftci|çiftlik|ciftlik|tarım|tarim|üretici|uretici|ev hanımı|ev hanimi|ev kadını|ev kadini|serbest|serbest meslek|esnaf|psikolog|sosyolog|ekonomist|siyaset bilimci|aktivist|ekolojist|yaşam savunucusu|yasam savunucusu|sendika emekçisi|kamu emekçisi|işsiz|issiz|yok|bağımsız|bagimsiz|-|\.)(\s*[\/,-]\s*.*)?$/i;
 
 function classifySignatoryOnServer({ name, organization, city, message, type }) {
   const cleanName = String(name || '').replace(/[<>]/g, '').trim().slice(0, 150);
@@ -393,7 +390,7 @@ function classifySignatoryOnServer({ name, organization, city, message, type }) 
 
   // If user stayed on 'institutional' tab by mistake and typed a personal profession in organization (e.g., "Emekli", "Yazar", "Birey")
   if (cleanOrg && INDIVIDUAL_PROFESSION_REGEX.test(cleanOrg) && cleanName && cleanName.toLowerCase() !== cleanOrg.toLowerCase()) {
-    const isBireyWord = /^(birey|bireysel|kişi|kisi|yok|-|\.)$/i.test(cleanOrg);
+    const isBireyWord = /^(birey|bireysel|şahıs|sahis|kişi|kisi|kişisel|kisisel|yok|-|\.)$/i.test(cleanOrg);
     return {
       name: cleanName,
       organization: isBireyWord ? undefined : cleanOrg,
@@ -422,15 +419,22 @@ function classifySignatoryOnServer({ name, organization, city, message, type }) 
   };
 }
 
+function normalizeTrKey(str) {
+  return String(str || '')
+    .trim()
+    .toLocaleLowerCase('tr-TR')
+    .replace(/\s+/g, ' ');
+}
+
 function getSignatoryKey(sig) {
   if (!sig) return '';
   const isInst =
     sig.type === 'institutional' ||
     Boolean(sig.organization && sig.organization === sig.name);
   if (isInst) {
-    return `inst:${String(sig.organization || sig.name || '').trim().toLowerCase()}`;
+    return `inst:${normalizeTrKey(sig.organization || sig.name)}`;
   }
-  return `ind:${String(sig.name || '').trim().toLowerCase()}`;
+  return `ind:${normalizeTrKey(sig.name)}`;
 }
 
 function getRemovedSignatorySet(cmsData) {
@@ -443,6 +447,7 @@ function getRemovedSignatorySet(cmsData) {
 function isSignatoryRemoved(sig, removedSet) {
   if (!sig) return true;
   const idKey = String(sig.id || '').trim().toLowerCase();
+  if (OBSOLETE_DUPLICATE_IDS.has(idKey)) return true;
   const nameKey = String(sig.organization || sig.name || '').trim().toLowerCase();
   const sigKey = getSignatoryKey(sig);
   return removedSet.has(idKey) || removedSet.has(nameKey) || removedSet.has(sigKey);
