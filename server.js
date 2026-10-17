@@ -54,6 +54,69 @@ const DEFAULT_SIGNATORIES = [
     emailVerified: true
   },
   {
+    id: 'org-46',
+    name: 'Sol Feminist Hareketi',
+    organization: 'Sol Feminist Hareketi',
+    city: '',
+    date: '2026-10-17',
+    type: 'institutional',
+    emailVerified: true
+  },
+  {
+    id: 'org-47',
+    name: 'Kaş Çevre Platformu',
+    organization: 'Kaş Çevre Platformu',
+    city: '',
+    date: '2026-10-17',
+    type: 'institutional',
+    emailVerified: true
+  },
+  {
+    id: 'org-48',
+    name: 'Kumluca Pir Sultan Abdal Derneği',
+    organization: 'Kumluca Pir Sultan Abdal Derneği',
+    city: '',
+    date: '2026-10-17',
+    type: 'institutional',
+    emailVerified: true
+  },
+  {
+    id: 'org-49',
+    name: 'Çiftçiler Sendikası (Çiftçi-Sen)',
+    organization: 'Çiftçiler Sendikası (Çiftçi-Sen)',
+    city: '',
+    date: '2026-10-17',
+    type: 'institutional',
+    emailVerified: true
+  },
+  {
+    id: 'org-50',
+    name: 'Validebağ Gönüllüleri Derneği',
+    organization: 'Validebağ Gönüllüleri Derneği',
+    city: '',
+    date: '2026-10-17',
+    type: 'institutional',
+    emailVerified: true
+  },
+  {
+    id: 'org-51',
+    name: 'Vaminon (Arhavi Maden İstemiyor)',
+    organization: 'Vaminon (Arhavi Maden İstemiyor)',
+    city: '',
+    date: '2026-10-17',
+    type: 'institutional',
+    emailVerified: true
+  },
+  {
+    id: 'org-52',
+    name: 'Fethiye Kent Konseyi',
+    organization: 'Fethiye Kent Konseyi',
+    city: '',
+    date: '2026-10-17',
+    type: 'institutional',
+    emailVerified: true
+  },
+  {
     id: 'sig-1792174998011',
     name: 'Necdet Demirci',
     organization: 'Mimar',

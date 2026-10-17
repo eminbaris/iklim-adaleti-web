@@ -50,7 +50,14 @@ export const INITIAL_SIGNATORY_ORGANIZATIONS: string[] = [
   'Kırsal Çevre ve Ormancılık Sorunları Araştırma Derneği',
   'Antalya Sanatçılar Derneği',
   'Yeşil Artvin Derneği',
-  'Derelerin Kardeşliği Platformu (DEKAP)'
+  'Derelerin Kardeşliği Platformu (DEKAP)',
+  'Sol Feminist Hareketi',
+  'Kaş Çevre Platformu',
+  'Kumluca Pir Sultan Abdal Derneği',
+  'Çiftçiler Sendikası (Çiftçi-Sen)',
+  'Validebağ Gönüllüleri Derneği',
+  'Vaminon (Arhavi Maden İstemiyor)',
+  'Fethiye Kent Konseyi'
 ];
 
 const INITIAL_ORGANIZATION_CITIES: Record<string, string> = {
