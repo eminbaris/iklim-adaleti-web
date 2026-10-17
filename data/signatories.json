@@ -1,0 +1,101 @@
+[
+  {
+    "id": "org-43",
+    "name": "Antalya Sanatçılar Derneği",
+    "organization": "Antalya Sanatçılar Derneği",
+    "city": "Antalya",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-44",
+    "name": "Yeşil Artvin Derneği",
+    "organization": "Yeşil Artvin Derneği",
+    "city": "Artvin",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-45",
+    "name": "Derelerin Kardeşliği Platformu (DEKAP)",
+    "organization": "Derelerin Kardeşliği Platformu (DEKAP)",
+    "city": "Artvin-Rize-Trabzon-Giresun-Ordu-Samsun",
+    "message": "Yaşamsal varlığımız su, alınıp satılan, kendşne efendi arayan bir kaynak değil, tüm canlı/cansız yaşamın var olduğu ekosistemin en temel hakkıdır. Hiçbir canlı suyaberişim hakkının diğerlerinden öncelikli olduğunu ileri süremez/iddia edemez...",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792174998011",
+    "name": "Necdet Demirci",
+    "organization": "Mimar",
+    "city": "Balıkesir",
+    "date": "2026-10-16",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792215319920",
+    "name": "İlkay Nişancı",
+    "organization": "Akademisyen",
+    "city": "İstanbul",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792220661845",
+    "name": "Ali Yalçın Göymen",
+    "organization": "Akademisyen",
+    "city": "Berlin",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792221951238",
+    "name": "Ömer Şan",
+    "organization": "Gazeteci /Yazar",
+    "city": "Ankara",
+    "message": "Hedef, 'İklim krizine uyum' değil; 'iklim krizine/değişikliğine neden olan müdahalelerin durdurulması' olmalıdır!",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792223802693",
+    "name": "Mert Yedek",
+    "organization": "Avukat",
+    "city": "Eskişehir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792225429862",
+    "name": "İlkay Öz",
+    "organization": "Siyaset Bilimci",
+    "city": "İstanbul",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792225793366",
+    "name": "Sercan Dede",
+    "city": "Ankara",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792227068065",
+    "name": "Önder İşleyen",
+    "city": "Ankara",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  }
+]

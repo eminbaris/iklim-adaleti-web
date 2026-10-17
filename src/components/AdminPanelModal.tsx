@@ -46,17 +46,17 @@ interface AdminPanelModalProps {
   onSaveCms: (payload: {
     username?: string;
     password: string;
-    forums: Article[];
-    workingGroups: WorkingGroup[];
-    declarations: Article[];
-    policies: Article[];
-    events: ForumEvent[];
-    signatories: Signatory[];
-    removedSignatoryIds: string[];
+    forums?: Article[];
+    workingGroups?: WorkingGroup[];
+    declarations?: Article[];
+    policies?: Article[];
+    events?: ForumEvent[];
+    signatories?: Signatory[];
+    removedSignatoryIds?: string[];
     newAdminPass?: string;
     newUser?: { username: string; name: string; password: string };
     deleteUserId?: string;
-    deleteItemKey?: string;
+    deleteItemKey?: string | string[];
   }) => Promise<boolean>;
 }
 
@@ -219,6 +219,8 @@ export default function AdminPanelModal({
     }
   };
 
+  const [editingForumId, setEditingForumId] = useState<string | null>(null);
+
   const triggerSave = async (overrides: Partial<{
     forums: Article[];
     workingGroups: WorkingGroup[];
@@ -230,23 +232,13 @@ export default function AdminPanelModal({
     newAdminPass?: string;
     newUser?: { username: string; name: string; password: string };
     deleteUserId?: string;
-    deleteItemKey?: string;
+    deleteItemKey?: string | string[];
   }>) => {
     setSaving(true);
     const ok = await onSaveCms({
       username,
       password,
-      forums: overrides.forums ?? forums,
-      workingGroups: overrides.workingGroups ?? workingGroups,
-      declarations: overrides.declarations ?? declarations,
-      policies: overrides.policies ?? policies,
-      events: overrides.events ?? events,
-      signatories: overrides.signatories ?? extraSignatories,
-      removedSignatoryIds: overrides.removedSignatoryIds ?? removedSignatoryIds,
-      newAdminPass: overrides.newAdminPass,
-      newUser: overrides.newUser,
-      deleteUserId: overrides.deleteUserId,
-      deleteItemKey: overrides.deleteItemKey
+      ...overrides
     });
     setSaving(false);
     if (ok) {
@@ -275,15 +267,17 @@ export default function AdminPanelModal({
     }
   };
 
-  // Add Forum Item
+  // Add or Update Forum Item
   const handleAddForum = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!fTitle.trim()) return;
     const summaryText = fExcerpt.trim() || fContent.trim().split('\n')[0] || fTitle.trim();
     const fullText = fContent.trim() || summaryText;
+    const forumId = editingForumId || `forum-${Date.now()}`;
+    const baseId = forumId.replace(/^(forum-|ev-)/, '');
     const item: Article = {
-      id: `forum-${Date.now()}`,
-      slug: `forum-${Date.now()}`,
+      id: forumId,
+      slug: forumId,
       title: fTitle.trim(),
       excerpt: summaryText,
       content: fullText.split(/\n\s*\n/),
@@ -297,28 +291,34 @@ export default function AdminPanelModal({
       videoUrl: fVideoUrl.trim() || undefined,
       pdfUrl: fPdfUrl.trim() || undefined
     };
-    const nextForums = [item, ...forums];
-    const matchingEventExists = events.some(
-      (ev) => ev.title.toLowerCase() === item.title.toLowerCase()
+    const nextForums = editingForumId
+      ? forums.map((f) => (f.id === editingForumId ? item : f))
+      : [item, ...forums];
+
+    const matchingEventIdx = events.findIndex(
+      (ev) =>
+        ev.id.replace(/^(ev-|forum-)/, '') === baseId ||
+        ev.title.toLowerCase() === item.title.toLowerCase()
     );
-    const nextEvents = matchingEventExists
-      ? events
-      : [
-          ...events,
-          {
-            id: `ev-${Date.now()}`,
-            title: item.title,
-            date: item.date,
-            time: '',
-            location: item.author || 'Türkiye',
-            type: item.category || 'Forum',
-            description: fullText,
-            imageUrl: item.imageUrl,
-            videoUrl: item.videoUrl,
-            pdfUrl: item.pdfUrl
-          }
-        ];
+    const syncedEvent: ForumEvent = {
+      id: matchingEventIdx >= 0 ? events[matchingEventIdx].id : `ev-${baseId}`,
+      title: item.title,
+      date: item.date,
+      time: matchingEventIdx >= 0 ? events[matchingEventIdx].time : '',
+      location: item.author || 'Türkiye',
+      type: item.category || 'Forum',
+      description: fullText,
+      imageUrl: item.imageUrl,
+      videoUrl: item.videoUrl,
+      pdfUrl: item.pdfUrl
+    };
+    const nextEvents =
+      matchingEventIdx >= 0
+        ? events.map((ev, idx) => (idx === matchingEventIdx ? syncedEvent : ev))
+        : [...events, syncedEvent];
+
     await triggerSave({ forums: nextForums, events: nextEvents });
+    setEditingForumId(null);
     setFTitle('');
     setFExcerpt('');
     setFContent('');
@@ -424,8 +424,10 @@ export default function AdminPanelModal({
   const handleAddEvent = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!eTitle.trim()) return;
+    const evId = editingEventId || `ev-${Date.now()}`;
+    const baseId = evId.replace(/^(ev-|forum-)/, '');
     const item: ForumEvent = {
-      id: editingEventId || `ev-${Date.now()}`,
+      id: evId,
       title: eTitle.trim(),
       date: eDate.trim() || new Date().toLocaleDateString('tr-TR'),
       time: eTime.trim(),
@@ -439,30 +441,34 @@ export default function AdminPanelModal({
     const nextEvents = editingEventId
       ? events.map((ev) => (ev.id === editingEventId ? item : ev))
       : [...events, item];
-    const matchingForumExists = forums.some(
-      (f) => f.title.toLowerCase() === item.title.toLowerCase()
+
+    const matchingForumIdx = forums.findIndex(
+      (f) =>
+        f.id.replace(/^(ev-|forum-)/, '') === baseId ||
+        f.title.toLowerCase() === item.title.toLowerCase()
     );
-    const nextForums = matchingForumExists
-      ? forums
-      : [
-          {
-            id: `forum-${Date.now()}`,
-            slug: `forum-${Date.now()}`,
-            title: item.title,
-            excerpt: item.description.split('\n\n')[0] || item.title,
-            content: (item.description || item.title).split(/\n\s*\n/),
-            category: item.type || 'Forum',
-            date: item.date,
-            author: item.location || 'İklim Adaleti Forumu',
-            authorRole: 'İklim Adaleti Forumu',
-            readTimeMinutes: 3,
-            tags: [item.type || 'Forum'],
-            imageUrl: item.imageUrl,
-            videoUrl: item.videoUrl,
-            pdfUrl: item.pdfUrl
-          },
-          ...forums
-        ];
+    const paragraphs = (item.description || item.title).split(/\n\s*\n/);
+    const syncedForum: Article = {
+      id: matchingForumIdx >= 0 ? forums[matchingForumIdx].id : `forum-${baseId}`,
+      slug: matchingForumIdx >= 0 ? forums[matchingForumIdx].slug : `forum-${baseId}`,
+      title: item.title,
+      excerpt: paragraphs.slice(0, 2).join('\n\n') || item.title,
+      content: paragraphs,
+      category: item.type || 'Forum',
+      date: item.date,
+      author: item.location || 'İklim Adaleti Forumu',
+      authorRole: 'İklim Adaleti Forumu',
+      readTimeMinutes: 3,
+      tags: [item.type || 'Forum'],
+      imageUrl: item.imageUrl,
+      videoUrl: item.videoUrl,
+      pdfUrl: item.pdfUrl
+    };
+    const nextForums =
+      matchingForumIdx >= 0
+        ? forums.map((f, idx) => (idx === matchingForumIdx ? syncedForum : f))
+        : [syncedForum, ...forums];
+
     await triggerSave({ events: nextEvents, forums: nextForums });
     setEditingEventId(null);
     setETitle('');
@@ -479,29 +485,49 @@ export default function AdminPanelModal({
   const handleAddManualSignatory = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!sOrg.trim()) return;
+    const cleanOrg = sOrg.trim();
+    const cleanOrgLower = cleanOrg.toLowerCase();
     const item: Signatory = {
       id: `sig-admin-${Date.now()}`,
-      name: sOrg.trim(),
-      organization: sOrg.trim(),
+      name: cleanOrg,
+      organization: cleanOrg,
       city: sCity.trim() || 'Türkiye',
       date: new Date().toISOString().split('T')[0],
       type: 'institutional',
       emailVerified: true
     };
+    const nextRemoved = removedSignatoryIds.filter(
+      (r) =>
+        r.toLowerCase() !== cleanOrgLower &&
+        r.toLowerCase() !== `inst:${cleanOrgLower}`
+    );
     const next = [...extraSignatories, item];
-    await triggerSave({ signatories: next });
+    await triggerSave({ signatories: next, removedSignatoryIds: nextRemoved });
     setSOrg('');
   };
 
   // Delete Signatory
-  const handleRemoveSignatory = async (id: string) => {
-    if (id.startsWith('org-')) {
-      const nextRemoved = [...new Set([...removedSignatoryIds, id])];
-      await triggerSave({ removedSignatoryIds: nextRemoved });
-    } else {
-      const nextExtra = extraSignatories.filter((s) => s.id !== id);
-      await triggerSave({ signatories: nextExtra });
-    }
+  const handleRemoveSignatory = async (sig: Signatory) => {
+    const nameLower = String(sig.organization || sig.name || '').trim().toLowerCase();
+    const instKey = `inst:${nameLower}`;
+    const indKey = `ind:${String(sig.name || '').trim().toLowerCase()}|${String(sig.city || '').trim().toLowerCase()}`;
+    const nextRemoved = [
+      ...new Set([
+        ...removedSignatoryIds,
+        sig.id,
+        nameLower,
+        sig.type === 'institutional' ? instKey : indKey
+      ])
+    ];
+    const nextExtra = extraSignatories.filter(
+      (s) =>
+        s.id !== sig.id &&
+        String(s.organization || s.name || '').trim().toLowerCase() !== nameLower
+    );
+    await triggerSave({
+      signatories: nextExtra,
+      removedSignatoryIds: nextRemoved
+    });
   };
 
   // Add New Editor User
@@ -922,14 +948,37 @@ export default function AdminPanelModal({
                         className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
                       />
                     </div>
-                    <button
-                      type="submit"
-                      disabled={saving}
-                      className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#3E8226] hover:bg-[#31681E] text-white text-xs font-bold rounded-lg cursor-pointer"
-                    >
-                      <Plus className="w-4 h-4" />
-                      <span>Forumlar Bölümüne Ekle ve Yayınla</span>
-                    </button>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="submit"
+                        disabled={saving}
+                        className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#3E8226] hover:bg-[#31681E] text-white text-xs font-bold rounded-lg cursor-pointer"
+                      >
+                        <Plus className="w-4 h-4" />
+                        <span>
+                          {editingForumId
+                            ? 'İçeriği Güncelle ve Yayınla'
+                            : 'Forumlar Bölümüne Ekle ve Yayınla'}
+                        </span>
+                      </button>
+                      {editingForumId && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingForumId(null);
+                            setFTitle('');
+                            setFExcerpt('');
+                            setFContent('');
+                            setFImageUrl('');
+                            setFVideoUrl('');
+                            setFPdfUrl('');
+                          }}
+                          className="px-4 py-2.5 bg-stone-200 hover:bg-stone-300 text-stone-700 text-xs font-bold rounded-lg cursor-pointer"
+                        >
+                          Düzenlemeyi İptal Et
+                        </button>
+                      )}
+                    </div>
                   </form>
 
                   <div className="space-y-2">
@@ -955,22 +1004,46 @@ export default function AdminPanelModal({
                               {item.pdfUrl ? ' · [PDF]' : ''}
                             </p>
                           </div>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              triggerSave({
-                                forums: forums.filter((f) => f.id !== item.id),
-                                events: events.filter(
-                                  (ev) => ev.title.toLowerCase() !== item.title.toLowerCase()
-                                ),
-                                deleteItemKey: item.title
-                              })
-                            }
-                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
-                            title="Sil"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setEditingForumId(item.id);
+                                setFTitle(item.title);
+                                setFCategory(item.category || 'Forum');
+                                setFDate(item.date || '');
+                                setFAuthor(item.author || 'İklim Adaleti Forumu');
+                                setFExcerpt(item.excerpt || '');
+                                setFContent(
+                                  Array.isArray(item.content)
+                                    ? item.content.join('\n\n')
+                                    : String(item.content || '')
+                                );
+                                setFImageUrl(item.imageUrl || '');
+                                setFVideoUrl(item.videoUrl || '');
+                                setFPdfUrl(item.pdfUrl || '');
+                              }}
+                              className="px-3 py-1.5 bg-sky-50 hover:bg-sky-100 border border-sky-200 text-[#0B4F71] text-xs font-bold rounded-lg cursor-pointer"
+                            >
+                              Düzenle
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                triggerSave({
+                                  forums: forums.filter((f) => f.id !== item.id),
+                                  events: events.filter(
+                                    (ev) => ev.title.toLowerCase() !== item.title.toLowerCase()
+                                  ),
+                                  deleteItemKey: [item.id, item.title]
+                                })
+                              }
+                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
+                              title="Sil"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
                         </div>
                       ))
                     )}
@@ -1066,7 +1139,8 @@ export default function AdminPanelModal({
                           type="button"
                           onClick={() =>
                             triggerSave({
-                              workingGroups: workingGroups.filter((item) => item.id !== g.id)
+                              workingGroups: workingGroups.filter((item) => item.id !== g.id),
+                              deleteItemKey: [g.id, g.name]
                             })
                           }
                           className="p-2 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
@@ -1187,7 +1261,8 @@ export default function AdminPanelModal({
                           type="button"
                           onClick={() =>
                             triggerSave({
-                              declarations: declarations.filter((item) => item.id !== d.id)
+                              declarations: declarations.filter((item) => item.id !== d.id),
+                              deleteItemKey: [d.id, d.title]
                             })
                           }
                           className="p-2 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
@@ -1342,7 +1417,8 @@ export default function AdminPanelModal({
                             type="button"
                             onClick={() =>
                               triggerSave({
-                                policies: policies.filter((item) => item.id !== p.id)
+                                policies: policies.filter((item) => item.id !== p.id),
+                                deleteItemKey: [p.id, p.title]
                               })
                             }
                             className="p-2 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
@@ -1540,7 +1616,7 @@ export default function AdminPanelModal({
                                 forums: forums.filter(
                                   (f) => f.title.toLowerCase() !== ev.title.toLowerCase()
                                 ),
-                                deleteItemKey: ev.title
+                                deleteItemKey: [ev.id, ev.title]
                               })
                             }
                             className="p-2 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
@@ -1611,12 +1687,16 @@ export default function AdminPanelModal({
                           className="p-2.5 bg-white border border-stone-200 rounded-lg flex items-center justify-between gap-2"
                         >
                           <span className="text-xs font-semibold text-stone-800">
-                            {idx + 1}. {sig.organization || sig.name}{' '}
-                            {sig.type === 'individual' ? `(${sig.city} - Bireysel)` : ''}
+                            {idx + 1}. {sig.organization || sig.name}
+                            {sig.city
+                              ? sig.type === 'individual'
+                                ? ` (${sig.city} - Bireysel)`
+                                : ` (${sig.city})`
+                              : ''}
                           </span>
                           <button
                             type="button"
-                            onClick={() => handleRemoveSignatory(sig.id)}
+                            onClick={() => handleRemoveSignatory(sig)}
                             className="p-1.5 text-red-600 hover:bg-red-50 rounded-md cursor-pointer"
                             title="İmzayı Kaldır"
                           >

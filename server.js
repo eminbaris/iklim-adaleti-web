@@ -9,6 +9,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const distPath = path.join(__dirname, 'dist');
+const publicUploadsDir = path.join(__dirname, 'public', 'uploads');
+const distUploadsDir = path.join(distPath, 'uploads');
 const dataDir = path.join(__dirname, 'data');
 const uploadsDir = path.join(dataDir, 'uploads');
 const sigsFile = path.join(dataDir, 'signatories.json');
@@ -21,37 +23,217 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-function readExtraSignatories() {
+const DEFAULT_SIGNATORIES = [
+  {
+    id: 'org-43',
+    name: 'Antalya Sanatçılar Derneği',
+    organization: 'Antalya Sanatçılar Derneği',
+    city: 'Antalya',
+    date: '2026-10-16',
+    type: 'institutional',
+    emailVerified: true
+  },
+  {
+    id: 'org-44',
+    name: 'Yeşil Artvin Derneği',
+    organization: 'Yeşil Artvin Derneği',
+    city: 'Artvin',
+    date: '2026-10-16',
+    type: 'institutional',
+    emailVerified: true
+  },
+  {
+    id: 'org-45',
+    name: 'Derelerin Kardeşliği Platformu (DEKAP)',
+    organization: 'Derelerin Kardeşliği Platformu (DEKAP)',
+    city: 'Artvin-Rize-Trabzon-Giresun-Ordu-Samsun',
+    message:
+      'Yaşamsal varlığımız su, alınıp satılan, kendşne efendi arayan bir kaynak değil, tüm canlı/cansız yaşamın var olduğu ekosistemin en temel hakkıdır. Hiçbir canlı suyaberişim hakkının diğerlerinden öncelikli olduğunu ileri süremez/iddia edemez...',
+    date: '2026-10-17',
+    type: 'institutional',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792174998011',
+    name: 'Necdet Demirci',
+    organization: 'Mimar',
+    city: 'Balıkesir',
+    date: '2026-10-16',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792215319920',
+    name: 'İlkay Nişancı',
+    organization: 'Akademisyen',
+    city: 'İstanbul',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792220661845',
+    name: 'Ali Yalçın Göymen',
+    organization: 'Akademisyen',
+    city: 'Berlin',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792221951238',
+    name: 'Ömer Şan',
+    organization: 'Gazeteci /Yazar',
+    city: 'Ankara',
+    message:
+      "Hedef, 'İklim krizine uyum' değil; 'iklim krizine/değişikliğine neden olan müdahalelerin durdurulması' olmalıdır!",
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792223802693',
+    name: 'Mert Yedek',
+    organization: 'Avukat',
+    city: 'Eskişehir',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792225429862',
+    name: 'İlkay Öz',
+    organization: 'Siyaset Bilimci',
+    city: 'İstanbul',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792225793366',
+    name: 'Sercan Dede',
+    city: 'Ankara',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792227068065',
+    name: 'Önder İşleyen',
+    city: 'Ankara',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  }
+];
+
+function getSignatoryKey(sig) {
+  if (!sig) return '';
+  const isInst =
+    sig.type === 'institutional' ||
+    Boolean(sig.organization && sig.organization === sig.name);
+  if (isInst) {
+    return `inst:${String(sig.organization || sig.name || '').trim().toLowerCase()}`;
+  }
+  return `ind:${String(sig.name || '').trim().toLowerCase()}|${String(sig.city || '').trim().toLowerCase()}`;
+}
+
+function getRemovedSignatorySet(cmsData) {
+  const cms = cmsData || readRawCmsFromDisk();
+  return new Set(
+    (cms.removedSignatoryIds || []).map((id) => String(id).trim().toLowerCase())
+  );
+}
+
+function isSignatoryRemoved(sig, removedSet) {
+  if (!sig) return true;
+  const idKey = String(sig.id || '').trim().toLowerCase();
+  const nameKey = String(sig.organization || sig.name || '').trim().toLowerCase();
+  const sigKey = getSignatoryKey(sig);
+  return removedSet.has(idKey) || removedSet.has(nameKey) || removedSet.has(sigKey);
+}
+
+function deduplicateSignatories(list, removedSet = new Set()) {
+  const map = new Map();
+  for (const sig of list) {
+    if (!sig || (!sig.name && !sig.organization)) continue;
+    if (isSignatoryRemoved(sig, removedSet)) continue;
+    const key = getSignatoryKey(sig);
+    if (!key) continue;
+    const prev = map.get(key);
+    if (!prev) {
+      map.set(key, sig);
+    } else {
+      map.set(key, {
+        ...prev,
+        ...sig,
+        id: prev.id || sig.id,
+        city: sig.city || prev.city,
+        message: sig.message || prev.message,
+        organization: sig.organization || prev.organization
+      });
+    }
+  }
+  return Array.from(map.values());
+}
+
+function readExtraSignatories(cmsData) {
+  const removedSet = getRemovedSignatorySet(cmsData);
+  let diskList = [];
   try {
     if (fs.existsSync(sigsFile)) {
-      return JSON.parse(fs.readFileSync(sigsFile, 'utf-8'));
+      const parsed = JSON.parse(fs.readFileSync(sigsFile, 'utf-8'));
+      if (Array.isArray(parsed)) {
+        diskList = parsed;
+      }
     }
   } catch (err) {
     console.error('Error reading signatories:', err);
   }
-  return [];
+  return deduplicateSignatories([...DEFAULT_SIGNATORIES, ...diskList], removedSet);
 }
 
-function writeExtraSignatories(list) {
+function writeExtraSignatories(list, cmsData) {
   try {
-    fs.writeFileSync(sigsFile, JSON.stringify(list, null, 2), 'utf-8');
+    const removedSet = getRemovedSignatorySet(cmsData);
+    const current = readExtraSignatories(cmsData);
+    const merged = deduplicateSignatories([...current, ...(Array.isArray(list) ? list : [])], removedSet);
+    fs.writeFileSync(sigsFile, JSON.stringify(merged, null, 2), 'utf-8');
+    return merged;
   } catch (err) {
     console.error('Error writing signatories:', err);
+    return readExtraSignatories(cmsData);
   }
 }
 
 function saveExtraSignatory(sig) {
   const current = readExtraSignatories();
-  current.push(sig);
-  writeExtraSignatories(current);
-  return current;
+  return writeExtraSignatories([...current, sig]);
 }
 
 const DEFAULT_CMS = {
   forums: [],
   workingGroups: [],
   declarations: [],
-  policies: [],
+  policies: [
+    {
+      id: 'pol-1792169995327',
+      slug: 'pol-1792169995327',
+      title: 'İklim Adaleti Forumu Program Örgütlenme ve Strateji Belgesi',
+      excerpt:
+        'Bu programın temel sorusu şudur: İklim krizi karşısında dönüşüm kimin için, kim tarafından, hangi haklar gözetilerek ve hangi bedeller kimlere yüklenerek kurulacaktır?',
+      content: [
+        'Bu programın temel sorusu şudur: İklim krizi karşısında dönüşüm kimin için, kim tarafından, hangi haklar gözetilerek ve hangi bedeller kimlere yüklenerek kurulacaktır?'
+      ],
+      category: 'Politika & Program',
+      date: 'Haziran 2026',
+      author: 'İklim Adaleti Forumu',
+      authorRole: 'Politika / Program',
+      readTimeMinutes: 10,
+      tags: ['Politika / Program'],
+      pdfUrl: '/uploads/1792170006227-_AF_PROGRAM_BELGES__docx.pdf'
+    }
+  ],
   events: [
     {
       id: 'ev-1792164191275',
@@ -115,6 +297,17 @@ const DEFAULT_CMS = {
   users: []
 };
 
+function readRawCmsFromDisk() {
+  try {
+    if (fs.existsSync(cmsFile)) {
+      return JSON.parse(fs.readFileSync(cmsFile, 'utf-8'));
+    }
+  } catch (err) {
+    console.error('Error reading raw CMS file:', err);
+  }
+  return {};
+}
+
 function parseEventDateForSort(dateStr, timeStr) {
   if (!dateStr) return Number.MAX_SAFE_INTEGER;
   const clean = String(dateStr).trim();
@@ -132,30 +325,99 @@ function parseEventDateForSort(dateStr, timeStr) {
   return Number.isNaN(parsed) ? Number.MAX_SAFE_INTEGER : parsed;
 }
 
+function mergeCollectionByKey(defaults, currentList, incomingList, isDeletedFn, keyAttr = 'title') {
+  const map = new Map();
+  const allItems = [
+    ...(Array.isArray(defaults) ? defaults : []),
+    ...(Array.isArray(currentList) ? currentList : []),
+    ...(Array.isArray(incomingList) ? incomingList : [])
+  ];
+  for (const item of allItems) {
+    if (!item || isDeletedFn(item)) continue;
+    const idKey = String(item.id || '').trim().toLowerCase();
+    const titleKey = String(item[keyAttr] || item.title || item.name || '').trim().toLowerCase();
+    // Find if an entry already exists by ID or by title/name
+    let existingMapKey = null;
+    for (const [k, v] of map.entries()) {
+      const vId = String(v.id || '').trim().toLowerCase();
+      const vTitle = String(v[keyAttr] || v.title || v.name || '').trim().toLowerCase();
+      if ((idKey && vId === idKey) || (titleKey && vTitle === titleKey)) {
+        existingMapKey = k;
+        break;
+      }
+    }
+    const targetKey = existingMapKey || idKey || titleKey;
+    if (!targetKey) continue;
+    map.set(targetKey, { ...(map.get(targetKey) || {}), ...item });
+  }
+  return Array.from(map.values());
+}
+
+function normalizeBaseId(idStr) {
+  return String(idStr || '')
+    .trim()
+    .toLowerCase()
+    .replace(/^(ev-|forum-)/, '');
+}
+
 function normalizeAndSyncCms(rawCms) {
   const deletedKeys = new Set(
     (rawCms.deletedItemKeys || []).map((k) => String(k).trim().toLowerCase())
   );
-  const isDeleted = (item) =>
-    !item ||
-    !item.title ||
-    deletedKeys.has(String(item.id || '').trim().toLowerCase()) ||
-    deletedKeys.has(String(item.title || '').trim().toLowerCase());
+  const removedSigIds = Array.from(
+    new Set((rawCms.removedSignatoryIds || []).map((k) => String(k).trim()))
+  );
 
-  // 1. Collect all events (from DEFAULT_CMS + rawCms.events + rawCms.forums)
+  const isDeleted = (item) => {
+    if (!item) return true;
+    const idStr = String(item.id || '').trim().toLowerCase();
+    const baseId = normalizeBaseId(idStr);
+    const titleStr = String(item.title || item.name || '').trim().toLowerCase();
+    if (!titleStr) return true;
+    return (
+      deletedKeys.has(idStr) ||
+      (baseId && deletedKeys.has(`ev-${baseId}`)) ||
+      (baseId && deletedKeys.has(`forum-${baseId}`)) ||
+      deletedKeys.has(titleStr)
+    );
+  };
+
+  // 1. Collect and sync all Events (from DEFAULT_CMS.events + rawCms.events + rawCms.forums)
   const eventMap = new Map();
-  for (const ev of [...DEFAULT_CMS.events, ...(rawCms.events || [])]) {
-    if (isDeleted(ev)) continue;
-    const key = String(ev.title).trim().toLowerCase();
-    eventMap.set(key, { ...eventMap.get(key), ...ev });
-  }
+  const upsertEvent = (ev) => {
+    if (isDeleted(ev)) return;
+    const baseId = normalizeBaseId(ev.id);
+    const titleKey = String(ev.title || '').trim().toLowerCase();
+    let matchedKey = null;
+    for (const [k, v] of eventMap.entries()) {
+      if ((baseId && normalizeBaseId(v.id) === baseId) || String(v.title || '').trim().toLowerCase() === titleKey) {
+        matchedKey = k;
+        break;
+      }
+    }
+    const targetKey = matchedKey || baseId || titleKey;
+    eventMap.set(targetKey, { ...(eventMap.get(targetKey) || {}), ...ev });
+  };
+
+  for (const ev of DEFAULT_CMS.events) upsertEvent(ev);
+  for (const ev of rawCms.events || []) upsertEvent(ev);
 
   for (const f of rawCms.forums || []) {
     if (isDeleted(f)) continue;
-    const key = String(f.title).trim().toLowerCase();
-    if (!eventMap.has(key)) {
-      const fullText = Array.isArray(f.content) ? f.content.join('\n\n') : String(f.content || f.excerpt || '');
-      eventMap.set(key, {
+    const baseId = normalizeBaseId(f.id);
+    const titleKey = String(f.title || '').trim().toLowerCase();
+    let exists = false;
+    for (const v of eventMap.values()) {
+      if ((baseId && normalizeBaseId(v.id) === baseId) || String(v.title || '').trim().toLowerCase() === titleKey) {
+        exists = true;
+        break;
+      }
+    }
+    if (!exists) {
+      const fullText = Array.isArray(f.content)
+        ? f.content.join('\n\n')
+        : String(f.content || f.excerpt || '');
+      upsertEvent({
         id: String(f.id || `ev-${Date.now()}`).replace(/^forum-/, 'ev-'),
         title: f.title,
         date: f.date || '',
@@ -174,39 +436,70 @@ function normalizeAndSyncCms(rawCms) {
     (a, b) => parseEventDateForSort(a.date, a.time) - parseEventDateForSort(b.date, b.time)
   );
 
-  // 2. Collect all forums (from rawCms.forums + syncedEvents)
+  // 2. Collect and sync all Forums (from rawCms.forums + syncedEvents)
   const forumMap = new Map();
-  for (const f of rawCms.forums || []) {
-    if (isDeleted(f)) continue;
-    const key = String(f.title).trim().toLowerCase();
-    forumMap.set(key, f);
-  }
+  const upsertForum = (f) => {
+    if (isDeleted(f)) return;
+    const baseId = normalizeBaseId(f.id);
+    const titleKey = String(f.title || '').trim().toLowerCase();
+    let matchedKey = null;
+    for (const [k, v] of forumMap.entries()) {
+      if ((baseId && normalizeBaseId(v.id) === baseId) || String(v.title || '').trim().toLowerCase() === titleKey) {
+        matchedKey = k;
+        break;
+      }
+    }
+    const targetKey = matchedKey || baseId || titleKey;
+    forumMap.set(targetKey, { ...(forumMap.get(targetKey) || {}), ...f });
+  };
+
+  for (const f of rawCms.forums || []) upsertForum(f);
 
   for (const ev of syncedEvents) {
-    const key = String(ev.title).trim().toLowerCase();
-    if (!forumMap.has(key)) {
-      const paragraphs = String(ev.description || ev.title).split(/\n\s*\n/);
-      forumMap.set(key, {
-        id: String(ev.id || `forum-${Date.now()}`).replace(/^ev-/, 'forum-'),
-        slug: String(ev.id || `forum-${Date.now()}`),
-        title: ev.title,
-        excerpt: paragraphs.slice(0, 2).join('\n\n') || ev.title,
-        content: paragraphs,
-        category: ev.type || 'Forum',
-        date: ev.date,
-        author: ev.location || 'İklim Adaleti Forumu',
-        authorRole: 'İklim Adaleti Forumu',
-        readTimeMinutes: 3,
-        tags: [ev.type || 'Forum'],
-        imageUrl: ev.imageUrl,
-        videoUrl: ev.videoUrl,
-        pdfUrl: ev.pdfUrl
-      });
-    }
+    const paragraphs = String(ev.description || ev.title).split(/\n\s*\n/);
+    upsertForum({
+      id: String(ev.id || `forum-${Date.now()}`).replace(/^ev-/, 'forum-'),
+      slug: String(ev.id || `forum-${Date.now()}`).replace(/^ev-/, 'forum-'),
+      title: ev.title,
+      excerpt: paragraphs.slice(0, 2).join('\n\n') || ev.title,
+      content: paragraphs,
+      category: ev.type || 'Forum',
+      date: ev.date,
+      author: ev.location || 'İklim Adaleti Forumu',
+      authorRole: 'İklim Adaleti Forumu',
+      readTimeMinutes: 3,
+      tags: [ev.type || 'Forum'],
+      imageUrl: ev.imageUrl,
+      videoUrl: ev.videoUrl,
+      pdfUrl: ev.pdfUrl
+    });
   }
 
   const syncedForums = Array.from(forumMap.values()).sort(
     (a, b) => parseEventDateForSort(a.date, '') - parseEventDateForSort(b.date, '')
+  );
+
+  // 3. Merge workingGroups, declarations, policies additively with DEFAULT_CMS
+  const syncedWorkingGroups = mergeCollectionByKey(
+    DEFAULT_CMS.workingGroups,
+    rawCms.workingGroups,
+    [],
+    isDeleted,
+    'name'
+  );
+  const syncedDeclarations = mergeCollectionByKey(
+    DEFAULT_CMS.declarations,
+    rawCms.declarations,
+    [],
+    isDeleted,
+    'title'
+  );
+  const syncedPolicies = mergeCollectionByKey(
+    DEFAULT_CMS.policies,
+    rawCms.policies,
+    [],
+    isDeleted,
+    'title'
   );
 
   return {
@@ -214,6 +507,10 @@ function normalizeAndSyncCms(rawCms) {
     ...rawCms,
     events: syncedEvents,
     forums: syncedForums,
+    workingGroups: syncedWorkingGroups,
+    declarations: syncedDeclarations,
+    policies: syncedPolicies,
+    removedSignatoryIds: removedSigIds,
     deletedItemKeys: Array.from(deletedKeys)
   };
 }
@@ -237,14 +534,52 @@ function writeCmsData(data) {
       ...(current.deletedItemKeys || []),
       ...(data.deletedItemKeys || [])
     ]);
-    // Additive merge of forums and events so stale tabs never wipe out items
-    const mergedForums = [...(current.forums || []), ...(data.forums || [])];
-    const mergedEvents = [...(current.events || []), ...(data.events || [])];
+    const nextRemovedSigs = Array.from(
+      new Set([
+        ...(current.removedSignatoryIds || []),
+        ...(data.removedSignatoryIds || [])
+      ])
+    );
+
+    const isDeleted = (item) => {
+      if (!item) return true;
+      const idStr = String(item.id || '').trim().toLowerCase();
+      const baseId = normalizeBaseId(idStr);
+      const titleStr = String(item.title || item.name || '').trim().toLowerCase();
+      return (
+        nextDeleted.has(idStr) ||
+        (baseId && nextDeleted.has(`ev-${baseId}`)) ||
+        (baseId && nextDeleted.has(`forum-${baseId}`)) ||
+        nextDeleted.has(titleStr)
+      );
+    };
+
+    // Additive merge + in-place update across ALL collections so saving one section NEVER breaks another
+    const mergedForums = Array.isArray(data.forums)
+      ? mergeCollectionByKey(DEFAULT_CMS.forums, current.forums, data.forums, isDeleted, 'title')
+      : current.forums;
+    const mergedEvents = Array.isArray(data.events)
+      ? mergeCollectionByKey(DEFAULT_CMS.events, current.events, data.events, isDeleted, 'title')
+      : current.events;
+    const mergedGroups = Array.isArray(data.workingGroups)
+      ? mergeCollectionByKey(DEFAULT_CMS.workingGroups, current.workingGroups, data.workingGroups, isDeleted, 'name')
+      : current.workingGroups;
+    const mergedDeclarations = Array.isArray(data.declarations)
+      ? mergeCollectionByKey(DEFAULT_CMS.declarations, current.declarations, data.declarations, isDeleted, 'title')
+      : current.declarations;
+    const mergedPolicies = Array.isArray(data.policies)
+      ? mergeCollectionByKey(DEFAULT_CMS.policies, current.policies, data.policies, isDeleted, 'title')
+      : current.policies;
+
     const merged = normalizeAndSyncCms({
       ...current,
       ...data,
       forums: mergedForums,
       events: mergedEvents,
+      workingGroups: mergedGroups,
+      declarations: mergedDeclarations,
+      policies: mergedPolicies,
+      removedSignatoryIds: nextRemovedSigs,
       deletedItemKeys: Array.from(nextDeleted)
     });
     fs.writeFileSync(cmsFile, JSON.stringify(merged, null, 2), 'utf-8');
@@ -387,7 +722,7 @@ function createServer() {
     next();
   });
 
-  // Serve uploaded photos, videos, and PDFs (allowing same-origin PDF viewer iframe)
+  // Serve uploaded photos, videos, and PDFs from runtime data/uploads, public/uploads, and dist/uploads
   app.use(
     '/uploads',
     (_req, res, next) => {
@@ -395,15 +730,18 @@ function createServer() {
       res.setHeader('X-Frame-Options', 'SAMEORIGIN');
       res.setHeader(
         'Content-Security-Policy',
-        "default-src 'self'; object-src 'self'; img-src 'self' data:; media-src 'self'; style-src 'unsafe-inline'"
+        "default-src 'self'; object-src 'self'; frame-ancestors 'self'; img-src 'self' data:; media-src 'self'; style-src 'unsafe-inline'"
       );
       next();
     },
-    express.static(uploadsDir)
+    express.static(uploadsDir),
+    express.static(publicUploadsDir),
+    express.static(distUploadsDir)
   );
 
   // 1. Public endpoint: get all CMS dynamic content + extra signatories
   app.get('/api/cms', (_req, res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     const cms = readCmsData();
     res.json({
       forums: cms.forums || [],
@@ -412,15 +750,16 @@ function createServer() {
       policies: cms.policies || [],
       events: cms.events || [],
       removedSignatoryIds: cms.removedSignatoryIds || [],
-      signatories: readExtraSignatories()
+      signatories: readExtraSignatories(cms)
     });
   });
 
   // 2. Get verified extra signatories saved on the server
   app.get('/api/signatories', (_req, res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     const cms = readCmsData();
     res.json({
-      signatories: readExtraSignatories(),
+      signatories: readExtraSignatories(cms),
       removedSignatoryIds: cms.removedSignatoryIds || []
     });
   });
@@ -445,16 +784,6 @@ function createServer() {
 
     if (!cleanName || !cleanCity) {
       return res.status(400).json({ error: 'Geçersiz bilgi' });
-    }
-
-    const existing = readExtraSignatories();
-    const isDuplicate = existing.some(
-      (s) =>
-        String(s.name || '').toLowerCase() === cleanName.toLowerCase() &&
-        String(s.city || '').toLowerCase() === cleanCity.toLowerCase()
-    );
-    if (isDuplicate) {
-      return res.json({ ok: true, signatories: existing });
     }
 
     const newSig = {
@@ -604,9 +933,15 @@ function createServer() {
         pdfUrl: sanitizeUrl(ev.pdfUrl)
       }));
     }
-    if (Array.isArray(removedSignatoryIds)) updates.removedSignatoryIds = removedSignatoryIds;
+    if (Array.isArray(removedSignatoryIds)) {
+      updates.removedSignatoryIds = removedSignatoryIds;
+    }
     if (deleteItemKey) {
-      updates.deletedItemKeys = [...(currentCms.deletedItemKeys || []), String(deleteItemKey)];
+      const keysToAdd = Array.isArray(deleteItemKey) ? deleteItemKey : [deleteItemKey];
+      updates.deletedItemKeys = [
+        ...(currentCms.deletedItemKeys || []),
+        ...keysToAdd.map((k) => String(k))
+      ];
     }
 
     // Only master admin can change master password or manage users
@@ -639,9 +974,9 @@ function createServer() {
     }
 
     const savedCms = writeCmsData(updates);
-    if (Array.isArray(signatories)) {
-      writeExtraSignatories(signatories);
-    }
+    const savedSigs = Array.isArray(signatories)
+      ? writeExtraSignatories(signatories, savedCms)
+      : readExtraSignatories(savedCms);
 
     const safeUsers = (savedCms.users || []).map((u) => ({
       id: u.id,
@@ -658,7 +993,7 @@ function createServer() {
       policies: savedCms.policies,
       events: savedCms.events,
       removedSignatoryIds: savedCms.removedSignatoryIds,
-      signatories: readExtraSignatories(),
+      signatories: savedSigs,
       users: safeUsers
     });
   });

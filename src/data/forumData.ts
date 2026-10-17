@@ -47,8 +47,17 @@ export const INITIAL_SIGNATORY_ORGANIZATIONS: string[] = [
   'Murat Dağı Yok Olmasın Platformu',
   'Marmara Ereğlisi Çevre Gönüllüleri',
   'Tekirdağ Kent Konseyi',
-  'Kırsal Çevre ve Ormancılık Sorunları Araştırma Derneği'
+  'Kırsal Çevre ve Ormancılık Sorunları Araştırma Derneği',
+  'Antalya Sanatçılar Derneği',
+  'Yeşil Artvin Derneği',
+  'Derelerin Kardeşliği Platformu (DEKAP)'
 ];
+
+const INITIAL_ORGANIZATION_CITIES: Record<string, string> = {
+  'Antalya Sanatçılar Derneği': 'Antalya',
+  'Yeşil Artvin Derneği': 'Artvin',
+  'Derelerin Kardeşliği Platformu (DEKAP)': 'Artvin-Rize-Trabzon-Giresun-Ordu-Samsun'
+};
 
 export const CALL_TEXT_FULL = `COP31'e DOĞRU İKLİM ADALETİ FORUMU
 
@@ -142,68 +151,182 @@ export const INITIAL_SIGNATORIES: Signatory[] = INITIAL_SIGNATORY_ORGANIZATIONS.
   id: `org-${idx + 1}`,
   name: org,
   organization: org,
-  city: '',
+  city: INITIAL_ORGANIZATION_CITIES[org] || '',
   date: '2026-10-16',
   type: 'institutional',
   emailVerified: true
 }));
 
-export const WORKING_GROUPS: WorkingGroup[] = [
+export const INITIAL_EXTRA_SIGNATORIES: Signatory[] = [
   {
-    id: 'wg-emek-zaman',
-    name: 'Emek, Zaman Hakkı ve Sendikal Katılım',
-    title: 'COP31 Sürecinde Ücretli İzin ve Fiili Katılım Hakkı',
-    coordinator: 'İklim Adaleti Forumu Çalışma Grubu',
-    description: '9–20 Kasım 2026 tarihleri arasında kamu çalışanlarına idari, özel sektör çalışanlarına ücretli izin hakkı tanınması ve sendikal güvencelerin sağlanması için ortak çalışma yürütür.',
-    focusAreas: ['Ücretli İzin ve İdari İzin Hakkı', 'Toplu Sözleşme Güvencesi', 'Çalışma Saatlerinin Kısaltılması', 'İş Güvencesi ve Yasal Koruma'],
-    meetingSchedule: '15–17 Kasım Antalya Buluşması Hazırlık Süreci'
+    id: 'sig-1792174998011',
+    name: 'Necdet Demirci',
+    organization: 'Mimar',
+    city: 'Balıkesir',
+    date: '2026-10-16',
+    type: 'individual',
+    emailVerified: true
   },
   {
-    id: 'wg-demokratik-donusum',
-    name: 'Enerji, Tarım, Sanayi ve Kent Politikaları',
-    title: 'Kamusal Mülkiyet ve Tabandan Toplumsal Denetim',
-    coordinator: 'İklim Adaleti Forumu Çalışma Grubu',
-    description: 'Enerjinin, toprağın, suyun ve ortak varlıklarımızın şirketlerin kâr hırsına terk edilmesine karşı toplumsal ihtiyaçlar ve ekolojik sınırlar doğrultusunda yeniden örgütlenmesini savunur.',
-    focusAreas: ['Kamusal Mülkiyet', 'Tabandan Toplumsal Denetim', 'Tarım ve Gıda Politikaları', 'Kent ve Ulaşım Hakkı'],
-    meetingSchedule: '15–17 Kasım Antalya Buluşması Hazırlık Süreci'
+    id: 'sig-1792215319920',
+    name: 'İlkay Nişancı',
+    organization: 'Akademisyen',
+    city: 'İstanbul',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
   },
   {
-    id: 'wg-yasam-alanlari',
-    name: 'Yaşam Alanları, Köylüler ve Ekoloji Savunusu',
-    title: 'Meraların, Nehirlerin, Ormanların ve Toprağın Savunulması',
-    coordinator: 'İklim Adaleti Forumu Çalışma Grubu',
-    description: 'Yeşil dönüşüm adı altında açılan yeni maden sahalarına, mülksüzleştirmelere ve ekolojik yıkıma karşı yaşam alanı savunucularının ve köylülerin doğrudan söz ve karar hakkını örgütler.',
-    focusAreas: ['Mera, Orman ve Nehir Savunusu', 'Mülksüzleştirmeye Karşı Mücadele', 'Şeffaf Ekolojik Etki Raporları', 'Bağımsız Temsil ve Karar Hakkı'],
-    meetingSchedule: '15–17 Kasım Antalya Buluşması Hazırlık Süreci'
+    id: 'sig-1792220661845',
+    name: 'Ali Yalçın Göymen',
+    organization: 'Akademisyen',
+    city: 'Berlin',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
   },
   {
-    id: 'wg-kadin-genclik',
-    name: 'Kadın, Gençlik ve Bakım Emeği Meclisi',
-    title: 'Eşit Katılım, Kamusal Bakım ve Ücretsiz Ulaşım/Konaklama',
-    coordinator: 'İklim Adaleti Forumu Çalışma Grubu',
-    description: 'Bakım emeği verenlerin, kadınların, gençlerin ve düşük gelirlilerin tartışma ve karar süreçlerine eşit koşullarda fiili katılımı için kamusal destek mekanizmalarını savunur.',
-    focusAreas: ['Kamusal Bakım Desteği', 'Ücretsiz Toplu Ulaşım ve Konaklama', 'Gençlik ve Kadın Örgütleri Temsili', 'İletişim ve Örgütlenme'],
-    meetingSchedule: '15–17 Kasım Antalya Buluşması Hazırlık Süreci'
+    id: 'sig-1792221951238',
+    name: 'Ömer Şan',
+    organization: 'Gazeteci /Yazar',
+    city: 'Ankara',
+    message:
+      "Hedef, 'İklim krizine uyum' değil; 'iklim krizine/değişikliğine neden olan müdahalelerin durdurulması' olmalıdır!",
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792223802693',
+    name: 'Mert Yedek',
+    organization: 'Avukat',
+    city: 'Eskişehir',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792225429862',
+    name: 'İlkay Öz',
+    organization: 'Siyaset Bilimci',
+    city: 'İstanbul',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792225793366',
+    name: 'Sercan Dede',
+    city: 'Ankara',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792227068065',
+    name: 'Önder İşleyen',
+    city: 'Ankara',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
   }
 ];
 
-export const UPCOMING_EVENTS: ForumEvent[] = [
+export const INITIAL_POLICIES: Article[] = [
   {
-    id: 'ev-cop31-katilim',
-    title: 'COP31 Günlerinde Ücretli İzin ve Fiili Katılım Süreci',
-    date: '2026-11-09',
-    time: '9–20 Kasım 2026',
-    location: 'Antalya & Tüm İşyerleri / Yaşam Alanları',
-    type: 'Ortak Talep & Eylemlilik',
-    description: 'Emekçilerin ve gençlerin tartışmalara eşit koşullarda katılabilmesi için kamu çalışanlarına idari, özel sektör çalışanlarına ücretli izin hakkı ve kamusal ulaşım/konaklama/bakım desteği talebi.'
-  },
-  {
-    id: 'ev-antalya-bulusmasi',
-    title: 'COP31’e Doğru İklim Adaleti Forumu Antalya Buluşması',
-    date: '2026-11-15',
-    time: '15–16–17 Kasım 2026',
-    location: 'Antalya',
-    type: 'İklim Adaleti Forumu Buluşması',
-    description: 'Talan edilen meraların, kurutulan nehirlerin, yakılan ormanların ve toprağını savunan köylülerin sesiyle; kendi örgütlerimiz ve meşru taleplerimizle 15–17 Kasım tarihlerinde Antalya’da buluşuyoruz.'
+    id: 'pol-1792169995327',
+    slug: 'pol-1792169995327',
+    title: 'İklim Adaleti Forumu Program Örgütlenme ve Strateji Belgesi',
+    excerpt:
+      'Bu programın temel sorusu şudur: İklim krizi karşısında dönüşüm kimin için, kim tarafından, hangi haklar gözetilerek ve hangi bedeller kimlere yüklenerek kurulacaktır?',
+    content: [
+      'Bu programın temel sorusu şudur: İklim krizi karşısında dönüşüm kimin için, kim tarafından, hangi haklar gözetilerek ve hangi bedeller kimlere yüklenerek kurulacaktır?'
+    ],
+    category: 'Politika & Program',
+    date: 'Haziran 2026',
+    author: 'İklim Adaleti Forumu',
+    authorRole: 'Politika / Program',
+    readTimeMinutes: 10,
+    tags: ['Politika / Program'],
+    pdfUrl: '/uploads/1792170006227-_AF_PROGRAM_BELGES__docx.pdf'
   }
 ];
+
+export const INITIAL_EVENTS: ForumEvent[] = [
+  {
+    id: 'ev-1792164191275',
+    title: 'Samsun İklim Adaleti Forumu',
+    date: '17.10.2026',
+    time: '13:00',
+    location: 'Elektrik Mühendisleri Odası (EMO) Samsun Şubesi',
+    type: 'Forum',
+    description:
+      'YERELLERİN SÖZÜ COP31’DE BULUŞUYOR! İKLİM ADALETİ FORUMU\n\nOcak 2026’da Antalya Barosu tarafından başlatılan İklim Adaleti Forumu süreci, COP31’e hazırlık kapsamında Türkiye’nin dört bir yanında yerellerin katılımıyla İklim Adaleti Forumları büyümeye devam ediyor.\n\nAkbelen’den Karadeniz’e, Trakya\'dan, Akdeniz’e, Doğuya; köylerden kentlere, yaşam alanlarını savunanların mücadelesi ortak bir zeminde buluşuyor. Antalya Barosu, İstanbul Barosu ve Türkiye Barolar Birliği’nin de desteğiyle yürütülen bu süreçte, yerellerin yıllardır sürdürdüğü mücadelelerin, deneyimlerin ve taleplerin Kasım ayında Antalya’da gerçekleştirilecek üç günlük programa taşınmasına hazırlanılıyor.\n\nKaradeniz hattında iki ayrı İklim Adaleti Forumu gerçekleştirilmesi planlandı. Bunlardan ilki yaklaşık iki ay önce Rize’de oldu. Trabzon, Artvin ve Rize’nin yerelleri, STK\'lar, yaşam savunucularıyla geniş katılımlı, verimli bir forum gerçekleştirildi.\n\nSamsun\'daki forumda Sinop, Amasya, Ordu ve Giresun gibi yakın havzaların yerelleri, toprakları için mücadele eden köylüleri, emekçileri bir araya getirmeyi hedefleniyor. 17 Ekim Cumartesi Samsun Elektrik Mühendisleri Odasından, COP31’e doğru itiraz sesleri birleşiyor.\n\nSamsun’daki forumda buluşalım.\n\n📅 Tarih: 17 Ekim 2026 Cumartesi\n🕒 Saat: 13.00\n📍 Yer: Elektrik Mühendisleri Odası (EMO) Samsun Şubesi',
+    imageUrl: '/uploads/1792164176567-samsuforum.png'
+  },
+  {
+    id: 'ev-1792162131784',
+    title: 'Eskişehir İklim Adaleti Forumu',
+    date: '17.10.2026',
+    time: '14:00',
+    location: 'Taşbaşı Kültür Merkezi - Kırmızı Salon, Eskişehir',
+    type: 'Forum',
+    description:
+      'Doğanın ve Yaşam Haklarımızın Yanındayız\n\nİklim krizi sadece derecelerin yükselmesinden ibaret değil, aşırı hava olayları, biyoçeşitlilik kaybı, gıda ve su krizi ile doğrudan yaşam hakkımızı tehdit eden toplumsal ve hukuki bir adalet meselesidir.\n\nKrizin etkilerini en derin hisseden toplulukların, yaşam alanlarının ve ekosistemlerin sesini yükseltmek, doğayı ve geleceğimizi hukuki ve ekolojik bir mücadele hattında savunmak için bir araya geliyoruz.\n\nEskişehir Ekoloji Derneği bünyesinde gerçekleştireceğimiz İklim Adaleti Forumu’nda, iklim krizine karşı hukuki haklarımızı, ekolojik mücadele yöntemlerini ve adil bir geleceğin nasıl inşa edileceğini konuşacağız.\n\nKonuşmacılarımız Avukat Onat Ötnü ve Avukat Mert Yedek’in katılımıyla gerçekleşecek bu önemli buluşmaya tüm yurttaşlarımızı bekliyoruz.\n\n📅 Tarih: 17 Ekim 2026\n🕑 Saat: 14.00\n📍 Yer: Taşbaşı Kültür Merkezi - Kırmızı Salon',
+    imageUrl: '/uploads/1792162144088-eski_ehir_17_10_2026.png'
+  },
+  {
+    id: 'ev-1792163395400',
+    title: 'Uşak İklim Adaleti Forumu',
+    date: '20.10.2026',
+    time: '16:00',
+    location: 'Atatürk Kültür Merkezi, 2 Nolu Salonu - Uşak',
+    type: 'Forum',
+    description:
+      'İklim Krizine Karşı Ekolojik ve Sosyal Adalet İçin Uşak’ta Buluşuyoruz\n\nİklim krizi, yalnızca çevresel bir felaket değil, sermaye odaklı büyüme politikalarının, doğa talanının ve sosyo-ekonomik derin eşitsizliklerin ürettiği sistemik bir hak ve adalet krizidir.\n\nKrize en az katkıda bulunan yerel toplulukların, tarım üreticilerinin, kadınların, çocukların ve gelecek kuşakların krizin en ağır yükünü taşımak zorunda bırakılması kabul edilemez. Kuraklık, su varlıklarının ticarileştirilmesi, maden ve sanayi baskısıyla tahrif edilen yaşam alanlarımız, doğanın ve yurttaşların en temel yaşam haklarını tehdit etmektedir.\n\nTam da bu nedenle, doğanın metalaştırılmasına karşı ekosistem haklarını, iklim krizinin getirdiği yıkımlara karşı ise halkların, emeğin ve gelecek nesillerin iklim adaletini savunmak için bir araya geliyoruz.\n\nUşak Barosu ev sahipliğinde düzenleyeceğimiz İklim Adaleti Forumu’nda, ekolojik yıkımın hukuki boyutlarını, hak ihlallerini, yerel mücadele tecrübelerini ve adil bir geçişin imkanlarını hep birlikte tartışacağız.\n\nDoğanın, suyun, toprağın ve yaşamın hakkını, hukukun ve toplumsal dayanışmanın gücüyle savunmak isteyen tüm yurttaşlarımızı sesimize güç vermeye davet ediyoruz.\n\n🗓️ 20 Ekim 2026 Salı\n⏱️ 16.00\n🧭 Atatürk Kültür Merkezi, 2 Nolu Salonu - Uşak',
+    imageUrl: '/uploads/1792163368686-u_ak_20_10_2026.png'
+  },
+  {
+    id: 'ev-1792161567412',
+    title: 'Döşemealtı İklim Adaleti Forumu',
+    date: '25.10.2026',
+    time: '13:00',
+    location: 'Yeşilpark Kültür Merkezi Tiyatro Salonu (Yeşilbayır / Döşemealtı - ANTALYA)',
+    type: 'Forum',
+    description:
+      'Rant projelerine ve ekolojik yıkıma karşı yaşam alanlarımızı, emeğimizi ve doğayı savunmak için buluşuyoruz. İklim adaleti mücadelemizi konuşmak ve ortak sözümüzü büyütmek üzere tüm halkımızı Döşemealtı İklim Adaleti Forumu’na çağırıyoruz.\n\n📆 25 Ekim 2026 Pazar | ⏰ 13.00\n📍 Yeşilpark Kültür Merkezi Tiyatro Salonu (Yeşilbayır / Döşemealtı)',
+    imageUrl: '/uploads/1792161526273-d__emealt__forum.jpeg'
+  },
+  {
+    id: 'ev-1792164859279',
+    title: 'Fethiye 2. İklim Adaleti Forumu',
+    date: '31.10.2026',
+    time: '14:00 - 16:00',
+    location: 'Kitaphane - Fethiye',
+    type: 'Forum',
+    description:
+      'Mayıs ayında gerçekleştirdiğimiz tanışma ve bilgilendirme toplantısında, iklim krizine karşı yerelden yükselen, katılımcı ve demokratik bir mücadeleyi birlikte kurmak için bir araya gelmiştik. Kıyılarımızı, koylarımızı, ormanlarımızı, tarım alanlarımızı ve ortak yaşamımızı tehdit eden politikalar karşısında başlattığımız tartışmayı büyütmek üzere yeniden buluşuyoruz.\n\nİklim Adaleti Forumu\'nun "Zamanımızı, yaşamımızı, geleceğimizi istiyoruz!" çağrısını Fethiye\'den birlikte karşılamak; 15-17 Kasım\'da Antalya\'da gerçekleşecek buluşmaya yerel mücadelelerimizin sözünü ve taleplerini taşımak istiyoruz. Bu toplantıda iklim adaleti mücadelesinde ortak adımlarımızı, Antalya buluşmasına katılımı ve dayanışma olanaklarımızı birlikte konuşacağız.\n\nYaşamımız ve geleceğimiz üzerinde söz, karar ve denetim hakkımızı savunmak için tüm yurttaşları, emek ve meslek örgütlerini, ekoloji hareketlerini, gençleri, üreticileri ve yaşam savunucularını toplantımıza davet ediyoruz.\n\n📍 KİTAPHANE - FETHİYE | 📅 31 EKİM 2026 CUMARTESİ | 🕒 14.00 - 16:00',
+    imageUrl: '/uploads/1792164708020-fethiye_2_bulu_ma.jpeg'
+  }
+];
+
+export const INITIAL_FORUMS: Article[] = INITIAL_EVENTS.map((ev) => {
+  const paragraphs = String(ev.description || ev.title).split(/\n\s*\n/);
+  return {
+    id: ev.id.replace(/^ev-/, 'forum-'),
+    slug: ev.id.replace(/^ev-/, 'forum-'),
+    title: ev.title,
+    excerpt: paragraphs.slice(0, 2).join('\n\n') || ev.title,
+    content: paragraphs,
+    category: ev.type || 'Forum',
+    date: ev.date,
+    author: ev.location || 'İklim Adaleti Forumu',
+    authorRole: 'İklim Adaleti Forumu',
+    readTimeMinutes: 3,
+    tags: [ev.type || 'Forum'],
+    imageUrl: ev.imageUrl
+  };
+});
+
+export const WORKING_GROUPS: WorkingGroup[] = [];
+export const UPCOMING_EVENTS: ForumEvent[] = INITIAL_EVENTS;

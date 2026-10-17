@@ -2,15 +2,16 @@
   "forums": [
     {
       "id": "forum-1792164191275",
-      "slug": "samsun-iklim-adaleti-forumu",
+      "slug": "forum-1792164191275",
       "title": "Samsun İklim Adaleti Forumu",
-      "excerpt": "YERELLERİN SÖZÜ İKLİM ADALETİ FORUMU SAMSUN'DA BULUŞUYOR!\n\nAkbelen’den Karadeniz’e, Trakya'dan, Akdeniz’e, Doğuya; köylerden kentlere, yaşam alanlarını savunanların mücadelesi ortak bir zeminde buluşuyor.",
+      "excerpt": "YERELLERİN SÖZÜ COP31’DE BULUŞUYOR! İKLİM ADALETİ FORUMU\n\nOcak 2026’da Antalya Barosu tarafından başlatılan İklim Adaleti Forumu süreci, COP31’e hazırlık kapsamında Türkiye’nin dört bir yanında yerellerin katılımıyla İklim Adaleti Forumları büyümeye devam ediyor.",
       "content": [
         "YERELLERİN SÖZÜ COP31’DE BULUŞUYOR! İKLİM ADALETİ FORUMU",
         "Ocak 2026’da Antalya Barosu tarafından başlatılan İklim Adaleti Forumu süreci, COP31’e hazırlık kapsamında Türkiye’nin dört bir yanında yerellerin katılımıyla İklim Adaleti Forumları büyümeye devam ediyor.",
         "Akbelen’den Karadeniz’e, Trakya'dan, Akdeniz’e, Doğuya; köylerden kentlere, yaşam alanlarını savunanların mücadelesi ortak bir zeminde buluşuyor. Antalya Barosu, İstanbul Barosu ve Türkiye Barolar Birliği’nin de desteğiyle yürütülen bu süreçte, yerellerin yıllardır sürdürdüğü mücadelelerin, deneyimlerin ve taleplerin Kasım ayında Antalya’da gerçekleştirilecek üç günlük programa taşınmasına hazırlanılıyor.",
         "Karadeniz hattında iki ayrı İklim Adaleti Forumu gerçekleştirilmesi planlandı. Bunlardan ilki yaklaşık iki ay önce Rize’de oldu. Trabzon, Artvin ve Rize’nin yerelleri, STK'lar, yaşam savunucularıyla geniş katılımlı, verimli bir forum gerçekleştirildi.",
         "Samsun'daki forumda Sinop, Amasya, Ordu ve Giresun gibi yakın havzaların yerelleri, toprakları için mücadele eden köylüleri, emekçileri bir araya getirmeyi hedefleniyor. 17 Ekim Cumartesi Samsun Elektrik Mühendisleri Odasından, COP31’e doğru itiraz sesleri birleşiyor.",
+        "Samsun’daki forumda buluşalım.",
         "📅 Tarih: 17 Ekim 2026 Cumartesi\n🕒 Saat: 13.00\n📍 Yer: Elektrik Mühendisleri Odası (EMO) Samsun Şubesi"
       ],
       "category": "Forum",
@@ -18,12 +19,14 @@
       "author": "Elektrik Mühendisleri Odası (EMO) Samsun Şubesi",
       "authorRole": "İklim Adaleti Forumu",
       "readTimeMinutes": 3,
-      "tags": ["Forum"],
+      "tags": [
+        "Forum"
+      ],
       "imageUrl": "/uploads/1792164176567-samsuforum.png"
     },
     {
       "id": "forum-1792162131784",
-      "slug": "eskisehir-iklim-adaleti-forumu",
+      "slug": "forum-1792162131784",
       "title": "Eskişehir İklim Adaleti Forumu",
       "excerpt": "Doğanın ve Yaşam Haklarımızın Yanındayız\n\nİklim krizi sadece derecelerin yükselmesinden ibaret değil, aşırı hava olayları, biyoçeşitlilik kaybı, gıda ve su krizi ile doğrudan yaşam hakkımızı tehdit eden toplumsal ve hukuki bir adalet meselesidir.",
       "content": [
@@ -32,19 +35,21 @@
         "Krizin etkilerini en derin hisseden toplulukların, yaşam alanlarının ve ekosistemlerin sesini yükseltmek, doğayı ve geleceğimizi hukuki ve ekolojik bir mücadele hattında savunmak için bir araya geliyoruz.",
         "Eskişehir Ekoloji Derneği bünyesinde gerçekleştireceğimiz İklim Adaleti Forumu’nda, iklim krizine karşı hukuki haklarımızı, ekolojik mücadele yöntemlerini ve adil bir geleceğin nasıl inşa edileceğini konuşacağız.",
         "Konuşmacılarımız Avukat Onat Ötnü ve Avukat Mert Yedek’in katılımıyla gerçekleşecek bu önemli buluşmaya tüm yurttaşlarımızı bekliyoruz.",
-        "📅 Tarih: 17 Ekim 2026\n🕒 Saat: 14.00\n📍 Yer: Taşbaşı Kültür Merkezi - Kırmızı Salon"
+        "📅 Tarih: 17 Ekim 2026\n🕑 Saat: 14.00\n📍 Yer: Taşbaşı Kültür Merkezi - Kırmızı Salon"
       ],
       "category": "Forum",
       "date": "17.10.2026",
       "author": "Taşbaşı Kültür Merkezi - Kırmızı Salon, Eskişehir",
       "authorRole": "İklim Adaleti Forumu",
       "readTimeMinutes": 3,
-      "tags": ["Forum"],
+      "tags": [
+        "Forum"
+      ],
       "imageUrl": "/uploads/1792162144088-eski_ehir_17_10_2026.png"
     },
     {
       "id": "forum-1792163395400",
-      "slug": "usak-iklim-adaleti-forumu",
+      "slug": "forum-1792163395400",
       "title": "Uşak İklim Adaleti Forumu",
       "excerpt": "İklim Krizine Karşı Ekolojik ve Sosyal Adalet İçin Uşak’ta Buluşuyoruz\n\nİklim krizi, yalnızca çevresel bir felaket değil, sermaye odaklı büyüme politikalarının, doğa talanının ve sosyo-ekonomik derin eşitsizliklerin ürettiği sistemik bir hak ve adalet krizidir.",
       "content": [
@@ -61,31 +66,35 @@
       "author": "Atatürk Kültür Merkezi, 2 Nolu Salonu - Uşak",
       "authorRole": "İklim Adaleti Forumu",
       "readTimeMinutes": 3,
-      "tags": ["Forum"],
+      "tags": [
+        "Forum"
+      ],
       "imageUrl": "/uploads/1792163368686-u_ak_20_10_2026.png"
     },
     {
       "id": "forum-1792161567412",
-      "slug": "dosemealti-iklim-adaleti-forumu",
+      "slug": "forum-1792161567412",
       "title": "Döşemealtı İklim Adaleti Forumu",
-      "excerpt": "Rant projelerine ve ekolojik yıkıma karşı yaşam alanlarımızı, emeğimizi ve doğayı savunmak için buluşuyoruz. İklim adaleti mücadelemizi konuşmak ve ortak sözümüzü büyütmek üzere tüm halkımızı Döşemealtı İklim Adaleti Forumu’na çağırıyoruz.",
+      "excerpt": "Rant projelerine ve ekolojik yıkıma karşı yaşam alanlarımızı, emeğimizi ve doğayı savunmak için buluşuyoruz. İklim adaleti mücadelemizi konuşmak ve ortak sözümüzü büyütmek üzere tüm halkımızı Döşemealtı İklim Adaleti Forumu’na çağırıyoruz.\n\n📆 25 Ekim 2026 Pazar | ⏰ 13.00\n📍 Yeşilpark Kültür Merkezi Tiyatro Salonu (Yeşilbayır / Döşemealtı)",
       "content": [
         "Rant projelerine ve ekolojik yıkıma karşı yaşam alanlarımızı, emeğimizi ve doğayı savunmak için buluşuyoruz. İklim adaleti mücadelemizi konuşmak ve ortak sözümüzü büyütmek üzere tüm halkımızı Döşemealtı İklim Adaleti Forumu’na çağırıyoruz.",
         "📆 25 Ekim 2026 Pazar | ⏰ 13.00\n📍 Yeşilpark Kültür Merkezi Tiyatro Salonu (Yeşilbayır / Döşemealtı)"
       ],
       "category": "Forum",
       "date": "25.10.2026",
-      "author": "Yeşilpark Kültür Merkezi Tiyatro Salonu (Yeşilbayır / Döşemealtı)",
+      "author": "Yeşilpark Kültür Merkezi Tiyatro Salonu (Yeşilbayır / Döşemealtı - ANTALYA)",
       "authorRole": "İklim Adaleti Forumu",
       "readTimeMinutes": 3,
-      "tags": ["Forum"],
+      "tags": [
+        "Forum"
+      ],
       "imageUrl": "/uploads/1792161526273-d__emealt__forum.jpeg"
     },
     {
       "id": "forum-1792164859279",
-      "slug": "fethiye-2-iklim-adaleti-forumu",
+      "slug": "forum-1792164859279",
       "title": "Fethiye 2. İklim Adaleti Forumu",
-      "excerpt": "Yaşamımız ve geleceğimiz üzerinde söz, karar ve denetim hakkımızı savunmak için tüm yurttaşları, emek ve meslek örgütlerini, ekoloji hareketlerini, gençleri, üreticileri ve yaşam savunucularını toplantımıza davet ediyoruz.",
+      "excerpt": "Mayıs ayında gerçekleştirdiğimiz tanışma ve bilgilendirme toplantısında, iklim krizine karşı yerelden yükselen, katılımcı ve demokratik bir mücadeleyi birlikte kurmak için bir araya gelmiştik. Kıyılarımızı, koylarımızı, ormanlarımızı, tarım alanlarımızı ve ortak yaşamımızı tehdit eden politikalar karşısında başlattığımız tartışmayı büyütmek üzere yeniden buluşuyoruz.\n\nİklim Adaleti Forumu'nun \"Zamanımızı, yaşamımızı, geleceğimizi istiyoruz!\" çağrısını Fethiye'den birlikte karşılamak; 15-17 Kasım'da Antalya'da gerçekleşecek buluşmaya yerel mücadelelerimizin sözünü ve taleplerini taşımak istiyoruz. Bu toplantıda iklim adaleti mücadelesinde ortak adımlarımızı, Antalya buluşmasına katılımı ve dayanışma olanaklarımızı birlikte konuşacağız.",
       "content": [
         "Mayıs ayında gerçekleştirdiğimiz tanışma ve bilgilendirme toplantısında, iklim krizine karşı yerelden yükselen, katılımcı ve demokratik bir mücadeleyi birlikte kurmak için bir araya gelmiştik. Kıyılarımızı, koylarımızı, ormanlarımızı, tarım alanlarımızı ve ortak yaşamımızı tehdit eden politikalar karşısında başlattığımız tartışmayı büyütmek üzere yeniden buluşuyoruz.",
         "İklim Adaleti Forumu'nun \"Zamanımızı, yaşamımızı, geleceğimizi istiyoruz!\" çağrısını Fethiye'den birlikte karşılamak; 15-17 Kasım'da Antalya'da gerçekleşecek buluşmaya yerel mücadelelerimizin sözünü ve taleplerini taşımak istiyoruz. Bu toplantıda iklim adaleti mücadelesinde ortak adımlarımızı, Antalya buluşmasına katılımı ve dayanışma olanaklarımızı birlikte konuşacağız.",
@@ -97,13 +106,34 @@
       "author": "Kitaphane - Fethiye",
       "authorRole": "İklim Adaleti Forumu",
       "readTimeMinutes": 3,
-      "tags": ["Forum"],
+      "tags": [
+        "Forum"
+      ],
       "imageUrl": "/uploads/1792164708020-fethiye_2_bulu_ma.jpeg"
     }
   ],
   "workingGroups": [],
   "declarations": [],
-  "policies": [],
+  "policies": [
+    {
+      "id": "pol-1792169995327",
+      "slug": "pol-1792169995327",
+      "title": "İklim Adaleti Forumu Program Örgütlenme ve Strateji Belgesi",
+      "excerpt": "Bu programın temel sorusu şudur: İklim krizi karşısında dönüşüm kimin için, kim tarafından, hangi haklar gözetilerek ve hangi bedeller kimlere yüklenerek kurulacaktır?",
+      "content": [
+        "Bu programın temel sorusu şudur: İklim krizi karşısında dönüşüm kimin için, kim tarafından, hangi haklar gözetilerek ve hangi bedeller kimlere yüklenerek kurulacaktır?"
+      ],
+      "category": "Politika & Program",
+      "date": "Haziran 2026",
+      "author": "İklim Adaleti Forumu",
+      "authorRole": "Politika / Program",
+      "readTimeMinutes": 10,
+      "tags": [
+        "Politika / Program"
+      ],
+      "pdfUrl": "/uploads/1792170006227-_AF_PROGRAM_BELGES__docx.pdf"
+    }
+  ],
   "events": [
     {
       "id": "ev-1792164191275",
@@ -122,7 +152,7 @@
       "time": "14:00",
       "location": "Taşbaşı Kültür Merkezi - Kırmızı Salon, Eskişehir",
       "type": "Forum",
-      "description": "Doğanın ve Yaşam Haklarımızın Yanındayız\n\nİklim krizi sadece derecelerin yükselmesinden ibaret değil, aşırı hava olayları, biyoçeşitlilik kaybı, gıda ve su krizi ile doğrudan yaşam hakkımızı tehdit eden toplumsal ve hukuki bir adalet meselesidir.\n\nKrizin etkilerini en derin hisseden toplulukların, yaşam alanlarının ve ekosistemlerin sesini yükseltmek, doğayı ve geleceğimizi hukuki ve ekolojik bir mücadele hattında savunmak için bir araya geliyoruz.\n\nEskişehir Ekoloji Derneği bünyesinde gerçekleştireceğimiz İklim Adaleti Forumu’nda, iklim krizine karşı hukuki haklarımızı, ekolojik mücadele yöntemlerini ve adil bir geleceğin nasıl inşa edileceğini konuşacağız.\n\nKonuşmacılarımız Avukat Onat Ötnü ve Avukat Mert Yedek’in katılımıyla gerçekleşecek bu önemli buluşmaya tüm yurttaşlarımızı bekliyoruz.\n\n📅 Tarih: 17 Ekim 2026\n🕒 Saat: 14.00\n📍 Yer: Taşbaşı Kültür Merkezi - Kırmızı Salon",
+      "description": "Doğanın ve Yaşam Haklarımızın Yanındayız\n\nİklim krizi sadece derecelerin yükselmesinden ibaret değil, aşırı hava olayları, biyoçeşitlilik kaybı, gıda ve su krizi ile doğrudan yaşam hakkımızı tehdit eden toplumsal ve hukuki bir adalet meselesidir.\n\nKrizin etkilerini en derin hisseden toplulukların, yaşam alanlarının ve ekosistemlerin sesini yükseltmek, doğayı ve geleceğimizi hukuki ve ekolojik bir mücadele hattında savunmak için bir araya geliyoruz.\n\nEskişehir Ekoloji Derneği bünyesinde gerçekleştireceğimiz İklim Adaleti Forumu’nda, iklim krizine karşı hukuki haklarımızı, ekolojik mücadele yöntemlerini ve adil bir geleceğin nasıl inşa edileceğini konuşacağız.\n\nKonuşmacılarımız Avukat Onat Ötnü ve Avukat Mert Yedek’in katılımıyla gerçekleşecek bu önemli buluşmaya tüm yurttaşlarımızı bekliyoruz.\n\n📅 Tarih: 17 Ekim 2026\n🕑 Saat: 14.00\n📍 Yer: Taşbaşı Kültür Merkezi - Kırmızı Salon",
       "imageUrl": "/uploads/1792162144088-eski_ehir_17_10_2026.png"
     },
     {
@@ -157,5 +187,7 @@
     }
   ],
   "removedSignatoryIds": [],
-  "signatories": []
+  "deletedItemKeys": [],
+  "customAdminPass": null,
+  "users": []
 }

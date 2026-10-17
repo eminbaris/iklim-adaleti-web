@@ -17,30 +17,86 @@ import ArticleModal from './components/ArticleModal.tsx';
 import SignDeclarationModal from './components/SignDeclarationModal.tsx';
 import AdminPanelModal from './components/AdminPanelModal.tsx';
 
-import { INITIAL_SIGNATORIES } from './data/forumData.ts';
+import {
+  INITIAL_SIGNATORIES,
+  INITIAL_EXTRA_SIGNATORIES,
+  INITIAL_FORUMS,
+  INITIAL_POLICIES,
+  INITIAL_EVENTS
+} from './data/forumData.ts';
 import { Article, WorkingGroup, ForumEvent, Signatory } from './types.ts';
 
 const STORAGE_KEY = 'iklimadaleti_verified_signatories_v1';
 
+function getSignatoryIdentityKey(sig: Signatory): string {
+  const isInst =
+    sig.type === 'institutional' ||
+    Boolean(sig.organization && sig.organization === sig.name);
+  if (isInst) {
+    return `inst:${String(sig.organization || sig.name || '').trim().toLowerCase()}`;
+  }
+  return `ind:${String(sig.name || '').trim().toLowerCase()}|${String(sig.city || '').trim().toLowerCase()}`;
+}
+
+function mergeAndDeduplicateSignatories(
+  lists: Signatory[][],
+  removedIds: string[]
+): Signatory[] {
+  const removedSet = new Set(removedIds.map((r) => String(r).trim().toLowerCase()));
+  const map = new Map<string, Signatory>();
+
+  for (const list of lists) {
+    for (const sig of list) {
+      if (!sig || (!sig.name && !sig.organization)) continue;
+      const idKey = String(sig.id || '').trim().toLowerCase();
+      const nameKey = String(sig.organization || sig.name || '').trim().toLowerCase();
+      const identityKey = getSignatoryIdentityKey(sig);
+      if (
+        removedSet.has(idKey) ||
+        removedSet.has(nameKey) ||
+        removedSet.has(identityKey)
+      ) {
+        continue;
+      }
+      const existing = map.get(identityKey);
+      if (!existing) {
+        map.set(identityKey, sig);
+      } else {
+        map.set(identityKey, {
+          ...existing,
+          ...sig,
+          id: existing.id || sig.id,
+          city: sig.city || existing.city,
+          message: sig.message || existing.message,
+          organization: sig.organization || existing.organization
+        });
+      }
+    }
+  }
+
+  return Array.from(map.values());
+}
+
 export default function App() {
-  const [forums, setForums] = useState<Article[]>([]);
+  const [forums, setForums] = useState<Article[]>(INITIAL_FORUMS);
   const [workingGroups, setWorkingGroups] = useState<WorkingGroup[]>([]);
   const [declarations, setDeclarations] = useState<Article[]>([]);
-  const [policies, setPolicies] = useState<Article[]>([]);
-  const [events, setEvents] = useState<ForumEvent[]>([]);
+  const [policies, setPolicies] = useState<Article[]>(INITIAL_POLICIES);
+  const [events, setEvents] = useState<ForumEvent[]>(INITIAL_EVENTS);
   const [removedSignatoryIds, setRemovedSignatoryIds] = useState<string[]>([]);
   const [extraSignatories, setExtraSignatories] = useState<Signatory[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed: Signatory[] = JSON.parse(saved);
-        const existingNames = new Set(INITIAL_SIGNATORIES.map((s) => s.organization || s.name));
-        return parsed.filter((s) => !existingNames.has(s.organization || s.name));
+        if (Array.isArray(parsed)) {
+          return mergeAndDeduplicateSignatories([INITIAL_EXTRA_SIGNATORIES, parsed], []);
+        }
       }
     } catch {
       // ignore storage errors
     }
-    return [];
+    return INITIAL_EXTRA_SIGNATORIES;
   });
 
   // Modals & UI States
@@ -70,20 +126,26 @@ export default function App() {
 
   // Load CMS data & server-persisted signatories on mount and when admin modal opens/closes
   useEffect(() => {
-    fetch('/api/cms')
+    fetch('/api/cms', { cache: 'no-store' })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (!data) return;
-        if (Array.isArray(data.forums)) setForums(data.forums);
+        const removed: string[] = Array.isArray(data.removedSignatoryIds)
+          ? data.removedSignatoryIds
+          : [];
+        setRemovedSignatoryIds(removed);
+        if (Array.isArray(data.forums) && data.forums.length > 0) setForums(data.forums);
         if (Array.isArray(data.workingGroups)) setWorkingGroups(data.workingGroups);
         if (Array.isArray(data.declarations)) setDeclarations(data.declarations);
-        if (Array.isArray(data.policies)) setPolicies(data.policies);
-        if (Array.isArray(data.events)) setEvents(data.events);
-        if (Array.isArray(data.removedSignatoryIds)) {
-          setRemovedSignatoryIds(data.removedSignatoryIds);
-        }
+        if (Array.isArray(data.policies) && data.policies.length > 0) setPolicies(data.policies);
+        if (Array.isArray(data.events) && data.events.length > 0) setEvents(data.events);
         if (Array.isArray(data.signatories)) {
-          setExtraSignatories(data.signatories);
+          setExtraSignatories((prev) =>
+            mergeAndDeduplicateSignatories(
+              [INITIAL_EXTRA_SIGNATORIES, prev, data.signatories],
+              removed
+            )
+          );
         }
       })
       .catch(() => {
@@ -91,11 +153,11 @@ export default function App() {
       });
   }, [adminModalOpen]);
 
-  // Combined signatories list (42 founding + extra verified - removed)
-  const signatories: Signatory[] = [
-    ...INITIAL_SIGNATORIES.filter((s) => !removedSignatoryIds.includes(s.id)),
-    ...extraSignatories.filter((s) => !removedSignatoryIds.includes(s.id))
-  ];
+  // Combined, deduplicated signatories list (45 institutional + verified individuals/institutions - removed)
+  const signatories: Signatory[] = mergeAndDeduplicateSignatories(
+    [INITIAL_SIGNATORIES, extraSignatories],
+    removedSignatoryIds
+  );
 
   const handleJoinWorkingGroup = (group: WorkingGroup) => {
     setSignModalOpen(true);
@@ -118,7 +180,10 @@ export default function App() {
       emailVerified: true
     };
     setExtraSignatories((prev) => {
-      const updated = [...prev, added];
+      const updated = mergeAndDeduplicateSignatories(
+        [prev, [added]],
+        removedSignatoryIds
+      );
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       } catch {
@@ -136,7 +201,12 @@ export default function App() {
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data && Array.isArray(data.signatories)) {
-          setExtraSignatories(data.signatories);
+          setExtraSignatories((prev) =>
+            mergeAndDeduplicateSignatories(
+              [INITIAL_EXTRA_SIGNATORIES, prev, data.signatories],
+              removedSignatoryIds
+            )
+          );
         }
       })
       .catch(() => {
@@ -153,25 +223,32 @@ export default function App() {
   const handleSaveCms = async (payload: {
     username?: string;
     password: string;
-    forums: Article[];
-    workingGroups: WorkingGroup[];
-    declarations: Article[];
-    policies: Article[];
-    events: ForumEvent[];
-    signatories: Signatory[];
-    removedSignatoryIds: string[];
+    forums?: Article[];
+    workingGroups?: WorkingGroup[];
+    declarations?: Article[];
+    policies?: Article[];
+    events?: ForumEvent[];
+    signatories?: Signatory[];
+    removedSignatoryIds?: string[];
     newAdminPass?: string;
     newUser?: { username: string; name: string; password: string };
     deleteUserId?: string;
-    deleteItemKey?: string;
+    deleteItemKey?: string | string[];
   }) => {
-    setForums(payload.forums);
-    setWorkingGroups(payload.workingGroups);
-    setDeclarations(payload.declarations);
-    setPolicies(payload.policies);
-    setEvents(payload.events);
-    setExtraSignatories(payload.signatories);
-    setRemovedSignatoryIds(payload.removedSignatoryIds);
+    const nextRemoved = payload.removedSignatoryIds ?? removedSignatoryIds;
+    if (payload.removedSignatoryIds !== undefined) {
+      setRemovedSignatoryIds(payload.removedSignatoryIds);
+    }
+    if (payload.forums !== undefined) setForums(payload.forums);
+    if (payload.workingGroups !== undefined) setWorkingGroups(payload.workingGroups);
+    if (payload.declarations !== undefined) setDeclarations(payload.declarations);
+    if (payload.policies !== undefined) setPolicies(payload.policies);
+    if (payload.events !== undefined) setEvents(payload.events);
+    if (payload.signatories !== undefined) {
+      setExtraSignatories(
+        mergeAndDeduplicateSignatories([payload.signatories], nextRemoved)
+      );
+    }
 
     try {
       const res = await fetch('/api/admin/save', {
@@ -181,13 +258,27 @@ export default function App() {
       });
       if (res.ok) {
         const data = await res.json();
+        const srvRemoved: string[] = Array.isArray(data.removedSignatoryIds)
+          ? data.removedSignatoryIds
+          : nextRemoved;
+        setRemovedSignatoryIds(srvRemoved);
         if (Array.isArray(data.forums)) setForums(data.forums);
         if (Array.isArray(data.workingGroups)) setWorkingGroups(data.workingGroups);
         if (Array.isArray(data.declarations)) setDeclarations(data.declarations);
         if (Array.isArray(data.policies)) setPolicies(data.policies);
         if (Array.isArray(data.events)) setEvents(data.events);
-        if (Array.isArray(data.removedSignatoryIds)) setRemovedSignatoryIds(data.removedSignatoryIds);
-        if (Array.isArray(data.signatories)) setExtraSignatories(data.signatories);
+        if (Array.isArray(data.signatories)) {
+          const mergedSigs = mergeAndDeduplicateSignatories(
+            [INITIAL_EXTRA_SIGNATORIES, data.signatories],
+            srvRemoved
+          );
+          setExtraSignatories(mergedSigs);
+          try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(mergedSigs));
+          } catch {
+            // ignore storage errors
+          }
+        }
         return true;
       }
       return false;

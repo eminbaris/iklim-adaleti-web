@@ -54,7 +54,21 @@ export default function HeroBanner({
   };
 
   const handleDownloadDeclaration = () => {
-    const blob = new Blob([CALL_TEXT_FULL], { type: 'text/plain;charset=utf-8' });
+    const baseText = CALL_TEXT_FULL.split('İMZACI KURUMLAR:')[0].trim();
+    const instText = institutionalSignatories
+      .map((s, idx) => `${idx + 1}. ${s.organization || s.name}${s.city ? ` (${s.city})` : ''}`)
+      .join('\n');
+    const indText =
+      individualSignatories.length > 0
+        ? `\n\nBİREYSEL İMZACILAR:\n${individualSignatories
+            .map(
+              (s, idx) =>
+                `${idx + 1}. ${s.name}${s.organization ? ` - ${s.organization}` : ''}${s.city ? ` (${s.city})` : ''}`
+            )
+            .join('\n')}`
+        : '';
+    const fullDownloadText = `${baseText}\n\nİMZACI KURUMLAR:\n${instText}${indText}`;
+    const blob = new Blob([fullDownloadText], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -297,8 +311,8 @@ export default function HeroBanner({
                         {sig.organization || sig.name}
                       </span>
                       {sig.city && (
-                        <span className="text-[11px] text-stone-500">
-                          {sig.city}
+                        <span className="text-[11px] text-stone-500 block mt-0.5">
+                          {' '}{sig.city}
                         </span>
                       )}
                     </div>
