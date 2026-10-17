@@ -77,7 +77,7 @@ function getSignatoryIdentityKey(sig: Signatory): string {
   if (isInst) {
     return `inst:${String(sig.organization || sig.name || '').trim().toLowerCase()}`;
   }
-  return `ind:${String(sig.name || '').trim().toLowerCase()}|${String(sig.city || '').trim().toLowerCase()}`;
+  return `ind:${String(sig.name || '').trim().toLowerCase()}`;
 }
 
 function mergeAndDeduplicateSignatories(

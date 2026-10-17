@@ -58,14 +58,17 @@ export const INITIAL_SIGNATORY_ORGANIZATIONS: string[] = [
   'Validebağ Gönüllüleri Derneği',
   'Vaminon (Arhavi Maden İstemiyor)',
   'Fethiye Kent Konseyi',
-  'Varto Ekoloji platformu'
+  'Varto Ekoloji platformu',
+  'Toroçder',
+  'İzmir Varto Ekoloji'
 ];
 
 const INITIAL_ORGANIZATION_CITIES: Record<string, string> = {
   'Antalya Sanatçılar Derneği': 'Antalya',
   'Yeşil Artvin Derneği': 'Artvin',
   'Derelerin Kardeşliği Platformu (DEKAP)': 'Artvin-Rize-Trabzon-Giresun-Ordu-Samsun',
-  'Varto Ekoloji platformu': 'Muş Varto'
+  'Varto Ekoloji platformu': 'Muş Varto',
+  'İzmir Varto Ekoloji': 'İzmir'
 };
 
 export const CALL_TEXT_FULL = `COP31'e DOĞRU İKLİM ADALETİ FORUMU
@@ -243,6 +246,137 @@ export const INITIAL_EXTRA_SIGNATORIES: Signatory[] = [
     id: 'sig-1792231606688',
     name: 'Ebru delice',
     city: 'Antalya',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792232026160',
+    name: 'Tacim Çiçek',
+    city: 'İzmir',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792232436607',
+    name: 'Serdar Aktaş',
+    organization: 'İşçi',
+    city: 'Denizli',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-asli-odman',
+    name: 'Aslı Odman',
+    organization: 'Akademisyen',
+    city: 'İstanbul',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-alev-yilmaz',
+    name: 'Alev Yılmaz',
+    organization: 'Üretici / Varto Ekoloji Platformu',
+    city: 'Muş Varto',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-nur-nese-karahan',
+    name: 'Nur Neşe Karahan',
+    organization: 'Emekli',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-sefa-taskin',
+    name: 'Sefa Taşkın',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-adnan-alin',
+    name: 'Adnan Alin',
+    organization: 'Eğitimci - Sendika Emekçisi',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-veli-bingoltekin',
+    name: 'Veli Bingöltekin',
+    organization: 'Araştırmacı / Yazar',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-baris-keskinkilic',
+    name: 'Barış Keskinkılıç',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-mustafa-kolcu',
+    name: 'Mustafa Kolcu',
+    organization: 'Toroçder',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-ali-merdan-celik',
+    name: 'Ali Merdan Çelik',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-dogukan-onder',
+    name: 'Doğukan Önder',
+    organization: 'İzmir Varto Ekoloji',
+    city: 'İzmir',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-yusuf-aksoy',
+    name: 'Yusuf Aksoy',
+    organization: 'Yazar',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-yuksel-kunter',
+    name: 'Yüksel Kunter',
+    organization: 'Emekli',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-hidayet-karakus',
+    name: 'Hidayet Karakuş',
+    organization: 'Emekli',
+    city: '',
     date: '2026-10-17',
     type: 'individual',
     emailVerified: true

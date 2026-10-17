@@ -136,9 +136,11 @@ export default function AdminPanelModal({
   const [eVideoUrl, setEVideoUrl] = useState('');
   const [ePdfUrl, setEPdfUrl] = useState('');
 
-  // Form states for adding an Institutional Signatory manually
+  // Form states for adding an Institutional or Individual Signatory manually
+  const [sType, setSType] = useState<'institutional' | 'individual'>('institutional');
+  const [sName, setSName] = useState('');
   const [sOrg, setSOrg] = useState('');
-  const [sCity, setSCity] = useState('Türkiye');
+  const [sCity, setSCity] = useState('');
 
   // Form states for adding a new User & changing master password
   const [uName, setUName] = useState('');
@@ -487,29 +489,37 @@ export default function AdminPanelModal({
     setEPdfUrl('');
   };
 
-  // Add Institutional Signatory manually
+  // Add Institutional or Individual Signatory manually
   const handleAddManualSignatory = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!sOrg.trim()) return;
+    if (sType === 'institutional' && !sOrg.trim()) return;
+    if (sType === 'individual' && !sName.trim()) return;
     const cleanOrg = sOrg.trim();
-    const cleanOrgLower = cleanOrg.toLowerCase();
+    const cleanName = sName.trim();
+    const cleanCity = sCity.trim();
+    const targetName = sType === 'institutional' ? cleanOrg : cleanName;
+    const targetLower = targetName.toLowerCase();
+
     const item: Signatory = {
       id: `sig-admin-${Date.now()}`,
-      name: cleanOrg,
-      organization: cleanOrg,
-      city: sCity.trim() || 'Türkiye',
+      name: targetName,
+      organization: sType === 'institutional' ? cleanOrg : (cleanOrg || undefined),
+      city: cleanCity,
       date: new Date().toISOString().split('T')[0],
-      type: 'institutional',
+      type: sType,
       emailVerified: true
     };
     const nextRemoved = removedSignatoryIds.filter(
       (r) =>
-        r.toLowerCase() !== cleanOrgLower &&
-        r.toLowerCase() !== `inst:${cleanOrgLower}`
+        r.toLowerCase() !== targetLower &&
+        r.toLowerCase() !== `inst:${targetLower}` &&
+        !r.toLowerCase().startsWith(`ind:${targetLower}|`)
     );
     const next = [...extraSignatories, item];
     await triggerSave({ signatories: next, removedSignatoryIds: nextRemoved });
+    setSName('');
     setSOrg('');
+    setSCity('');
   };
 
   // Delete Signatory
@@ -1645,49 +1655,124 @@ export default function AdminPanelModal({
                 </div>
               )}
 
-              {/* TAB 5: İMZACI KURUMLAR */}
+              {/* TAB 6: İMZACI KURUMLAR & BİREYLER */}
               {activeTab === 'signatories' && (
                 <div className="space-y-6">
                   <form
                     onSubmit={handleAddManualSignatory}
                     className="bg-stone-50 border border-stone-200 rounded-xl p-5 space-y-4"
                   >
-                    <h4 className="font-serif text-lg font-bold text-stone-900">
-                      Doğrudan Yeni İmzacı Kurum Ekle
-                    </h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div className="sm:col-span-2">
-                        <label className="block text-xs font-semibold text-stone-700 mb-1">
-                          Kurum / Sendika / Dernek / Platform Adı *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={sOrg}
-                          onChange={(e) => setSOrg(e.target.value)}
-                          placeholder="Örn: Ekoloji Birliği"
-                          className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-semibold text-stone-700 mb-1">
-                          Şehir
-                        </label>
-                        <input
-                          type="text"
-                          value={sCity}
-                          onChange={(e) => setSCity(e.target.value)}
-                          className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
-                        />
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <h4 className="font-serif text-lg font-bold text-stone-900">
+                        Doğrudan Yeni İmzacı Ekle (Kurum veya Birey)
+                      </h4>
+                      <div className="inline-flex rounded-lg bg-stone-200/80 p-1">
+                        <button
+                          type="button"
+                          onClick={() => setSType('institutional')}
+                          className={`px-3 py-1.5 text-xs font-bold rounded-md cursor-pointer transition-colors ${
+                            sType === 'institutional'
+                              ? 'bg-[#0B4F71] text-white'
+                              : 'text-stone-700 hover:text-stone-900'
+                          }`}
+                        >
+                          Kurumsal İmza
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSType('individual')}
+                          className={`px-3 py-1.5 text-xs font-bold rounded-md cursor-pointer transition-colors ${
+                            sType === 'individual'
+                              ? 'bg-[#3E8226] text-white'
+                              : 'text-stone-700 hover:text-stone-900'
+                          }`}
+                        >
+                          Bireysel İmza
+                        </button>
                       </div>
                     </div>
+
+                    {sType === 'institutional' ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="sm:col-span-2">
+                          <label className="block text-xs font-semibold text-stone-700 mb-1">
+                            Kurum / Sendika / Dernek / Platform Adı *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={sOrg}
+                            onChange={(e) => setSOrg(e.target.value)}
+                            placeholder="Örn: Ekoloji Birliği"
+                            className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-stone-700 mb-1">
+                            Şehir (İsteğe bağlı)
+                          </label>
+                          <input
+                            type="text"
+                            value={sCity}
+                            onChange={(e) => setSCity(e.target.value)}
+                            placeholder="Örn: İzmir"
+                            className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                          <label className="block text-xs font-semibold text-stone-700 mb-1">
+                            Ad Soyad *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={sName}
+                            onChange={(e) => setSName(e.target.value)}
+                            placeholder="Örn: Barış Keskinkılıç"
+                            className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-stone-700 mb-1">
+                            Meslek / Ünvan (İsteğe bağlı)
+                          </label>
+                          <input
+                            type="text"
+                            value={sOrg}
+                            onChange={(e) => setSOrg(e.target.value)}
+                            placeholder="Örn: Emekli, Akademisyen, Yazar"
+                            className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-stone-700 mb-1">
+                            Şehir (İsteğe bağlı)
+                          </label>
+                          <input
+                            type="text"
+                            value={sCity}
+                            onChange={(e) => setSCity(e.target.value)}
+                            placeholder="Örn: İstanbul"
+                            className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
+                          />
+                        </div>
+                      </div>
+                    )}
+
                     <button
                       type="submit"
                       disabled={saving}
                       className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#0B4F71] hover:bg-[#083B54] text-white text-xs font-bold rounded-lg cursor-pointer"
                     >
                       <Plus className="w-4 h-4" />
-                      <span>İmzacı Kurum Listesine Ekle</span>
+                      <span>
+                        {sType === 'institutional'
+                          ? 'İmzacı Kurum Listesine Ekle'
+                          : 'Bireysel İmzacı Listesine Ekle'}
+                      </span>
                     </button>
                   </form>
 
@@ -1702,12 +1787,10 @@ export default function AdminPanelModal({
                           className="p-2.5 bg-white border border-stone-200 rounded-lg flex items-center justify-between gap-2"
                         >
                           <span className="text-xs font-semibold text-stone-800">
-                            {idx + 1}. {sig.organization || sig.name}
-                            {sig.city
-                              ? sig.type === 'individual'
-                                ? ` (${sig.city} - Bireysel)`
-                                : ` (${sig.city})`
-                              : ''}
+                            {idx + 1}.{' '}
+                            {sig.type === 'individual'
+                              ? `${sig.name}${sig.organization ? ` - ${sig.organization}` : ''}${sig.city ? ` (${sig.city} · Bireysel)` : ' (Bireysel)'}`
+                              : `${sig.organization || sig.name}${sig.city ? ` (${sig.city})` : ''}`}
                           </span>
                           <button
                             type="button"

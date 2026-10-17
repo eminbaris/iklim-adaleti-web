@@ -223,8 +223,194 @@ const DEFAULT_SIGNATORIES = [
     date: '2026-10-17',
     type: 'individual',
     emailVerified: true
+  },
+  {
+    id: 'org-53',
+    name: 'Toroçder',
+    organization: 'Toroçder',
+    city: '',
+    date: '2026-10-17',
+    type: 'institutional',
+    emailVerified: true
+  },
+  {
+    id: 'org-54',
+    name: 'İzmir Varto Ekoloji',
+    organization: 'İzmir Varto Ekoloji',
+    city: 'İzmir',
+    date: '2026-10-17',
+    type: 'institutional',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-asli-odman',
+    name: 'Aslı Odman',
+    organization: 'Akademisyen',
+    city: 'İstanbul',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-alev-yilmaz',
+    name: 'Alev Yılmaz',
+    organization: 'Üretici / Varto Ekoloji Platformu',
+    city: 'Muş Varto',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-nur-nese-karahan',
+    name: 'Nur Neşe Karahan',
+    organization: 'Emekli',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-sefa-taskin',
+    name: 'Sefa Taşkın',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-adnan-alin',
+    name: 'Adnan Alin',
+    organization: 'Eğitimci - Sendika Emekçisi',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-veli-bingoltekin',
+    name: 'Veli Bingöltekin',
+    organization: 'Araştırmacı / Yazar',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-baris-keskinkilic',
+    name: 'Barış Keskinkılıç',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-mustafa-kolcu',
+    name: 'Mustafa Kolcu',
+    organization: 'Toroçder',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-ali-merdan-celik',
+    name: 'Ali Merdan Çelik',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-dogukan-onder',
+    name: 'Doğukan Önder',
+    organization: 'İzmir Varto Ekoloji',
+    city: 'İzmir',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-yusuf-aksoy',
+    name: 'Yusuf Aksoy',
+    organization: 'Yazar',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-yuksel-kunter',
+    name: 'Yüksel Kunter',
+    organization: 'Emekli',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-rec-hidayet-karakus',
+    name: 'Hidayet Karakuş',
+    organization: 'Emekli',
+    city: '',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
   }
 ];
+
+const INDIVIDUAL_PROFESSION_REGEX =
+  /^(emekli|yazar|birey|bireysel|kişi|kisi|vatandaş|vatandas|yurttaş|yurttas|işçi|isci|memur|öğretmen|ogretmen|eğitimci|egitimci|akademisyen|avukat|hukukçu|hukukcu|mimar|mühendis|muhendis|doktor|hekim|hemşire|hemsire|sağlık emekçisi|saglik emekcisi|sağlıkçı|saglikci|öğrenci|ogrenci|gazeteci|araştırmacı|arastirmaci|sanatçı|sanatci|müzisyen|muzisyen|oyuncu|yönetmen|yonetmen|çiftçi|ciftci|çiftlik|ciftlik|üretici|uretici|ev hanımı|ev hanimi|ev kadını|ev kadini|serbest|serbest meslek|esnaf|psikolog|sosyolog|ekonomist|siyaset bilimci|aktivist|ekolojist|yaşam savunucusu|yasam savunucusu|sendika emekçisi|kamu emekçisi|işsiz|issiz|yok|bağımsız|bagimsiz|-|\.)(\s*[\/,-]\s*.*)?$/i;
+
+function classifySignatoryOnServer({ name, organization, city, message, type }) {
+  const cleanName = String(name || '').replace(/[<>]/g, '').trim().slice(0, 150);
+  const cleanOrg = organization
+    ? String(organization).replace(/[<>]/g, '').trim().slice(0, 150)
+    : undefined;
+  const cleanCity = String(city || '').replace(/[<>]/g, '').trim().slice(0, 80);
+  const cleanMsg = message
+    ? String(message).replace(/[<>]/g, '').trim().slice(0, 500)
+    : undefined;
+
+  if (type === 'individual') {
+    return {
+      name: cleanName || cleanOrg || '',
+      organization: cleanOrg && cleanOrg !== cleanName ? cleanOrg : undefined,
+      city: cleanCity,
+      message: cleanMsg,
+      type: 'individual'
+    };
+  }
+
+  // If user stayed on 'institutional' tab by mistake and typed a personal profession in organization (e.g., "Emekli", "Yazar", "Birey")
+  if (cleanOrg && INDIVIDUAL_PROFESSION_REGEX.test(cleanOrg) && cleanName && cleanName.toLowerCase() !== cleanOrg.toLowerCase()) {
+    const isBireyWord = /^(birey|bireysel|kişi|kisi|yok|-|\.)$/i.test(cleanOrg);
+    return {
+      name: cleanName,
+      organization: isBireyWord ? undefined : cleanOrg,
+      city: cleanCity,
+      message: cleanMsg,
+      type: 'individual'
+    };
+  }
+
+  if (cleanOrg) {
+    return {
+      name: cleanOrg,
+      organization: cleanOrg,
+      city: cleanCity,
+      message: cleanMsg,
+      type: 'institutional'
+    };
+  }
+
+  return {
+    name: cleanName,
+    organization: undefined,
+    city: cleanCity,
+    message: cleanMsg,
+    type: 'individual'
+  };
+}
 
 function getSignatoryKey(sig) {
   if (!sig) return '';
@@ -234,7 +420,7 @@ function getSignatoryKey(sig) {
   if (isInst) {
     return `inst:${String(sig.organization || sig.name || '').trim().toLowerCase()}`;
   }
-  return `ind:${String(sig.name || '').trim().toLowerCase()}|${String(sig.city || '').trim().toLowerCase()}`;
+  return `ind:${String(sig.name || '').trim().toLowerCase()}`;
 }
 
 function getRemovedSignatorySet(cmsData) {
@@ -870,34 +1056,34 @@ function createServer() {
 
   // 3. Save a newly verified signatory on the server
   app.post('/api/signatories', (req, res) => {
-    if (!checkRateLimit(req, 'signatories', 10, 15 * 60 * 1000)) {
+    if (!checkRateLimit(req, 'signatories', 120, 15 * 60 * 1000)) {
       return res.status(429).json({ error: 'Çok fazla istek gönderildi. Lütfen biraz bekleyin.' });
     }
     const { name, organization, city, message, type } = req.body || {};
-    if (!name || !city) {
+    if (!name && !organization) {
       return res.status(400).json({ error: 'Eksik bilgi' });
     }
-    const cleanName = String(name).replace(/[<>]/g, '').trim().slice(0, 150);
-    const cleanOrg = organization
-      ? String(organization).replace(/[<>]/g, '').trim().slice(0, 150)
-      : undefined;
-    const cleanCity = String(city).replace(/[<>]/g, '').trim().slice(0, 80);
-    const cleanMsg = message
-      ? String(message).replace(/[<>]/g, '').trim().slice(0, 500)
-      : undefined;
 
-    if (!cleanName || !cleanCity) {
+    const classified = classifySignatoryOnServer({
+      name,
+      organization,
+      city,
+      message,
+      type
+    });
+
+    if (!classified.name && !classified.organization) {
       return res.status(400).json({ error: 'Geçersiz bilgi' });
     }
 
     const newSig = {
       id: `sig-${Date.now()}`,
-      name: cleanName,
-      organization: cleanOrg,
-      city: cleanCity,
-      message: cleanMsg,
+      name: classified.name,
+      organization: classified.organization,
+      city: classified.city || '',
+      message: classified.message,
       date: new Date().toISOString().split('T')[0],
-      type: type === 'individual' ? 'individual' : cleanOrg ? 'institutional' : 'individual',
+      type: classified.type,
       emailVerified: true
     };
     const updated = saveExtraSignatory(newSig);
@@ -1102,23 +1288,45 @@ function createServer() {
     });
   });
 
-  // 7. Send 6-digit verification code via Gmail / SMTP
+  // 7. Send confirmation email & auto-save signatory so zero signatures are ever lost
   app.post('/api/send-verification-code', async (req, res) => {
-    if (!checkRateLimit(req, 'send-otp', 8, 15 * 60 * 1000)) {
+    if (!checkRateLimit(req, 'send-otp', 120, 15 * 60 * 1000)) {
       return res
         .status(429)
-        .json({ error: 'Çok fazla kod isteği gönderildi. Lütfen birkaç dakika bekleyin.' });
+        .json({ error: 'Çok fazla istek gönderildi. Lütfen birkaç dakika bekleyin.' });
     }
-    const { email, name, organization, code } = req.body || {};
+    const { email, name, organization, city, message, signType, code } = req.body || {};
     const cleanEmail = String(email || '').trim();
     const cleanCode = String(code || '').trim();
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    if (!cleanEmail || cleanEmail.length > 120 || !emailRegex.test(cleanEmail)) {
-      return res.status(400).json({ error: 'Geçerli bir e-posta adresi giriniz.' });
+    // IMMEDIATELY auto-save the signatory on the server so even if the user closes the tab or is on an older cached client, their signature is NEVER lost!
+    let savedList = null;
+    if (name || organization) {
+      const classified = classifySignatoryOnServer({
+        name,
+        organization,
+        city,
+        message,
+        type: signType
+      });
+      if (classified.name || classified.organization) {
+        const autoSig = {
+          id: `sig-${Date.now()}`,
+          name: classified.name,
+          organization: classified.organization,
+          city: classified.city || '',
+          message: classified.message,
+          date: new Date().toISOString().split('T')[0],
+          type: classified.type,
+          emailVerified: true
+        };
+        savedList = saveExtraSignatory(autoSig);
+      }
     }
-    if (!/^\d{6}$/.test(cleanCode)) {
-      return res.status(400).json({ error: 'Geçersiz doğrulama kodu formatı.' });
+
+    if (!cleanEmail || cleanEmail.length > 120 || !emailRegex.test(cleanEmail)) {
+      return res.json({ ok: true, signatories: savedList });
     }
 
     const candidateUsers = process.env.SMTP_USER
@@ -1128,27 +1336,32 @@ function createServer() {
     const smtpPass = (process.env.SMTP_PASS || '').replace(/\s+/g, '');
 
     if (!smtpPass) {
-      return res.json({ ok: true, previewCode: cleanCode });
+      return res.json({ ok: true, previewCode: cleanCode || '000000', signatories: savedList });
     }
 
     const safeName = escapeHtml(String(name || '').slice(0, 120));
     const safeOrg = escapeHtml(String(organization || '').slice(0, 150));
     const signerTitle = safeOrg ? `${safeOrg} (${safeName})` : safeName;
+    const codeSection = /^\d{6}$/.test(cleanCode)
+      ? `
+        <div style="margin: 20px 0; padding: 14px; background-color: #ffffff; border: 2px solid #0B4F71; border-radius: 10px; text-align: center;">
+          <span style="font-family: monospace; font-size: 26px; font-weight: bold; letter-spacing: 6px; color: #0B4F71;">${cleanCode}</span>
+        </div>
+      `
+      : '';
+
     const htmlBody = `
       <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 24px; border: 1px solid #e5e7eb; border-radius: 12px; background-color: #fbf9f5;">
         <h2 style="color: #0B4F71; margin-top: 0;">COP31'e Doğru İklim Adaleti Forumu</h2>
         <p style="color: #292524; font-size: 15px; line-height: 1.6;">
           Merhaba <strong>${signerTitle || ''}</strong>,
         </p>
-        <p style="color: #44403c; font-size: 14px; line-height: 1.6;">
-          İklim Adaleti Forumu Çağrı Metni'ni imzalamak için tek kullanımlık 6 haneli e-posta doğrulama kodunuz aşağıdadır:
+        <p style="color: #3E8226; font-size: 15px; font-weight: bold; line-height: 1.6;">
+          İmzanız İklim Adaleti Forumu Çağrı Metni'ne başarıyla kaydedilmiştir. Dayanışmanız için teşekkür ederiz!
         </p>
-        <div style="margin: 24px 0; padding: 16px; background-color: #ffffff; border: 2px solid #0B4F71; border-radius: 10px; text-align: center;">
-          <span style="font-family: monospace; font-size: 28px; font-weight: bold; letter-spacing: 8px; color: #0B4F71;">${cleanCode}</span>
-        </div>
+        ${codeSection}
         <p style="color: #78716c; font-size: 12px; line-height: 1.5;">
-          Bu kodu web sayfasındaki doğrulama ekranına girerek imzanızı tamamlayabilirsiniz.<br/>
-          iklimadaleti.org
+          İklim Adaleti Forumu · <a href="https://iklimadaleti.org" style="color: #0B4F71;">iklimadaleti.org</a>
         </p>
       </div>
     `;
@@ -1168,18 +1381,20 @@ function createServer() {
           from: `"İklim Adaleti Forumu" <${smtpUser}>`,
           replyTo: 'iklimadaleti2026@gmail.com',
           to: cleanEmail,
-          subject: `İklim Adaleti Forumu - İmza Onay Kodunuz: ${cleanCode}`,
+          subject: cleanCode
+            ? `İklim Adaleti Forumu - İmzanız Kaydedildi (Onay: ${cleanCode})`
+            : `İklim Adaleti Forumu - İmzanız Başarıyla Kaydedildi`,
           html: htmlBody
         });
 
-        return res.json({ ok: true, sent: true });
+        return res.json({ ok: true, sent: true, signatories: savedList });
       } catch (err) {
         lastErr = err;
       }
     }
 
     console.error('SMTP error:', lastErr);
-    return res.status(500).json({ error: 'E-posta gönderilemedi' });
+    return res.json({ ok: true, sent: false, signatories: savedList });
   });
 
   app.use(express.static(distPath));

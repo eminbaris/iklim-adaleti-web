@@ -4,7 +4,7 @@
  */
 
 import { useState } from 'react';
-import { X, CheckCircle, Building2, User, Mail, ShieldCheck, KeyRound, ArrowLeft, RefreshCw } from 'lucide-react';
+import { X, CheckCircle, Building2, User, Mail, ShieldCheck, PenTool } from 'lucide-react';
 import { Signatory } from '../types.ts';
 
 interface SignDeclarationModalProps {
@@ -13,13 +13,62 @@ interface SignDeclarationModalProps {
   onAddSignatory: (signatory: Omit<Signatory, 'id' | 'date'>) => void;
 }
 
+const INDIVIDUAL_PROFESSION_PATTERN =
+  /^(emekli|yazar|birey|bireysel|kişi|kisi|vatandaş|vatandas|yurttaş|yurttas|işçi|isci|memur|öğretmen|ogretmen|eğitimci|egitimci|akademisyen|avukat|hukukçu|hukukcu|mimar|mühendis|muhendis|doktor|hekim|hemşire|hemsire|sağlık emekçisi|saglik emekcisi|sağlıkçı|saglikci|öğrenci|ogrenci|gazeteci|araştırmacı|arastirmaci|sanatçı|sanatci|müzisyen|muzisyen|oyuncu|yönetmen|yonetmen|çiftçi|ciftci|çiftlik|ciftlik|üretici|uretici|ev hanımı|ev hanimi|ev kadını|ev kadini|serbest|serbest meslek|esnaf|psikolog|sosyolog|ekonomist|siyaset bilimci|aktivist|ekolojist|yaşam savunucusu|yasam savunucusu|sendika emekçisi|kamu emekçisi|işsiz|issiz|yok|bağımsız|bagimsiz|-|\.)(\s*[\/,-]\s*.*)?$/i;
+
+export function classifySignatoryInput(input: {
+  signType: 'institutional' | 'individual';
+  name: string;
+  organization: string;
+  city: string;
+  message?: string;
+}): Omit<Signatory, 'id' | 'date'> {
+  const cleanName = input.name.trim();
+  const cleanOrg = input.organization.trim();
+  const cleanCity = input.city.trim();
+  const cleanMsg = input.message?.trim() || undefined;
+
+  if (input.signType === 'individual') {
+    return {
+      name: cleanName,
+      organization: cleanOrg || undefined,
+      city: cleanCity,
+      message: cleanMsg,
+      type: 'individual',
+      emailVerified: true
+    };
+  }
+
+  // Check if user accidentally stayed on 'institutional' tab while entering a personal profession (e.g., "Emekli", "Yazar", "Birey")
+  if (cleanOrg && INDIVIDUAL_PROFESSION_PATTERN.test(cleanOrg) && cleanName) {
+    const isBireyWord = /^(birey|bireysel|kişi|kisi|yok|-|\.)$/i.test(cleanOrg);
+    return {
+      name: cleanName,
+      organization: isBireyWord ? undefined : cleanOrg,
+      city: cleanCity,
+      message: cleanMsg,
+      type: 'individual',
+      emailVerified: true
+    };
+  }
+
+  return {
+    name: cleanOrg || cleanName,
+    organization: cleanOrg || cleanName,
+    city: cleanCity,
+    message: cleanMsg,
+    type: 'institutional',
+    emailVerified: true
+  };
+}
+
 export default function SignDeclarationModal({
   isOpen,
   onClose,
   onAddSignatory
 }: SignDeclarationModalProps) {
-  const [signType, setSignType] = useState<'institutional' | 'individual'>('institutional');
-  const [step, setStep] = useState<'form' | 'verify' | 'success'>('form');
+  const [signType, setSignType] = useState<'institutional' | 'individual'>('individual');
+  const [step, setStep] = useState<'form' | 'success'>('form');
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -28,12 +77,10 @@ export default function SignDeclarationModal({
   const [message, setMessage] = useState('');
   const [honeypot, setHoneypot] = useState(''); // Anti-bot hidden field
 
-  // Email OTP Verification states
-  const [generatedCode, setGeneratedCode] = useState('');
-  const [enteredCode, setEnteredCode] = useState('');
-  const [sendingCode, setSendingCode] = useState(false);
-  const [demoNoticeCode, setDemoNoticeCode] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [savedAsType, setSavedAsType] = useState<'institutional' | 'individual'>('individual');
+  const [savedDisplayName, setSavedDisplayName] = useState('');
 
   if (!isOpen) return null;
 
@@ -45,9 +92,7 @@ export default function SignDeclarationModal({
     setCity('');
     setMessage('');
     setHoneypot('');
-    setGeneratedCode('');
-    setEnteredCode('');
-    setDemoNoticeCode(null);
+    setSubmitting(false);
     setError('');
   };
 
@@ -56,8 +101,7 @@ export default function SignDeclarationModal({
     onClose();
   };
 
-  // Step 1: Validate fields & Send 6-Digit Email Verification Code
-  const handleSendCode = async (e: React.FormEvent) => {
+  const handleSubmitSignature = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -79,70 +123,54 @@ export default function SignDeclarationModal({
       return;
     }
     if (!email.trim() || !email.includes('@')) {
-      setError('Lütfen onay kodunun gönderileceği geçerli bir e-posta adresi giriniz.');
+      setError('Lütfen geçerli bir e-posta adresi giriniz.');
       return;
     }
 
-    setSendingCode(true);
+    setSubmitting(true);
 
-    // Generate a 6-digit verification code
-    const code = String(Math.floor(100000 + Math.random() * 900000));
-    setGeneratedCode(code);
+    const classified = classifySignatoryInput({
+      signType,
+      name,
+      organization,
+      city,
+      message
+    });
 
+    setSavedAsType(classified.type || 'individual');
+    setSavedDisplayName(
+      classified.type === 'institutional'
+        ? classified.organization || classified.name
+        : classified.name
+    );
+
+    // 1. Immediately add and save the signatory on client & server so ZERO signatures are ever lost
+    onAddSignatory(classified);
+
+    // 2. Also trigger background confirmation email / log via server
     try {
-      // Attempt to call backend email OTP endpoint if configured on Coolify / server
-      const res = await fetch('/api/send-verification-code', {
+      await fetch('/api/send-verification-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: email.trim(),
           name: name.trim(),
           organization: organization.trim(),
-          code
+          city: city.trim(),
+          message: message.trim(),
+          signType: classified.type,
+          autoSave: true
         })
       });
-
-      if (!res.ok) {
-        // Fallback for preview / before SMTP env vars are set
-        setDemoNoticeCode(code);
-      } else {
-        const data = await res.json();
-        if (data.previewCode) {
-          setDemoNoticeCode(data.previewCode);
-        }
-      }
     } catch {
-      // In static / local preview mode without SMTP backend, show the code in test banner
-      setDemoNoticeCode(code);
+      // Ignore email notification error since signature is already saved via /api/signatories
     } finally {
-      setSendingCode(false);
-      setStep('verify');
+      setSubmitting(false);
+      setStep('success');
+      setTimeout(() => {
+        handleClose();
+      }, 2800);
     }
-  };
-
-  // Step 2: Verify the 6-digit code & Add signature to the list
-  const handleVerifyCode = (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-
-    if (enteredCode.trim() !== generatedCode) {
-      setError('Girdiğiniz 6 haneli onay kodu hatalı. Lütfen kontrol edip tekrar deneyiniz.');
-      return;
-    }
-
-    onAddSignatory({
-      name: signType === 'institutional' ? organization.trim() : name.trim(),
-      organization: signType === 'institutional' ? organization.trim() : (organization.trim() || undefined),
-      city: city.trim(),
-      message: message.trim() || undefined,
-      type: signType,
-      emailVerified: true
-    });
-
-    setStep('success');
-    setTimeout(() => {
-      handleClose();
-    }, 2200);
   };
 
   return (
@@ -165,162 +193,47 @@ export default function SignDeclarationModal({
           <X className="w-5 h-5" />
         </button>
 
-        {/* STEP 3: SUCCESS */}
+        {/* SUCCESS SCREEN */}
         {step === 'success' && (
           <div className="py-8 text-center">
             <CheckCircle className="w-14 h-14 text-[#3E8226] mx-auto mb-3" />
             <h3 className="font-serif text-2xl font-bold text-stone-900 mb-2">
-              E-posta Doğrulandı ve İmzanız Eklendi!
+              İmzanız Başarıyla Eklendi!
             </h3>
             <p className="text-sm text-stone-600 max-w-md mx-auto leading-relaxed">
-              {signType === 'institutional' ? (
+              {savedAsType === 'institutional' ? (
                 <>
-                  <strong>{organization}</strong> çağrı metninin altındaki <strong>İmzacı Kurumlar</strong> listesine başarıyla eklendi.
+                  <strong>{savedDisplayName}</strong> çağrı metninin altındaki{' '}
+                  <strong>İmzacı Kurumlar</strong> listesine başarıyla eklendi.
                 </>
               ) : (
                 <>
-                  Sayın <strong>{name}</strong>, imzanız doğrulanarak çağrı metninin altına başarıyla eklendi.
+                  Sayın <strong>{savedDisplayName}</strong>, imzanız çağrı metninin altındaki{' '}
+                  <strong>Bireysel İmzacılar</strong> listesine başarıyla eklendi.
                 </>
               )}
             </p>
           </div>
         )}
 
-        {/* STEP 2: 6-DIGIT EMAIL OTP VERIFICATION */}
-        {step === 'verify' && (
-          <div>
-            <button
-              type="button"
-              onClick={() => {
-                setStep('form');
-                setError('');
-              }}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-500 hover:text-stone-900 mb-4 cursor-pointer"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Bilgileri Düzenle</span>
-            </button>
-
-            <div className="mb-5">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sky-50 border border-sky-200 text-[11px] font-bold text-[#0B4F71] mb-2">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#3E8226]" />
-                <span>Adım 2/2 · E-posta Onay Kodu Doğrulaması</span>
-              </div>
-              <h3 className="font-serif text-2xl font-bold text-stone-900">
-                Onay Kodunu Giriniz
-              </h3>
-              <p className="text-xs sm:text-sm text-stone-600 mt-1.5 leading-relaxed">
-                Güvenlik doğrulaması için <strong>{email}</strong> adresine 6 haneli tek kullanımlık onay kodu gönderildi.
-              </p>
-            </div>
-
-            {demoNoticeCode && (
-              <div className="mb-5 p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900">
-                <span className="font-bold block mb-0.5">
-                  Önizleme / Test Modu Onay Kodunuz:
-                </span>
-                <span>
-                  Sunucu SMTP e-posta ayarı yapılana kadar test edebilmeniz için üretilen onay kodu:{' '}
-                  <strong className="font-mono text-sm tracking-widest bg-white px-2 py-0.5 rounded border border-amber-300">
-                    {demoNoticeCode}
-                  </strong>
-                </span>
-              </div>
-            )}
-
-            {error && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-xs text-red-700 font-medium">
-                {error}
-              </div>
-            )}
-
-            <form onSubmit={handleVerifyCode} className="space-y-5">
-              <div>
-                <label className="block text-xs font-bold text-stone-700 mb-2">
-                  6 Haneli Onay Kodu *
-                </label>
-                <div className="relative">
-                  <KeyRound className="w-5 h-5 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    maxLength={6}
-                    required
-                    value={enteredCode}
-                    onChange={(e) => {
-                      setEnteredCode(e.target.value.replace(/\D/g, ''));
-                      if (error) setError('');
-                    }}
-                    placeholder="000000"
-                    className="w-full pl-11 pr-4 py-3 text-lg font-mono font-bold tracking-[0.35em] text-stone-900 bg-stone-50 border border-stone-300 rounded-xl focus:bg-white focus:outline-none focus:border-[#0B4F71] transition-colors"
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between text-xs text-stone-500">
-                <span>Kod ulaşmadı mı?</span>
-                <button
-                  type="button"
-                  onClick={handleSendCode}
-                  className="font-bold text-[#0B4F71] hover:underline inline-flex items-center gap-1 cursor-pointer"
-                >
-                  <RefreshCw className="w-3.5 h-3.5" />
-                  <span>Yeni Kod Gönder</span>
-                </button>
-              </div>
-
-              <div className="pt-2 flex items-center justify-between gap-3">
-                <button
-                  type="button"
-                  onClick={handleClose}
-                  className="px-4 py-3 text-xs font-semibold text-stone-600 hover:text-stone-900 bg-stone-100 rounded-xl transition-colors cursor-pointer"
-                >
-                  Vazgeç
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 py-3 px-5 text-xs sm:text-sm font-extrabold text-white bg-[#3E8226] hover:bg-[#31681E] rounded-xl transition-colors shadow-sm cursor-pointer"
-                >
-                  Kodu Doğrula ve İmzayı Tamamla
-                </button>
-              </div>
-            </form>
-          </div>
-        )}
-
-        {/* STEP 1: INITIAL SIGNATURE FORM */}
+        {/* SIGNATURE FORM */}
         {step === 'form' && (
           <div>
             <div className="mb-5">
               <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-[#0B4F71]">
                 <ShieldCheck className="w-4 h-4 text-[#3E8226]" />
-                <span>E-posta Doğrulamalı Güvenli İmza</span>
+                <span>COP31’e Doğru İklim Adaleti Forumu</span>
               </div>
               <h3 className="font-serif text-2xl font-bold text-stone-900 mt-1">
                 Çağrı Metnini İmzala
               </h3>
               <p className="text-xs text-stone-600 mt-1.5 leading-relaxed">
-                Sahte imzaları önlemek amacıyla e-posta adresinize <strong>6 haneli onay kodu</strong> gönderilir. Onaylanan kurum imzaları doğrudan metnin altındaki <strong>İmzacı Kurumlar</strong> listesine eklenir.
+                Lütfen aşağıdan <strong>Bireysel İmza</strong> veya <strong>İmzacı Kurum / Örgüt</strong> seçeneğini belirleyerek bilgilerinizi giriniz. İmzanız anında çağrı metninin altındaki listeye eklenecektir.
               </p>
             </div>
 
             {/* Sign Type Selector */}
-            <div className="grid grid-cols-2 gap-2 p-1 bg-stone-100 rounded-xl mb-5">
-              <button
-                type="button"
-                onClick={() => {
-                  setSignType('institutional');
-                  setError('');
-                }}
-                className={`py-2.5 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-                  signType === 'institutional'
-                    ? 'bg-[#0B4F71] text-white shadow-2xs'
-                    : 'text-stone-600 hover:text-stone-900'
-                }`}
-              >
-                <Building2 className="w-3.5 h-3.5" />
-                <span>İmzacı Kurum / Örgüt</span>
-              </button>
+            <div className="grid grid-cols-2 gap-2 p-1.5 bg-stone-100 rounded-xl mb-5 border border-stone-200">
               <button
                 type="button"
                 onClick={() => {
@@ -329,12 +242,27 @@ export default function SignDeclarationModal({
                 }}
                 className={`py-2.5 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                   signType === 'individual'
-                    ? 'bg-[#0B4F71] text-white shadow-2xs'
+                    ? 'bg-[#0B4F71] text-white shadow-xs'
                     : 'text-stone-600 hover:text-stone-900'
                 }`}
               >
-                <User className="w-3.5 h-3.5" />
-                <span>Bireysel İmza</span>
+                <User className="w-4 h-4" />
+                <span>Bireysel İmza (Kişi)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setSignType('institutional');
+                  setError('');
+                }}
+                className={`py-2.5 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                  signType === 'institutional'
+                    ? 'bg-[#3E8226] text-white shadow-xs'
+                    : 'text-stone-600 hover:text-stone-900'
+                }`}
+              >
+                <Building2 className="w-4 h-4" />
+                <span>İmzacı Kurum / Örgüt</span>
               </button>
             </div>
 
@@ -344,7 +272,7 @@ export default function SignDeclarationModal({
               </div>
             )}
 
-            <form onSubmit={handleSendCode} className="space-y-4">
+            <form onSubmit={handleSubmitSignature} className="space-y-4">
               {/* Hidden Honeypot input against automated spam bots */}
               <input
                 type="text"
@@ -360,7 +288,7 @@ export default function SignDeclarationModal({
               {signType === 'institutional' && (
                 <div>
                   <label className="block text-xs font-semibold text-stone-700 mb-1">
-                    Kurum / Sendika / Meslek Örgütü / Dernek Adı *
+                    Kurum / Sendika / Meslek Örgütü / Dernek / Platform Adı *
                   </label>
                   <input
                     type="text"
@@ -370,7 +298,7 @@ export default function SignDeclarationModal({
                       setOrganization(e.target.value);
                       if (error) setError('');
                     }}
-                    placeholder="Örn: Sendika, Meslek Odası, Ekoloji Derneği"
+                    placeholder="Örn: Ekoloji Derneği, Sendika, Meslek Odası..."
                     className="w-full px-3.5 py-2.5 text-sm text-stone-900 bg-stone-50 border border-stone-300 rounded-lg focus:bg-white focus:outline-none focus:border-[#0B4F71] transition-colors"
                   />
                 </div>
@@ -379,7 +307,7 @@ export default function SignDeclarationModal({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-stone-700 mb-1">
-                    {signType === 'institutional' ? 'Yetkili / İletişim Kişisi *' : 'Ad Soyad *'}
+                    {signType === 'institutional' ? 'Yetkili / İletişim Kişisi Ad Soyad *' : 'Adınız ve Soyadınız *'}
                   </label>
                   <input
                     type="text"
@@ -403,7 +331,7 @@ export default function SignDeclarationModal({
                     required
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    placeholder="Örn: Antalya"
+                    placeholder="Örn: Antalya, İstanbul, İzmir..."
                     className="w-full px-3.5 py-2.5 text-sm text-stone-900 bg-stone-50 border border-stone-300 rounded-lg focus:bg-white focus:outline-none focus:border-[#0B4F71] transition-colors"
                   />
                 </div>
@@ -412,13 +340,13 @@ export default function SignDeclarationModal({
               {signType === 'individual' && (
                 <div>
                   <label className="block text-xs font-semibold text-stone-700 mb-1">
-                    Kurum / İşkolu / Meslek (İsteğe bağlı)
+                    Meslek / Ünvan / Kurum (İsteğe bağlı)
                   </label>
                   <input
                     type="text"
                     value={organization}
                     onChange={(e) => setOrganization(e.target.value)}
-                    placeholder="Örn: İşçi, Çiftçi, Öğretmen..."
+                    placeholder="Örn: Emekli, Öğretmen, İşçi, Akademisyen, Avukat..."
                     className="w-full px-3.5 py-2.5 text-sm text-stone-900 bg-stone-50 border border-stone-300 rounded-lg focus:bg-white focus:outline-none focus:border-[#0B4F71] transition-colors"
                   />
                 </div>
@@ -426,7 +354,7 @@ export default function SignDeclarationModal({
 
               <div>
                 <label className="block text-xs font-semibold text-stone-700 mb-1">
-                  E-posta Adresi (Onay kodu gönderilecektir) *
+                  E-posta Adresi *
                 </label>
                 <div className="relative">
                   <Mail className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -438,7 +366,7 @@ export default function SignDeclarationModal({
                       setEmail(e.target.value);
                       if (error) setError('');
                     }}
-                    placeholder="ornek@kurum.org"
+                    placeholder="ornek@eposta.com"
                     className="w-full pl-10 pr-3.5 py-2.5 text-sm text-stone-900 bg-stone-50 border border-stone-300 rounded-lg focus:bg-white focus:outline-none focus:border-[#0B4F71] transition-colors"
                   />
                 </div>
@@ -467,11 +395,11 @@ export default function SignDeclarationModal({
                 </button>
                 <button
                   type="submit"
-                  disabled={sendingCode}
-                  className="flex-1 py-3 px-4 text-xs sm:text-sm font-bold text-white bg-[#0B4F71] hover:bg-[#083B54] disabled:opacity-60 rounded-lg transition-colors shadow-xs cursor-pointer flex items-center justify-center gap-2"
+                  disabled={submitting}
+                  className="flex-1 py-3 px-4 text-xs sm:text-sm font-extrabold text-white bg-[#3E8226] hover:bg-[#31681E] disabled:opacity-60 rounded-lg transition-colors shadow-sm cursor-pointer flex items-center justify-center gap-2"
                 >
-                  <Mail className="w-4 h-4 text-sky-200" />
-                  <span>{sendingCode ? 'Onay Kodu Gönderiliyor...' : 'E-postaya Onay Kodu Gönder'}</span>
+                  <PenTool className="w-4 h-4 text-emerald-100" />
+                  <span>{submitting ? 'İmzanız Kaydediliyor...' : 'Çağrı Metnini İmzala ve Kaydet'}</span>
                 </button>
               </div>
             </form>
