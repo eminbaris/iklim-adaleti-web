@@ -328,5 +328,96 @@
     "date": "2026-10-17",
     "type": "individual",
     "emailVerified": true
+  },
+  {
+    "id": "sig-1792238544395",
+    "name": "Edremit Sol Parti İlçe Başkanı",
+    "organization": "Edremit Sol Parti İlçe Başkanı",
+    "city": "Balıkesir",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792238883174",
+    "name": "Mehmet KAÇMAZ",
+    "organization": "Emekli/Eğitimci",
+    "city": "Balıkesir",
+    "message": "Sonuçlarına katlanmamak için sö ve karar sahibi olmak istiyorum. Okul öncesinden başlayarak, tüm öğrencilere ücretsiz  bir öğün sağlıklı yemek ve temiz su verilmesi konusunda yetkililerin bağlayıcı karar alması zorlanmalıdır.",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792239216677",
+    "name": "Güven Subaşı",
+    "organization": "Avukat",
+    "city": "Bandırma",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792240554713",
+    "name": "Özlem BAHÇECİ",
+    "organization": "İşçi",
+    "city": "Eskişehir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792240658490",
+    "name": "Uğur Kurnaz",
+    "organization": "İşçi",
+    "city": "Denizli",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792240707621",
+    "name": "Özgür Erhun",
+    "organization": "Avukat",
+    "city": "Eskişehir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792241132610",
+    "name": "Tülin Koç",
+    "organization": "Emekli Öğretmen",
+    "city": "Antalya",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792241315496",
+    "name": "Yücelay Sal",
+    "organization": "Hukukçu/ Edebiyatçı",
+    "city": "İzmir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792241441677",
+    "name": "Ezgican Erhun",
+    "organization": "Gazeteci",
+    "city": "Eskişehir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792245096193",
+    "name": "Akhisar Çevre Derneği",
+    "organization": "Akhisar Çevre Derneği",
+    "city": "AKHİSAR-MANİSA",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
   }
 ]

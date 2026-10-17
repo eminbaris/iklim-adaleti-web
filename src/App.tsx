@@ -275,8 +275,8 @@ export default function App() {
 
     showToast(
       added.type === 'institutional' && added.organization
-        ? `E-posta doğrulandı! "${added.organization}" İmzacı Kurumlar listesine eklendi.`
-        : `E-posta doğrulandı! Teşekkürler ${added.name}, imzanız listeye eklendi.`
+        ? `"${added.organization}" İmzacı Kurumlar listesine başarıyla eklendi.`
+        : `Teşekkürler ${added.name}, imzanız listeye başarıyla eklendi.`
     );
   };
 
@@ -362,6 +362,35 @@ export default function App() {
       window.removeEventListener('hashchange', syncFromUrl);
     };
   }, []);
+
+  // Update browser tab title dynamically for SEO & usability
+  useEffect(() => {
+    const baseTitle = 'COP31’e Doğru İklim Adaleti Forumu – iklimadaleti.org';
+    if (activeSection === 'etkinlik-takvimi' && selectedEventSlug) {
+      const matched = events.find((ev) => {
+        const slug = String(ev.title || ev.id)
+          .toLowerCase()
+          .replace(/ğ/g, 'g')
+          .replace(/ü/g, 'u')
+          .replace(/ş/g, 's')
+          .replace(/ı/g, 'i')
+          .replace(/ö/g, 'o')
+          .replace(/ç/g, 'c')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        return slug === selectedEventSlug || ev.id === selectedEventSlug;
+      });
+      if (matched) {
+        document.title = `${matched.title} (${matched.date}) | İklim Adaleti Forumu`;
+        return;
+      }
+    }
+    if (activeSection !== 'anasayfa' && SECTION_LABELS[activeSection]) {
+      document.title = `${SECTION_LABELS[activeSection]} | ${baseTitle}`;
+    } else {
+      document.title = `${baseTitle} | Zamanımızı, Yaşamımızı, Geleceğimizi İstiyoruz`;
+    }
+  }, [activeSection, selectedEventSlug, events]);
 
   const handleNavigate = (sectionId: string, path: string) => {
     setActiveSection(sectionId);

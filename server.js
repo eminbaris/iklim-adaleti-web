@@ -356,6 +356,98 @@ const DEFAULT_SIGNATORIES = [
     date: '2026-10-17',
     type: 'individual',
     emailVerified: true
+  },
+  {
+    id: 'sig-1792238544395',
+    name: 'Edremit Sol Parti İlçe Başkanı',
+    organization: 'Edremit Sol Parti İlçe Başkanı',
+    city: 'Balıkesir',
+    date: '2026-10-17',
+    type: 'institutional',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792238883174',
+    name: 'Mehmet KAÇMAZ',
+    organization: 'Emekli/Eğitimci',
+    city: 'Balıkesir',
+    message:
+      'Sonuçlarına katlanmamak için sö ve karar sahibi olmak istiyorum. Okul öncesinden başlayarak, tüm öğrencilere ücretsiz  bir öğün sağlıklı yemek ve temiz su verilmesi konusunda yetkililerin bağlayıcı karar alması zorlanmalıdır.',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792239216677',
+    name: 'Güven Subaşı',
+    organization: 'Avukat',
+    city: 'Bandırma',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792240554713',
+    name: 'Özlem BAHÇECİ',
+    organization: 'İşçi',
+    city: 'Eskişehir',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792240658490',
+    name: 'Uğur Kurnaz',
+    organization: 'İşçi',
+    city: 'Denizli',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792240707621',
+    name: 'Özgür Erhun',
+    organization: 'Avukat',
+    city: 'Eskişehir',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792241132610',
+    name: 'Tülin Koç',
+    organization: 'Emekli Öğretmen',
+    city: 'Antalya',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792241315496',
+    name: 'Yücelay Sal',
+    organization: 'Hukukçu/ Edebiyatçı',
+    city: 'İzmir',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792241441677',
+    name: 'Ezgican Erhun',
+    organization: 'Gazeteci',
+    city: 'Eskişehir',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792245096193',
+    name: 'Akhisar Çevre Derneği',
+    organization: 'Akhisar Çevre Derneği',
+    city: 'AKHİSAR-MANİSA',
+    date: '2026-10-17',
+    type: 'institutional',
+    emailVerified: true
   }
 ];
 
@@ -1412,9 +1504,188 @@ function createServer() {
     return res.json({ ok: true, sent: false, signatories: savedList });
   });
 
+  // Helper to generate URL-safe slug for events
+  function toEventSlug(ev) {
+    return String(ev?.title || ev?.id || 'etkinlik')
+      .toLowerCase()
+      .replace(/ğ/g, 'g')
+      .replace(/ü/g, 'u')
+      .replace(/ş/g, 's')
+      .replace(/ı/g, 'i')
+      .replace(/ö/g, 'o')
+      .replace(/ç/g, 'c')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  // 8. SEO: robots.txt
+  app.get('/robots.txt', (_req, res) => {
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.send(
+      [
+        'User-agent: *',
+        'Allow: /',
+        'Disallow: /api/',
+        'Disallow: /admin',
+        'Disallow: /yonetim',
+        '',
+        'Sitemap: https://iklimadaleti.org/sitemap.xml'
+      ].join('\n')
+    );
+  });
+
+  // 9. SEO: Dynamic sitemap.xml (includes all pages + all events automatically)
+  app.get('/sitemap.xml', (_req, res) => {
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    const cms = readCmsData();
+    const today = new Date().toISOString().split('T')[0];
+    const staticPages = [
+      { loc: 'https://iklimadaleti.org/', priority: '1.0', changefreq: 'daily' },
+      { loc: 'https://iklimadaleti.org/etkinlikler', priority: '0.9', changefreq: 'daily' },
+      { loc: 'https://iklimadaleti.org/forumlar', priority: '0.9', changefreq: 'daily' },
+      { loc: 'https://iklimadaleti.org/politika-program', priority: '0.8', changefreq: 'weekly' },
+      { loc: 'https://iklimadaleti.org/sonuc-bildirgeleri', priority: '0.8', changefreq: 'weekly' },
+      { loc: 'https://iklimadaleti.org/calisma-gruplari', priority: '0.7', changefreq: 'weekly' }
+    ];
+    const eventPages = (cms.events || []).map((ev) => ({
+      loc: `https://iklimadaleti.org/etkinlikler/${encodeURIComponent(toEventSlug(ev))}`,
+      priority: '0.85',
+      changefreq: 'weekly'
+    }));
+
+    const urlsXml = [...staticPages, ...eventPages]
+      .map(
+        (u) => `  <url>
+    <loc>${escapeHtml(u.loc)}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>${u.changefreq}</changefreq>
+    <priority>${u.priority}</priority>
+  </url>`
+      )
+      .join('\n');
+
+    res.send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urlsXml}
+</urlset>`);
+  });
+
   app.use(express.static(distPath));
-  app.use((_req, res) => {
-    res.sendFile(path.join(distPath, 'index.html'));
+
+  // 10. Dynamic SEO & WhatsApp/Social OpenGraph Meta Injection for SPA routes
+  app.use((req, res) => {
+    const indexPath = path.join(distPath, 'index.html');
+    if (!fs.existsSync(indexPath)) {
+      return res.status(404).send('Not found');
+    }
+    try {
+      let html = fs.readFileSync(indexPath, 'utf-8');
+      const cleanPath = (req.path || '/').replace(/\/+$/, '') || '/';
+      const cms = readCmsData();
+
+      let pageTitle =
+        'COP31’e Doğru İklim Adaleti Forumu – iklimadaleti.org | Zamanımızı, Yaşamımızı, Geleceğimizi İstiyoruz';
+      let pageDesc =
+        'COP31’e Doğru İklim Adaleti Forumu resmi platformu (iklimadaleti.org). Çağrı metni, imzacı kurumlar, yerel iklim adaleti forumları, etkinlik takvimi, politika ve program belgeleri.';
+      let pageUrl = `https://iklimadaleti.org${cleanPath === '/' ? '/' : cleanPath}`;
+      let pageImage = 'https://iklimadaleti.org/favicon.png';
+
+      if (
+        cleanPath.startsWith('/etkinlikler/') ||
+        cleanPath.startsWith('/etkinlik/') ||
+        cleanPath.startsWith('/etkinlik-takvimi/')
+      ) {
+        const parts = cleanPath.split('/').filter(Boolean);
+        const slug = parts[1] ? decodeURIComponent(parts[1]) : '';
+        const matchedEv = (cms.events || []).find(
+          (ev) => toEventSlug(ev) === slug || ev.id === slug
+        );
+        if (matchedEv) {
+          pageTitle = `${matchedEv.title} (${matchedEv.date}) – İklim Adaleti Forumu`;
+          const rawDesc = String(matchedEv.description || '')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .slice(0, 220);
+          pageDesc =
+            rawDesc ||
+            `${matchedEv.title} · Tarih: ${matchedEv.date}${matchedEv.time ? ` ${matchedEv.time}` : ''} · Yer: ${matchedEv.location || 'Türkiye'}`;
+          pageUrl = `https://iklimadaleti.org/etkinlikler/${encodeURIComponent(toEventSlug(matchedEv))}`;
+          if (matchedEv.imageUrl) {
+            pageImage = matchedEv.imageUrl.startsWith('http')
+              ? matchedEv.imageUrl
+              : `https://iklimadaleti.org${matchedEv.imageUrl}`;
+          }
+        }
+      } else if (cleanPath === '/etkinlikler' || cleanPath === '/etkinlik-takvimi') {
+        pageTitle = 'Etkinlik Takvimi | COP31’e Doğru İklim Adaleti Forumu';
+        pageDesc =
+          'Türkiye genelinde düzenlenen yerel İklim Adaleti Forumları, buluşmalar, paneller ve COP31 Antalya hazırlık takvimi.';
+      } else if (cleanPath === '/forumlar') {
+        pageTitle = 'Forumlar & Yerel Buluşmalar | COP31’e Doğru İklim Adaleti Forumu';
+        pageDesc =
+          'İklim Adaleti Forumu yerel buluşmaları, forum duyuruları, raporlar ve tartışma metinleri.';
+      } else if (cleanPath === '/politika-program' || cleanPath === '/politika') {
+        pageTitle = 'Politika / Program Belgesi | COP31’e Doğru İklim Adaleti Forumu';
+        pageDesc =
+          'İklim Adaleti Forumu Program, Örgütlenme ve Strateji Belgesi: Demokratik dönüşüm ve toplumsal denetim programı.';
+      } else if (cleanPath === '/sonuc-bildirgeleri') {
+        pageTitle = 'Sonuç Bildirgeleri | COP31’e Doğru İklim Adaleti Forumu';
+        pageDesc =
+          'Gerçekleştirilen İklim Adaleti Forumlarının sonuç bildirgeleri ve ortak deklarasyonları.';
+      } else if (cleanPath === '/calisma-gruplari') {
+        pageTitle = 'Çalışma Grupları | COP31’e Doğru İklim Adaleti Forumu';
+        pageDesc = 'İklim Adaleti Forumu çalışma grupları ve ortak mücadele başlıkları.';
+      }
+
+      const safeTitle = escapeHtml(pageTitle);
+      const safeDesc = escapeHtml(pageDesc);
+      const safeUrl = escapeHtml(pageUrl);
+      const safeImg = escapeHtml(pageImage);
+
+      html = html
+        .replace(/<title>[\s\S]*?<\/title>/, `<title>${safeTitle}</title>`)
+        .replace(
+          /<meta name="description" content="[^"]*" \/>/,
+          `<meta name="description" content="${safeDesc}" />`
+        )
+        .replace(
+          /<link rel="canonical" href="[^"]*" \/>/,
+          `<link rel="canonical" href="${safeUrl}" />`
+        )
+        .replace(
+          /<meta property="og:url" content="[^"]*" \/>/,
+          `<meta property="og:url" content="${safeUrl}" />`
+        )
+        .replace(
+          /<meta property="og:title" content="[^"]*" \/>/,
+          `<meta property="og:title" content="${safeTitle}" />`
+        )
+        .replace(
+          /<meta property="og:description" content="[^"]*" \/>/,
+          `<meta property="og:description" content="${safeDesc}" />`
+        )
+        .replace(
+          /<meta property="og:image" content="[^"]*" \/>/,
+          `<meta property="og:image" content="${safeImg}" />`
+        )
+        .replace(
+          /<meta name="twitter:title" content="[^"]*" \/>/,
+          `<meta name="twitter:title" content="${safeTitle}" />`
+        )
+        .replace(
+          /<meta name="twitter:description" content="[^"]*" \/>/,
+          `<meta name="twitter:description" content="${safeDesc}" />`
+        )
+        .replace(
+          /<meta name="twitter:image" content="[^"]*" \/>/,
+          `<meta name="twitter:image" content="${safeImg}" />`
+        );
+
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      return res.send(html);
+    } catch {
+      return res.sendFile(indexPath);
+    }
   });
   return app;
 }
