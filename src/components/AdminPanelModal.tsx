@@ -196,17 +196,23 @@ export default function AdminPanelModal({
     reader.readAsDataURL(file);
   };
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError('');
+    const cleanUser = username.trim() || 'admin';
+    const cleanPass = password.trim();
     try {
       const res = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username: cleanUser, password: cleanPass })
       });
       if (res.ok) {
         const data = await res.json();
+        setUsername(cleanUser);
+        setPassword(cleanPass);
         setAuthenticated(true);
         if (data.user?.name) setCurrentUserDisplay(data.user.name);
         if (Array.isArray(data.users)) setAdminUsers(data.users);
@@ -723,11 +729,20 @@ export default function AdminPanelModal({
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1.5">
-                  Şifre
-                </label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-bold text-stone-700">
+                    Şifre
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="text-xs font-semibold text-[#0B4F71] hover:underline cursor-pointer"
+                  >
+                    {showPassword ? 'Şifreyi Gizle' : 'Şifreyi Göster'}
+                  </button>
+                </div>
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}

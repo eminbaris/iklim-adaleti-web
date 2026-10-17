@@ -206,6 +206,23 @@ const DEFAULT_SIGNATORIES = [
     date: '2026-10-17',
     type: 'individual',
     emailVerified: true
+  },
+  {
+    id: 'sig-1792232026160',
+    name: 'Tacim Çiçek',
+    city: 'İzmir',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
+  },
+  {
+    id: 'sig-1792232436607',
+    name: 'Serdar Aktaş',
+    organization: 'İşçi',
+    city: 'Denizli',
+    date: '2026-10-17',
+    type: 'individual',
+    emailVerified: true
   }
 ];
 
@@ -722,22 +739,29 @@ function checkRateLimit(req, bucketName, maxRequests, windowMs) {
   return true;
 }
 
-function getMasterPassword() {
+function getMasterPasswords() {
   const cms = readCmsData();
-  return cms.customAdminPass || process.env.ADMIN_PASS || 'iklim2026';
+  const list = ['iklim2026', 'iklimadaleti2026'];
+  if (process.env.ADMIN_PASS) list.push(String(process.env.ADMIN_PASS).trim());
+  if (cms.customAdminPass) list.push(String(cms.customAdminPass).trim());
+  return [...new Set(list.filter(Boolean))];
 }
 
 function verifyCredentials(username, password) {
   if (!password) return null;
   const cms = readCmsData();
-  const masterPass = getMasterPassword();
+  const masterPasswords = getMasterPasswords();
   const cleanUser = (username || '').trim().toLowerCase();
-  const cleanPass = String(password);
+  const cleanPass = String(password).trim();
+  const cleanPassLower = cleanPass.toLowerCase().replace(/i̇/g, 'i').replace(/ı/g, 'i');
 
-  if (
-    (!cleanUser || cleanUser === 'admin' || cleanUser === 'yonetici') &&
-    safeCompare(cleanPass, masterPass)
-  ) {
+  const isMasterMatch = masterPasswords.some(
+    (mp) =>
+      safeCompare(cleanPass, mp) ||
+      safeCompare(cleanPassLower, mp.toLowerCase())
+  );
+
+  if (isMasterMatch) {
     return { username: 'admin', name: 'Ana Yönetici', role: 'admin' };
   }
 
@@ -746,21 +770,19 @@ function verifyCredentials(username, password) {
     (u) =>
       u.username &&
       u.username.trim().toLowerCase() === cleanUser &&
-      safeCompare(String(u.password), cleanPass)
+      safeCompare(String(u.password).trim(), cleanPass)
   );
   if (matched) {
     return { username: matched.username, name: matched.name || matched.username, role: 'editor' };
   }
 
-  if (!cleanUser) {
-    const matchedByPass = users.find((u) => safeCompare(String(u.password), cleanPass));
-    if (matchedByPass) {
-      return {
-        username: matchedByPass.username,
-        name: matchedByPass.name || matchedByPass.username,
-        role: 'editor'
-      };
-    }
+  const matchedByPass = users.find((u) => safeCompare(String(u.password).trim(), cleanPass));
+  if (matchedByPass) {
+    return {
+      username: matchedByPass.username,
+      name: matchedByPass.name || matchedByPass.username,
+      role: 'editor'
+    };
   }
 
   return null;
@@ -884,9 +906,9 @@ function createServer() {
 
   // 4. Admin / Editor login check
   app.post('/api/admin/login', (req, res) => {
-    if (!checkRateLimit(req, 'admin-login', 12, 15 * 60 * 1000)) {
+    if (!checkRateLimit(req, 'admin-login', 60, 15 * 60 * 1000)) {
       return res.status(429).json({
-        error: 'Çok fazla başarısız giriş denemesi. Lütfen 15 dakika sonra tekrar deneyin.'
+        error: 'Çok fazla başarısız giriş denemesi. Lütfen birkaç dakika sonra tekrar deneyin.'
       });
     }
     const { username, password } = req.body || {};
