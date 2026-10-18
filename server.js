@@ -25,528 +25,2447 @@ if (!fs.existsSync(uploadsDir)) {
 
 const DEFAULT_SIGNATORIES = [
   {
-    id: 'org-43',
-    name: 'Antalya Sanatçılar Derneği',
-    organization: 'Antalya Sanatçılar Derneği',
-    city: 'Antalya',
-    date: '2026-10-16',
-    type: 'institutional',
-    emailVerified: true
+    "id": "org-43",
+    "name": "ANSAN Antalya Sanatçılar Derneği",
+    "organization": "ANSAN Antalya Sanatçılar Derneği",
+    "city": "Antalya",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
   },
   {
-    id: 'org-44',
-    name: 'Yeşil Artvin Derneği',
-    organization: 'Yeşil Artvin Derneği',
-    city: 'Artvin',
-    date: '2026-10-16',
-    type: 'institutional',
-    emailVerified: true
+    "id": "org-44",
+    "name": "Yeşil Artvin Derneği",
+    "organization": "Yeşil Artvin Derneği",
+    "city": "Artvin",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
   },
   {
-    id: 'org-45',
-    name: 'Derelerin Kardeşliği Platformu (DEKAP)',
-    organization: 'Derelerin Kardeşliği Platformu (DEKAP)',
-    city: 'Artvin-Rize-Trabzon-Giresun-Ordu-Samsun',
-    message:
-      'Yaşamsal varlığımız su, alınıp satılan, kendşne efendi arayan bir kaynak değil, tüm canlı/cansız yaşamın var olduğu ekosistemin en temel hakkıdır. Hiçbir canlı suyaberişim hakkının diğerlerinden öncelikli olduğunu ileri süremez/iddia edemez...',
-    date: '2026-10-17',
-    type: 'institutional',
-    emailVerified: true
+    "id": "org-45",
+    "name": "Derelerin Kardeşliği Platformu (DEKAP)",
+    "organization": "Derelerin Kardeşliği Platformu (DEKAP)",
+    "city": "Artvin-Rize-Trabzon-Giresun-Ordu-Samsun",
+    "message": "Yaşamsal varlığımız su, alınıp satılan, kendşne efendi arayan bir kaynak değil, tüm canlı/cansız yaşamın var olduğu ekosistemin en temel hakkıdır. Hiçbir canlı suyaberişim hakkının diğerlerinden öncelikli olduğunu ileri süremez/iddia edemez...",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
   },
   {
-    id: 'org-46',
-    name: 'Sol Feminist Hareketi',
-    organization: 'Sol Feminist Hareketi',
-    city: '',
-    date: '2026-10-17',
-    type: 'institutional',
-    emailVerified: true
+    "id": "sig-1792174998011",
+    "name": "Necdet Demirci",
+    "organization": "Mimar",
+    "city": "Balıkesir",
+    "date": "2026-10-16",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'org-47',
-    name: 'Kaş Çevre Platformu',
-    organization: 'Kaş Çevre Platformu',
-    city: '',
-    date: '2026-10-17',
-    type: 'institutional',
-    emailVerified: true
+    "id": "sig-1792215319920",
+    "name": "İlkay Nişancı",
+    "organization": "Akademisyen",
+    "city": "İstanbul",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'org-48',
-    name: 'Kumluca Pir Sultan Abdal Derneği',
-    organization: 'Kumluca Pir Sultan Abdal Derneği',
-    city: '',
-    date: '2026-10-17',
-    type: 'institutional',
-    emailVerified: true
+    "id": "sig-1792220661845",
+    "name": "Ali Yalçın Göymen",
+    "organization": "Akademisyen",
+    "city": "Berlin",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'org-49',
-    name: 'Çiftçiler Sendikası (Çiftçi-Sen)',
-    organization: 'Çiftçiler Sendikası (Çiftçi-Sen)',
-    city: '',
-    date: '2026-10-17',
-    type: 'institutional',
-    emailVerified: true
+    "id": "sig-1792221951238",
+    "name": "Ömer Şan",
+    "organization": "Gazeteci /Yazar",
+    "city": "Ankara",
+    "message": "Hedef, 'İklim krizine uyum' değil; 'iklim krizine/değişikliğine neden olan müdahalelerin durdurulması' olmalıdır!",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'org-50',
-    name: 'Validebağ Gönüllüleri Derneği',
-    organization: 'Validebağ Gönüllüleri Derneği',
-    city: '',
-    date: '2026-10-17',
-    type: 'institutional',
-    emailVerified: true
+    "id": "sig-1792223802693",
+    "name": "Mert Yedek",
+    "organization": "Avukat",
+    "city": "Eskişehir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'org-51',
-    name: 'Vaminon (Arhavi Maden İstemiyor)',
-    organization: 'Vaminon (Arhavi Maden İstemiyor)',
-    city: '',
-    date: '2026-10-17',
-    type: 'institutional',
-    emailVerified: true
+    "id": "sig-1792225429862",
+    "name": "İlkay Öz",
+    "organization": "Siyaset Bilimci",
+    "city": "İstanbul",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'org-52',
-    name: 'Fethiye Kent Konseyi',
-    organization: 'Fethiye Kent Konseyi',
-    city: '',
-    date: '2026-10-17',
-    type: 'institutional',
-    emailVerified: true
+    "id": "sig-1792225793366",
+    "name": "Sercan Dede",
+    "city": "Ankara",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792231166730',
-    name: 'Varto Ekoloji platformu',
-    organization: 'Varto Ekoloji platformu',
-    city: 'Muş Varto',
-    message:
-      "İmzalıyorum çünkü;\nBizler Varto Ekoloji Platformu çatısı altında, toprağına, merasına ve suyuna sahip çıkan üretici kadınlarız. Coğrafyamızda doğamızı ve yaşam alanlarımızı hedef alan talana karşı bir yıla yakındır kurduğumuz Direniş Çadırı'nda gece gündüz nöbetteyiz. O çadır sadece bir nöbet yeri değil; toprağını, merasını ve suyunu rant projelerine teslim etmeyenlerin ortak iradesi ve direniş kalemizdir.\nİklim krizini ve doğa tahribatını en çok hisseden biz üretici kadınlar; Varto'nun yaylalar",
-    date: '2026-10-17',
-    type: 'institutional',
-    emailVerified: true
+    "id": "sig-1792227068065",
+    "name": "Önder İşleyen",
+    "city": "Ankara",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792174998011',
-    name: 'Necdet Demirci',
-    organization: 'Mimar',
-    city: 'Balıkesir',
-    date: '2026-10-16',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792231166730",
+    "name": "Varto Ekoloji Platformu",
+    "organization": "Varto Ekoloji Platformu",
+    "city": "Muş Varto",
+    "message": "İmzalıyorum çünkü;\nBizler Varto Ekoloji Platformu çatısı altında, toprağına, merasına ve suyuna sahip çıkan üretici kadınlarız. Coğrafyamızda doğamızı ve yaşam alanlarımızı hedef alan talana karşı bir yıla yakındır kurduğumuz Direniş Çadırı'nda gece gündüz nöbetteyiz. O çadır sadece bir nöbet yeri değil; toprağını, merasını ve suyunu rant projelerine teslim etmeyenlerin ortak iradesi ve direniş kalemizdir.\nİklim krizini ve doğa tahribatını en çok hisseden biz üretici kadınlar; Varto'nun yaylalar",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792215319920',
-    name: 'İlkay Nişancı',
-    organization: 'Akademisyen',
-    city: 'İstanbul',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792231606688",
+    "name": "Ebru delice",
+    "city": "Antalya",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792220661845',
-    name: 'Ali Yalçın Göymen',
-    organization: 'Akademisyen',
-    city: 'Berlin',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792231766729",
+    "name": "Sol Feminist Hareketi",
+    "organization": "Sol Feminist Hareketi",
+    "city": "Türkiye",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792221951238',
-    name: 'Ömer Şan',
-    organization: 'Gazeteci /Yazar',
-    city: 'Ankara',
-    message:
-      "Hedef, 'İklim krizine uyum' değil; 'iklim krizine/değişikliğine neden olan müdahalelerin durdurulması' olmalıdır!",
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792231766961",
+    "name": "Kaş Çevre Platformu",
+    "organization": "Kaş Çevre Platformu",
+    "city": "Antalya",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792223802693',
-    name: 'Mert Yedek',
-    organization: 'Avukat',
-    city: 'Eskişehir',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792231767180",
+    "name": "Kumluca Pir Sultan Abdal Derneği",
+    "organization": "Kumluca Pir Sultan Abdal Derneği",
+    "city": "Antalya",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792225429862',
-    name: 'İlkay Öz',
-    organization: 'Siyaset Bilimci',
-    city: 'İstanbul',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "org-49",
+    "name": "Çiftçiler Sendikası (Çiftçi-Sen)",
+    "organization": "Çiftçiler Sendikası (Çiftçi-Sen)",
+    "city": "",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792225793366',
-    name: 'Sercan Dede',
-    city: 'Ankara',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "org-50",
+    "name": "Validebağ Gönüllüleri Derneği",
+    "organization": "Validebağ Gönüllüleri Derneği",
+    "city": "",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792227068065',
-    name: 'Önder İşleyen',
-    city: 'Ankara',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "org-51",
+    "name": "Vaminon (Arhavi Maden İstemiyor)",
+    "organization": "Vaminon (Arhavi Maden İstemiyor)",
+    "city": "",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792231606688',
-    name: 'Ebru delice',
-    city: 'Antalya',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "org-52",
+    "name": "Fethiye Kent Konseyi",
+    "organization": "Fethiye Kent Konseyi",
+    "city": "",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792232026160',
-    name: 'Tacim Çiçek',
-    city: 'İzmir',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792232026160",
+    "name": "Tacim Çiçek",
+    "city": "İzmir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792232436607',
-    name: 'Serdar Aktaş',
-    organization: 'İşçi',
-    city: 'Denizli',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792232436607",
+    "name": "Serdar Aktaş",
+    "organization": "İşçi",
+    "city": "Denizli",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'org-53',
-    name: 'Toroçder',
-    organization: 'Toroçder',
-    city: '',
-    date: '2026-10-17',
-    type: 'institutional',
-    emailVerified: true
+    "id": "org-53",
+    "name": "Toroçder",
+    "organization": "Toroçder",
+    "city": "",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
   },
   {
-    id: 'org-54',
-    name: 'İzmir Varto Ekoloji',
-    organization: 'İzmir Varto Ekoloji',
-    city: 'İzmir',
-    date: '2026-10-17',
-    type: 'institutional',
-    emailVerified: true
+    "id": "org-54",
+    "name": "İzmir Varto Ekoloji",
+    "organization": "İzmir Varto Ekoloji",
+    "city": "İzmir",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
   },
   {
-    id: 'org-55',
-    name: 'Validebağ Savunması',
-    organization: 'Validebağ Savunması',
-    city: 'İstanbul',
-    date: '2026-10-17',
-    type: 'institutional',
-    emailVerified: true
+    "id": "org-55",
+    "name": "Validebağ Savunması",
+    "organization": "Validebağ Savunması",
+    "city": "İstanbul",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
   },
   {
-    id: 'sig-rec-asli-odman',
-    name: 'Aslı Odman',
-    organization: 'Akademisyen',
-    city: 'İstanbul',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-rec-asli-odman",
+    "name": "Aslı Odman",
+    "organization": "Akademisyen",
+    "city": "İstanbul",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-rec-ziya-gokerkucuk',
-    name: 'Ziya Gökerküçük',
-    organization: 'Eğitimci',
-    city: '',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-rec-ziya-gokerkucuk",
+    "name": "Ziya Gökerküçük",
+    "organization": "Eğitimci",
+    "city": "",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-rec-nur-nese-karahan',
-    name: 'Nur Neşe Karahan',
-    organization: 'Emekli',
-    city: '',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-rec-nur-nese-karahan",
+    "name": "Nur Neşe Karahan",
+    "organization": "Emekli",
+    "city": "Artvin",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-rec-sefa-taskin',
-    name: 'Sefa Taşkın',
-    city: '',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-rec-sefa-taskin",
+    "name": "Sefa Taşkın",
+    "city": "",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-rec-adnan-alin',
-    name: 'Adnan Alin',
-    organization: 'Eğitimci - Sendika Emekçisi',
-    city: '',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-rec-adnan-alin",
+    "name": "Adnan Alin",
+    "organization": "Eğitimci - Sendika Emekçisi",
+    "city": "",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-rec-veli-bingoltekin',
-    name: 'Veli Bingöltekin',
-    organization: 'Araştırmacı / Yazar',
-    city: '',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-rec-veli-bingoltekin",
+    "name": "Veli Bingöltekin",
+    "organization": "Araştırmacı / Yazar",
+    "city": "",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-rec-baris-keskinkilic',
-    name: 'Barış Keskinkılıç',
-    city: '',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-rec-baris-keskinkilic",
+    "name": "Barış Keskinkılıç",
+    "city": "",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-rec-ali-merdan-celik',
-    name: 'Ali Merdan Çelik',
-    city: '',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-rec-ali-merdan-celik",
+    "name": "Ali Merdan Çelik",
+    "city": "",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-rec-yusuf-aksoy',
-    name: 'Yusuf Aksoy',
-    organization: 'Yazar',
-    city: '',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-rec-yusuf-aksoy",
+    "name": "Yusuf Aksoy",
+    "organization": "Yazar",
+    "city": "",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-rec-yuksel-kunter',
-    name: 'Yüksel Kunter',
-    organization: 'Emekli',
-    city: '',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-rec-yuksel-kunter",
+    "name": "Yüksel Kunter",
+    "organization": "Emekli",
+    "city": "",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-rec-hidayet-karakus',
-    name: 'Hidayet Karakuş',
-    organization: 'Emekli',
-    city: '',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-rec-hidayet-karakus",
+    "name": "Hidayet Karakuş",
+    "organization": "Emekli",
+    "city": "",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792237242014',
-    name: 'Orhun Çoban',
-    organization: 'Emekli/Gazeteci',
-    city: 'Denizli',
-    message: 'Birlikte kazanacağız...',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792237242014",
+    "name": "Orhun Çoban",
+    "organization": "Emekli/Gazeteci",
+    "city": "Denizli",
+    "message": "Birlikte kazanacağız...",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792238544395',
-    name: 'Edremit Sol Parti İlçe Başkanı',
-    organization: 'Edremit Sol Parti İlçe Başkanı',
-    city: 'Balıkesir',
-    date: '2026-10-17',
-    type: 'institutional',
-    emailVerified: true
+    "id": "sig-1792238544395",
+    "name": "Edremit Sol Parti İlçe Başkanı",
+    "organization": "Edremit Sol Parti İlçe Başkanı",
+    "city": "Balıkesir",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792238883174',
-    name: 'Mehmet KAÇMAZ',
-    organization: 'Emekli/Eğitimci',
-    city: 'Balıkesir',
-    message:
-      'Sonuçlarına katlanmamak için sö ve karar sahibi olmak istiyorum. Okul öncesinden başlayarak, tüm öğrencilere ücretsiz  bir öğün sağlıklı yemek ve temiz su verilmesi konusunda yetkililerin bağlayıcı karar alması zorlanmalıdır.',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792238883174",
+    "name": "Mehmet KAÇMAZ",
+    "organization": "Emekli/Eğitimci",
+    "city": "Balıkesir",
+    "message": "Sonuçlarına katlanmamak için sö ve karar sahibi olmak istiyorum. Okul öncesinden başlayarak, tüm öğrencilere ücretsiz  bir öğün sağlıklı yemek ve temiz su verilmesi konusunda yetkililerin bağlayıcı karar alması zorlanmalıdır.",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792239216677',
-    name: 'Güven Subaşı',
-    organization: 'Avukat',
-    city: 'Bandırma',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792239216677",
+    "name": "Güven Subaşı",
+    "organization": "avukat",
+    "city": "Bandırma",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792240554713',
-    name: 'Özlem BAHÇECİ',
-    organization: 'İşçi',
-    city: 'Eskişehir',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792240554713",
+    "name": "Özlem BAHÇECİ",
+    "organization": "İşçi",
+    "city": "Eskişehir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792240658490',
-    name: 'Uğur Kurnaz',
-    organization: 'İşçi',
-    city: 'Denizli',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792240658490",
+    "name": "Uğur Kurnaz",
+    "organization": "İşçi",
+    "city": "Denizli",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792240707621',
-    name: 'Özgür Erhun',
-    organization: 'Avukat',
-    city: 'Eskişehir',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792240707621",
+    "name": "Özgür Erhun",
+    "organization": "Avukat",
+    "city": "Eskişehir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792241132610',
-    name: 'Tülin Koç',
-    organization: 'Emekli Öğretmen',
-    city: 'Antalya',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792241132610",
+    "name": "Tülin Koç",
+    "organization": "Emekli Öğretmen",
+    "city": "Antalya",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792241315496',
-    name: 'Yücelay Sal',
-    organization: 'Hukukçu/ Edebiyatçı',
-    city: 'İzmir',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792241315496",
+    "name": "Yücelay Sal",
+    "organization": "Hukukçu/ Edebiyatçı",
+    "city": "İzmir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792241441677',
-    name: 'Ezgican Erhun',
-    organization: 'Gazeteci',
-    city: 'Eskişehir',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792241441677",
+    "name": "Ezgican Erhun",
+    "organization": "Gazeteci",
+    "city": "Eskişehir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792245096193',
-    name: 'Akhisar Çevre Derneği',
-    organization: 'Akhisar Çevre Derneği',
-    city: 'AKHİSAR-MANİSA',
-    date: '2026-10-17',
-    type: 'institutional',
-    emailVerified: true
+    "id": "sig-1792245096193",
+    "name": "Akhisar Çevre Derneği",
+    "organization": "Akhisar Çevre Derneği",
+    "city": "AKHİSAR-MANİSA",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792248490763',
-    name: 'Nezih Yağar',
-    organization: 'emekli',
-    city: 'antalya',
-    message: 'sermayenin zehrinin sonuçlarını çekmek istemiyoruz',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792248490763",
+    "name": "Nezih Yağar",
+    "organization": "emekli",
+    "city": "antalya",
+    "message": "sermayenin zehrinin sonuçlarını çekmek istemiyoruz",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792248768499',
-    name: 'Merve Avcı',
-    organization: 'Avukat',
-    city: 'İstanbul',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792248768499",
+    "name": "Merve Avcı",
+    "organization": "Avukat",
+    "city": "İstanbul",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792249092242',
-    name: 'Sedat Gül',
-    organization: 'Emekli',
-    city: 'Balıkesir',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792249092242",
+    "name": "Sedat Gül",
+    "organization": "Emekli",
+    "city": "Balıkesir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792251973360',
-    name: 'Nuran Kamalı Şahin',
-    organization: 'Emekli',
-    city: 'Balıkesir',
-    message: 'Emperyalist talana karşı iklim adalet formunu destekliyorum',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792251973360",
+    "name": "Nuran Kamalı Şahin",
+    "organization": "Emekli",
+    "city": "Balıkesir",
+    "message": "Emperyalist talana karşı iklim adalet formunu destekliyorum",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792252055323',
-    name: 'İrfan Akkaya',
-    organization: 'Eskişehir Gıda Topluluğu',
-    city: 'Eskişehir',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792252055323",
+    "name": "İrfan Akkaya",
+    "organization": "Eskişehir Gıda Topluluğu",
+    "city": "Eskişehir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792252689953',
-    name: 'Yalçın Ünal',
-    organization: 'Avukat',
-    city: 'Balıkesir',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792252689953",
+    "name": "Yalçın Ünal",
+    "organization": "Avukat",
+    "city": "Balıkesir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792252720745',
-    name: 'Rıza kurt',
-    organization: 'Emekli',
-    city: 'İstanbul',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792252720745",
+    "name": "Rıza kurt",
+    "organization": "Emekli",
+    "city": "İstanbul",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792252723621',
-    name: 'Mehmet Ali Sönmez',
-    organization: 'Enekli',
-    city: 'Balikesir',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792252723621",
+    "name": "Mehmet Ali Sönmez",
+    "organization": "Enekli",
+    "city": "Balikesir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792253109581',
-    name: 'Hayrettin uluman',
-    organization: 'Emekli gazeteci, yazar',
-    city: 'Balıkesir',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792253109581",
+    "name": "Hayrettin uluman",
+    "organization": "Emekli gazeteci, yazar",
+    "city": "Balıkesir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
   },
   {
-    id: 'sig-1792253333311',
-    name: 'Şenol Yıldırım',
-    organization: 'Emekli',
-    city: 'Balıkesir',
-    date: '2026-10-17',
-    type: 'individual',
-    emailVerified: true
+    "id": "sig-1792253333311",
+    "name": "Şenol Yıldırım",
+    "organization": "Emekli",
+    "city": "Balıkesir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792245323818",
+    "name": "Mustafa Sen",
+    "organization": "İnşaat Mühendisi",
+    "city": "Manisa",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792245417268",
+    "name": "Azîz  karabelli",
+    "organization": "Emekli",
+    "city": "Balıkesir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792245911417",
+    "name": "Fuat Ercan",
+    "organization": "Akademisyen",
+    "city": "İstanbul",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "org-1",
+    "name": "Öğrenci Veli Derneği (Velider)",
+    "organization": "Öğrenci Veli Derneği (Velider)",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-2",
+    "name": "Tüm Emeklilerin Sendikası",
+    "organization": "Tüm Emeklilerin Sendikası",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-3",
+    "name": "Salda Gölü Koruma Derneği",
+    "organization": "Salda Gölü Koruma Derneği",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-4",
+    "name": "Uşak Ulubey Doğal Üretim ve Dayanışma Derneği (ÇEDAY)",
+    "organization": "Uşak Ulubey Doğal Üretim ve Dayanışma Derneği (ÇEDAY)",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-5",
+    "name": "Gerede Çayı Temiz Aksın Platformu",
+    "organization": "Gerede Çayı Temiz Aksın Platformu",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-6",
+    "name": "Derelerin Kardeşliği Akdeniz Platformu",
+    "organization": "Derelerin Kardeşliği Akdeniz Platformu",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-7",
+    "name": "İkizdere Dernekler Federasyonu",
+    "organization": "İkizdere Dernekler Federasyonu",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-8",
+    "name": "Uluslararası Çevre Gazetecileri Derneği",
+    "organization": "Uluslararası Çevre Gazetecileri Derneği",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-9",
+    "name": "Şavşat Dernekleri Federasyonu",
+    "organization": "Şavşat Dernekleri Federasyonu",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-10",
+    "name": "İstanbul Şavşat Derneği",
+    "organization": "İstanbul Şavşat Derneği",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-11",
+    "name": "Samsun Çevre Platformu (Samçep)",
+    "organization": "Samsun Çevre Platformu (Samçep)",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-12",
+    "name": "Samandağ Ekoloji Grubu",
+    "organization": "Samandağ Ekoloji Grubu",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-13",
+    "name": "Antakya Çevre Koruma Derneği",
+    "organization": "Antakya Çevre Koruma Derneği",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-14",
+    "name": "İstanbul Kent Çevre Doğa ve Canlı Hakları Derneği",
+    "organization": "İstanbul Kent Çevre Doğa ve Canlı Hakları Derneği",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-15",
+    "name": "Sivas Zara Çaylıca Köyü Derneği",
+    "organization": "Sivas Zara Çaylıca Köyü Derneği",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-16",
+    "name": "Köyceğiz Çevre ve Doğa Koruma Derneği",
+    "organization": "Köyceğiz Çevre ve Doğa Koruma Derneği",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-17",
+    "name": "Kemaliye ve Köyleri Çevre Platformu",
+    "organization": "Kemaliye ve Köyleri Çevre Platformu",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-18",
+    "name": "Denizli Avdan Platformu",
+    "organization": "Denizli Avdan Platformu",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-19",
+    "name": "Acıbadem Sakinleri Dayanışması",
+    "organization": "Acıbadem Sakinleri Dayanışması",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-20",
+    "name": "Gümüşhacıköy Çevre Platformu",
+    "organization": "Gümüşhacıköy Çevre Platformu",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-21",
+    "name": "Saros Gönüllüleri",
+    "organization": "Saros Gönüllüleri",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-22",
+    "name": "Araklı Karadere Vadisi Yaylaları Doğayı ve Yaban Hayatını Koruma Derneği",
+    "organization": "Araklı Karadere Vadisi Yaylaları Doğayı ve Yaban Hayatını Koruma Derneği",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-23",
+    "name": "Fethiye Ekolojik Yaşam Derneği",
+    "organization": "Fethiye Ekolojik Yaşam Derneği",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-24",
+    "name": "Antalya Kadın Danışma Merkezi ve Dayanışma Derneği",
+    "organization": "Antalya Kadın Danışma Merkezi ve Dayanışma Derneği",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-25",
+    "name": "İnsanca Felsefe Sanat ve Bilim Çevresi",
+    "organization": "İnsanca Felsefe Sanat ve Bilim Çevresi",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-26",
+    "name": "Kıyılar Halkındır İnisiyatifi",
+    "organization": "Kıyılar Halkındır İnisiyatifi",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-27",
+    "name": "Kadıköy Kent Dayanışması",
+    "organization": "Kadıköy Kent Dayanışması",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-28",
+    "name": "Türkiye İnsan Hakları Kurumu",
+    "organization": "Türkiye İnsan Hakları Kurumu",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-29",
+    "name": "Eskişehir Ekoloji Derneği",
+    "organization": "Eskişehir Ekoloji Derneği",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-30",
+    "name": "Kocaeli Çevre Platformu",
+    "organization": "Kocaeli Çevre Platformu",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-31",
+    "name": "Kocaeli Ekolojik Yaşam Derneği",
+    "organization": "Kocaeli Ekolojik Yaşam Derneği",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-32",
+    "name": "Tütünçiftlik Sahili Koruma ve Güzelleştirme Derneği",
+    "organization": "Tütünçiftlik Sahili Koruma ve Güzelleştirme Derneği",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-33",
+    "name": "Kızderbentliler Dayanışma Derneği",
+    "organization": "Kızderbentliler Dayanışma Derneği",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-34",
+    "name": "Kocaeli Çevre Savunması",
+    "organization": "Kocaeli Çevre Savunması",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-35",
+    "name": "Kocaeli Sürdürülebilir Çevre ve Yaşam Derneği",
+    "organization": "Kocaeli Sürdürülebilir Çevre ve Yaşam Derneği",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-36",
+    "name": "Kocaeli KHK Platformu",
+    "organization": "Kocaeli KHK Platformu",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-37",
+    "name": "Türkiye Yazarlar Sendikası",
+    "organization": "Türkiye Yazarlar Sendikası",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-38",
+    "name": "Türetim Ağı Derneği",
+    "organization": "Türetim Ağı Derneği",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-39",
+    "name": "Murat Dağı Yok Olmasın Platformu",
+    "organization": "Murat Dağı Yok Olmasın Platformu",
+    "city": "",
+    "date": "2026-10-16",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792157573972",
+    "name": "Emin Barış Tarım",
+    "organization": "HAKLAR VE ARAŞTIRMALAR DERNEĞİ",
+    "city": "mersin",
+    "date": "2026-10-16",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792257431202",
+    "name": "Nevzat Altıntaş",
+    "organization": "Öğretmen",
+    "city": "Artvin",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792257522578",
+    "name": "Kemal aydın",
+    "organization": "Emekli",
+    "city": "Manisa",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792258050918",
+    "name": "Cemaleddin Gülmen",
+    "organization": "Emekli",
+    "city": "Manisa",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792258497503",
+    "name": "Berivan ÖZKARA",
+    "city": "Eskişehir",
+    "message": "Doğaya, bilime, insanlığa özgürlük!",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792260176907",
+    "name": "Özgür Öztürk",
+    "organization": "Veteriner Hekim",
+    "city": "Balıkesir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792262108886",
+    "name": "Fatih Mehmet Eker",
+    "organization": "Emekli",
+    "city": "Balıkesir",
+    "message": "İklim krizine karşı yanyana olalım, kurtuluş yok, ya hep beraber ya hiçbirimiz",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792262542841",
+    "name": "Mansur Özcan",
+    "organization": "Emekli",
+    "city": "Balıkesir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792262596016",
+    "name": "Semra Buğra",
+    "organization": "Avukat",
+    "city": "Balıkesir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792262853650",
+    "name": "Ahmet kahraman Seküçoglu",
+    "organization": "Emekli",
+    "city": "Hatay",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792262866007",
+    "name": "Tansu ozbakan",
+    "organization": "Emekli",
+    "city": "Balikesir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792262946415",
+    "name": "Dilek Baytöre",
+    "organization": "Emekli  Ekonomist",
+    "city": "Balıkesir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792263149601",
+    "name": "Haldun Solak",
+    "organization": "Emeklii",
+    "city": "Aydın",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792263211980",
+    "name": "Afife Köseoğlu Yolmaz",
+    "organization": "Emekli",
+    "city": "Balıkesir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792263263498",
+    "name": "Tanju Zafer",
+    "organization": "Emekli",
+    "city": "Aydın",
+    "message": "Bireysel katılımlara imkan sağlansın",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792263315093",
+    "name": "Ali Can Yıldırım",
+    "organization": "Memur / Sağlık",
+    "city": "Hatay",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792263701194",
+    "name": "Mehmet Akif eski",
+    "organization": "Emekli",
+    "city": "Hatay",
+    "message": "Bu devran böyle yürümez",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792264463971",
+    "name": "Nazire Reyhandalı",
+    "organization": "Emekli",
+    "city": "HATAY",
+    "message": "Asıl evimiz yaşam alanımız doğadır doğana dokunma",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792264926240",
+    "name": "Mahir kozat",
+    "organization": "Emekli",
+    "city": "Hatay",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792265245472",
+    "name": "Muzeyyen demirel",
+    "organization": "Emekli",
+    "city": "Istanbul",
+    "message": "Dayanisma herzaman",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792266174813",
+    "name": "Hilal Tuner",
+    "organization": "Emekli",
+    "city": "Balıkesir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792266329298",
+    "name": "⁰Gülser  Yavuz",
+    "organization": "Emekli öğretmen",
+    "city": "İskenderun",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792266349488",
+    "name": "Günay Demiröz",
+    "organization": "Emekli",
+    "city": "İstanbul",
+    "message": ".",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792267042784",
+    "name": "Fatma serin",
+    "organization": "Emekli",
+    "city": "Balıkesir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792267456131",
+    "name": "MEDİNE YAYMAN",
+    "organization": "SMMM",
+    "city": "HATAY-İSKENDERUN",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792268158618",
+    "name": "TANSU GÜNGÖR",
+    "organization": "AVUKAT",
+    "city": "İSTANBUL",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792268354936",
+    "name": "Gökçe Yılmaz",
+    "organization": "Avukat",
+    "city": "Antalya",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792269083629",
+    "name": "CENGİZ ŞAHİN",
+    "organization": "Mühendis",
+    "city": "SAMSUN",
+    "message": "Yerel Kiyafetler ile davet gönderin. Ben 8 köşeli Çarşamba Kasketli geleceğim 😊",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792269147640",
+    "name": "Ahmet Güner",
+    "organization": "Fizyoterapist",
+    "city": "Antalya",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792269172774",
+    "name": "Bilge Erol",
+    "organization": "Emekli Öğretmen",
+    "city": "Balıkesir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792269241156",
+    "name": "Işık Kıribrahim",
+    "city": "istanbul",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792269327132",
+    "name": "Neslihan Parmaksız Güner",
+    "organization": "Avukat",
+    "city": "Antalya",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792269402196",
+    "name": "Öykü Ağtaş",
+    "city": "Antalya",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792269571429",
+    "name": "Nazan Kaya",
+    "organization": "Emekli",
+    "city": "Balıkesir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792269760709",
+    "name": "Çağrı Oğuz",
+    "organization": "Emlakcı",
+    "city": "Antalya",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792270105991",
+    "name": "Antalya Sol Feminist Hareket",
+    "organization": "Antalya Sol Feminist Hareket",
+    "city": "Antalya",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792270578811",
+    "name": "Nezihe Erdar",
+    "organization": "Emekli",
+    "city": "Hatay",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792271063639",
+    "name": "Bilal UĞUR",
+    "organization": "Emekli  öğretmen",
+    "city": "Burdur",
+    "message": "Yaşamı  savunmak adına",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792271480024",
+    "name": "Güldane Pekdoğan",
+    "organization": "Antropolog",
+    "city": "Ankara",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792271548791",
+    "name": "Erdan Boşnak",
+    "organization": "Emekli",
+    "city": "Manisa",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792271967713",
+    "name": "Perihan dere",
+    "organization": "Emekli",
+    "city": "İskenderun",
+    "message": "Duyarlılık",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792272227515",
+    "name": "Mahmut Aydıncı",
+    "organization": "Emekli",
+    "city": "Hatay",
+    "message": "Çağrı metnine aynen katılıyorum.",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792272628045",
+    "name": "Nermin Bilgili",
+    "organization": "Emekli",
+    "city": "Balıkesir",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792274089246",
+    "name": "vildan çalıkoğlu",
+    "organization": "Emekli İnşaat Tekniker",
+    "city": "İzmir",
+    "message": "Sömürü ve talana dayalı cop31 zirvesine karşı doğamızı savunuyoruz",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792277338296",
+    "name": "Emindar Güngör",
+    "organization": "Mimar",
+    "city": "Elazığ",
+    "message": "“İklim krizini önemsiyor muş gibi” oynunu sergileyecekleri COP31 sirkine mesaj: İklim krizi siz düşünce çözülecek.",
+    "date": "2026-10-17",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792282108193",
+    "name": "Zeynep Tüzer",
+    "organization": "Öğrenci / Sinema Emekçisi",
+    "city": "Londra",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792293709079",
+    "name": "Elif Sahra Köse Söğüt",
+    "organization": "Emekli",
+    "city": "Manisa",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792301047630",
+    "name": "Necip Vardal",
+    "organization": "Öğretmen",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792301365083",
+    "name": "Faruk Nafiz Şimşek",
+    "organization": "Emekli",
+    "city": "Balıkesir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792303158308",
+    "name": "Fatma Şahin",
+    "organization": "Muhasebeci / Emekli",
+    "city": "Antalya",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792303406293",
+    "name": "Mevlüt Güven",
+    "organization": "Yeminli Mali Müşavir",
+    "city": "Antalya",
+    "message": "Cop31 ile doğa talanı birarada olamaz.",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792303768266",
+    "name": "Metin Tekiz",
+    "organization": "Emekli (Basın  Yayın)",
+    "city": "İstanbul",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792304474830",
+    "name": "Sevgi Dağaşan",
+    "organization": "Öğretmen",
+    "city": "İstanbul",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792305068952",
+    "name": "Pelin Bağır",
+    "organization": "Doktor",
+    "city": "Balıkesir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792306139930",
+    "name": "Hasan kavak",
+    "organization": "Emekli",
+    "city": "İskenderun",
+    "message": "Destek",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792306153305",
+    "name": "Bengisu Muazzez Kurtuluş",
+    "city": "Mersin",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792307054771",
+    "name": "Şefika Sarıoğlu Bayır",
+    "organization": "Emekli Öğretmen",
+    "city": "ANTALYA",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792307101338",
+    "name": "Ayşen Çalışkan",
+    "city": "Antalya",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792307476016",
+    "name": "Mustafa Haydar Tiftikçi",
+    "organization": "Makina Mühendisi",
+    "city": "Eskişehir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792307697625",
+    "name": "İlyas Yaman",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792308406548",
+    "name": "Hikmet Gündüz",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792308768466",
+    "name": "Yusuf Şenol",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "message": "Doğayı kapitalizm talan ediyor ancak hepimize mal etmeye çalışıyor.",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792309144151",
+    "name": "Semra Süren",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792309300260",
+    "name": "Memet Erdayı",
+    "organization": "Emekli",
+    "city": "Ankara",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792309642423",
+    "name": "Ferudun Güven",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792309753896",
+    "name": "Muharrem Toralıoğlu",
+    "organization": "Mühendis",
+    "city": "Sinop",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792309760030",
+    "name": "Ahmet Erkan",
+    "organization": "Emekli Öğretmen",
+    "city": "Edirne/Keşan",
+    "message": "İklim ve doğaya insan müdahalesini önlemek ve kapitalizmi yoketmek için mücadele birliği sağlanmalı.",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792310115973",
+    "name": "Doruk Dizdarer",
+    "organization": "Antrenör",
+    "city": "İstanbul",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792310173277",
+    "name": "İsmail Deveci",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "message": "Yaşam Alanlarımıza sahip çıkalım.. \nDoğamız insamlığın ortak mirasıdır..",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792310199183",
+    "name": "Mustafa Gürler",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792310452356",
+    "name": "Arif kaya",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792310818356",
+    "name": "Hüseyin  Habip Taşkın",
+    "organization": "Yazar",
+    "city": "İzmir",
+    "message": "Bir avuç kapitalistin çıkarı için doğamıza zarar vermeye hakkı yoktur.",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792311154507",
+    "name": "Abdurrahman Akbal",
+    "organization": "Emekli",
+    "city": "Ankara",
+    "message": "Çağrıya ilişkin mesajınız",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792311342623",
+    "name": "müjde",
+    "organization": "öğrenci",
+    "city": "mersin",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792311356956",
+    "name": "Sinan Kılıç",
+    "organization": "Öğretmen",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792311376800",
+    "name": "Ege 78'liler Sanat Ve Edebiyat Grubu",
+    "organization": "Ege 78'liler Sanat Ve Edebiyat Grubu",
+    "city": "İzmir",
+    "message": "Bir avuç kapitalistin çıkarı için dünyayı kirletmesine hayır.",
+    "date": "2026-10-18",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792311742617",
+    "name": "Sıdıka Beken",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792311851980",
+    "name": "Fadıl Gezen",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792311862507",
+    "name": "İbrahim Hakkan",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792312101639",
+    "name": "Nermin Ekinci",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "message": "Geleceğimize ilişkin alınacak  kararlarda biz  de varız, bizi de duyun, demek için.",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792312369128",
+    "name": "Özlem Yücesan",
+    "organization": "İşsiz",
+    "city": "Zonguldak",
+    "message": "Geleceğimiz DOĞA",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792312387635",
+    "name": "Mehmet Güzel",
+    "organization": "Mühendis",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792312467807",
+    "name": "Tüm Emeklilerin Sendikası Bornova Şubesi",
+    "organization": "Tüm Emeklilerin Sendikası Bornova Şubesi",
+    "city": "İzmir",
+    "message": "İklim sorunu SINIFSALDIR.",
+    "date": "2026-10-18",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792312703978",
+    "name": "Yalçın Ergündoğan",
+    "organization": "Gazeteci, yazar",
+    "city": "İzmir",
+    "message": "🙏✊👏👏🌿",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792312765232",
+    "name": "Muzaffer  Delikan",
+    "organization": "Em. Ogretmen.",
+    "city": "Izmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792312848543",
+    "name": "Tüm Emeklilerin Sendikası Konak Şubesi",
+    "organization": "Tüm Emeklilerin Sendikası Konak Şubesi",
+    "city": "İzmir",
+    "message": "Destekliyoruz.",
+    "date": "2026-10-18",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792313250355",
+    "name": "haydar Ayyıldız",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792313302416",
+    "name": "Ayhan Ergündoğan",
+    "organization": "Veteriner Hekim",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792313438748",
+    "name": "İzem üleş şahintaş",
+    "organization": "Psikolog",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792313650868",
+    "name": "Yalçın Şardağı",
+    "organization": "Emekli mühendis",
+    "city": "İzmir",
+    "message": "Dünyamızın sonunu getirmeden doğa ile barış",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792313653037",
+    "name": "Edirne Çevre Gönülleri Derneği",
+    "organization": "Edirne Çevre Gönülleri Derneği",
+    "city": "Edirne",
+    "date": "2026-10-18",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792313717500",
+    "name": "feyyaz ateş",
+    "organization": "emekli",
+    "city": "izmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792313718497",
+    "name": "Bilal Par",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792313951460",
+    "name": "Hasan Ardıç",
+    "organization": "Öğretmen Sendikası",
+    "city": "Antalya",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792314521918",
+    "name": "Eylem Tunalı",
+    "organization": "Öğretmen",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792314578547",
+    "name": "Kadir Bülbül",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792314988834",
+    "name": "Mehmet Adnan Can",
+    "organization": "Emekli öğretmen",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792315178603",
+    "name": "Necati Özdemir",
+    "city": "İzmir Emekli.",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792315360616",
+    "name": "Gülsüm Dalgın",
+    "city": "Antalya",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792315621226",
+    "name": "Zeki Aydın",
+    "organization": "Emekli",
+    "city": "Mugla",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792316381575",
+    "name": "Sıtkı Mehmet Zeki ÖZ",
+    "organization": "İşçi",
+    "city": "İZMİR",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792316405125",
+    "name": "Kemal Bulut",
+    "organization": "Enekli maden müh/ Sol parti",
+    "city": "Zonguldak",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792316412822",
+    "name": "Hikmet SARAL",
+    "organization": "Öğretmen",
+    "city": "İZMİR",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792316654077",
+    "name": "Serpil Deniz",
+    "organization": "Diş hekimi,Alevi aktivisti",
+    "city": "İzmir",
+    "message": "Cehenneme çevrilen dünyanın gerçekleri ile hiç korkmadan çekinmeden yüzleşmek için geleceği iyimserlikle kurmak Bu cehenneme rağmen yeniden icra edebileceğimizin bilinciyle tutkuyla yaklaşmakla olacaktır.",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792316729878",
+    "name": "Dilruba DEDEOĞLU DURMAZ",
+    "organization": "Emekli",
+    "city": "Edirne",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792316797209",
+    "name": "Muzaffer Yançeken",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792317353178",
+    "name": "Nazif Sümer",
+    "organization": "Emlak Müşaviri",
+    "city": "İzmir",
+    "message": "Bu bildiriyi en yaygın biçimde paylaşıyorum.",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792317422604",
+    "name": "Bilge",
+    "city": "Antalya",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792317443649",
+    "name": "Bêrîvan aslan",
+    "organization": "Sanatçı",
+    "city": "Mardin",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792317490089",
+    "name": "Müfide saykam",
+    "organization": "Emekli hemşire",
+    "city": "İzmir",
+    "message": "Doğa hepimizin, kimsenin şahsı malı değildir.\nGeleceğimize sahip çıkacağız.",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792317697185",
+    "name": "Hatice kaçar",
+    "organization": "Ressam",
+    "city": "Diyarbakır",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792317937599",
+    "name": "Gülistan Ertan",
+    "organization": "Sanatçı",
+    "city": "Diyarbakır",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792318026536",
+    "name": "Nesrin Seçer",
+    "organization": "Emekli",
+    "city": "Balıkesir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792318375470",
+    "name": "Zozan Bor",
+    "organization": "Ressam",
+    "city": "Van",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792318588516",
+    "name": "Tülay kaya",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792318777004",
+    "name": "Mediyha Şahin",
+    "organization": "Emekli Öğretmen",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792318983015",
+    "name": "Yüksel Adıbatmaz",
+    "organization": "Emekli",
+    "city": "M",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792319161271",
+    "name": "Seyfettin Gündüz",
+    "organization": "Emekli",
+    "city": "Sakarya",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792319809234",
+    "name": "ZERLANİS  - Keşan Görsel Sanatlar ve Kültürel Araştırmalar Derneği",
+    "organization": "ZERLANİS  - Keşan Görsel Sanatlar ve Kültürel Araştırmalar Derneği",
+    "city": "Edirne / Keşan",
+    "message": "Susma, Ses Ver!",
+    "date": "2026-10-18",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792319854623",
+    "name": "Adnan Seyidoğlu",
+    "organization": "Emekli öğretmen",
+    "city": "İzmit",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792319870798",
+    "name": "Nizamettin Aydın",
+    "organization": "Emekli",
+    "city": "Antalya",
+    "message": "Her zaman Yan Yana",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792319974495",
+    "name": "Aysel Aydın",
+    "organization": "Emekli",
+    "city": "Antalya",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792320053724",
+    "name": "Hasan Karagöz",
+    "organization": "Emekli öğretmen",
+    "city": "Edirne -Keşan",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792320133496",
+    "name": "Erol Adil Aksel",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792320546858",
+    "name": "Evrim İNCEOĞLU",
+    "organization": "Öğretmen",
+    "city": "Antalya",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792320865709",
+    "name": "Üstün Yıldırım",
+    "organization": "Emekli - Öğretmen",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792321079445",
+    "name": "Yasin Aktaş",
+    "organization": "Öğretmen",
+    "city": "Denizli",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792321431964",
+    "name": "Mahnut Ayrancı",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792325261986",
+    "name": "Gülseren Doğan Dağdeviren",
+    "organization": "Sanatçı",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792326375436",
+    "name": "yavuz gedik",
+    "organization": "Emekli elektronik teknisyeni",
+    "city": "İzmir",
+    "message": "Madem demokrasi sözü ediliyor gereği yapılmalı.",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792326924962",
+    "name": "TANER HAMARAT",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792327547221",
+    "name": "Alaaddin yiğit",
+    "organization": "Aşçı emekli",
+    "city": "Seferihisar",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792327565175",
+    "name": "Hasan Kayım",
+    "organization": "Muhasebe",
+    "city": "İstanbul",
+    "message": "Yaşanır bir doğa",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792327656227",
+    "name": "Yüksel keleş",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "message": "Sağlıklı bir dünya için yaşam alanlarımız a \nSahip çıkıyorum .",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792327847397",
+    "name": "İbrahim Bayrak",
+    "organization": "Em.Öğretmen",
+    "city": "İstanbul",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792328308760",
+    "name": "Ercan Dumbak",
+    "organization": "Öğretmen",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792328339012",
+    "name": "ZEHRA TUNCEL",
+    "organization": "Öğretmen",
+    "city": "Antalya",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792328369202",
+    "name": "Sadık Sezer",
+    "organization": "Emekli öğretmen",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792328558006",
+    "name": "Nevzat UĞUR",
+    "organization": "Emekli Öğretmen",
+    "city": "Edirne/ Keşan",
+    "message": "Bu ülke sadeceSirketlere, sanayicilere madencilere ait değildir.  Onların  cikarlarina göre  dizayn edilemez. Bu ülke onlardan daha büyük tür  ve sahiplari vardır.",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792328969148",
+    "name": "Hatice kübra erişir",
+    "organization": "Sanatçı",
+    "city": "Balıkesir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792329343963",
+    "name": "Helin Ertan",
+    "city": "Siirt",
+    "message": "İklim krizine karşı somut adımların atılması ve adaletin sağlanması için bu çağrının yanındayım.",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792332151606",
+    "name": "Aylin Yüksel",
+    "organization": "Öğretmen",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792332176689",
+    "name": "Nesrin mutlu",
+    "city": "Samsun",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792332362481",
+    "name": "Ahmet Mutlu",
+    "organization": "Akademisyen",
+    "city": "Samsun",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792332586365",
+    "name": "Bora Cangüloğlu",
+    "organization": "Öğretmen",
+    "city": "İzmir",
+    "message": "ZAMANIMIZI, YAŞAMIMIZI, GELECEĞİMİZİ İSTİYORUZ!",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792333600787",
+    "name": "Nuray vardal",
+    "organization": "Emekli memur",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792334152055",
+    "name": "Emine Durgun",
+    "organization": "Öğretmen",
+    "city": "Antalya",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792334214738",
+    "name": "Arif Bayraktar",
+    "organization": "Emekli",
+    "city": "Rize/Pazar",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792334991012",
+    "name": "Recep Memişoğlu",
+    "organization": "Emekli",
+    "city": "Rize",
+    "message": "Dünya ve ülkeme zarar verecek tüm müdahalelere ve ekolojik değişiklik insanlığa da zarar verdiği için sizi destekliyorum..",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792335139690",
+    "name": "Nihat gümüş",
+    "organization": "Emekli",
+    "city": "Rize",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792335166769",
+    "name": "Adem  Demirhan",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792335357182",
+    "name": "Levent Üstünes",
+    "organization": "Emekli öğretim üyesi",
+    "city": "İzmir",
+    "message": "Sonuna kadar destekliyorum.",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792335683474",
+    "name": "NURSAL SEÇKİN",
+    "organization": "Emekli Ziraat  Mühendisi",
+    "city": "ANKARA",
+    "message": "Bu forumda ülkemizin ve dünyanın geleceği için doğa katliamlarından olumsuz etkilenenleri  temsil eden kuruluş temsilcilerine söz hakkı verilerek taleplerinin dikkate alınması sorunların çözümünde anahtar rol oynayacaktır.",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792335729368",
+    "name": "Nurhayat Demirhan",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792335812299",
+    "name": "Mustafa Şahin",
+    "organization": "Avukat",
+    "city": "Antalya",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792336184858",
+    "name": "Timur oktay",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792336880985",
+    "name": "Yasemin sağlam",
+    "organization": "Danıiman",
+    "city": "İzmir",
+    "message": "Ne ülkemizi ne de ekolojimizi sermayeye teslim etmeyeceğiz.",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792336967788",
+    "name": "Altan Kurtoğlu",
+    "organization": "Yönetici",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792337018299",
+    "name": "Sevgi Kahraman",
+    "organization": "Emekli laborant",
+    "city": "Mersin",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792337115684",
+    "name": "Vedat Yorulmazel",
+    "organization": "İnşaat mühendisi",
+    "city": "İzmir",
+    "date": "2026-10-18",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "org-56",
+    "name": "Haliç Dayanışması",
+    "organization": "Haliç Dayanışması",
+    "city": "İstanbul",
+    "date": "2026-10-18",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-57",
+    "name": "Gazipaşa Hepimiz Platformu",
+    "organization": "Gazipaşa Hepimiz Platformu",
+    "city": "Antalya",
+    "date": "2026-10-18",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-58",
+    "name": "Kaş Kadın Platformu",
+    "organization": "Kaş Kadın Platformu",
+    "city": "Antalya",
+    "date": "2026-10-18",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-59",
+    "name": "Kaş Koruma İnisiyatifi",
+    "organization": "Kaş Koruma İnisiyatifi",
+    "city": "Antalya",
+    "date": "2026-10-18",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-60",
+    "name": "Kaş Hayvanseverler",
+    "organization": "Kaş Hayvanseverler",
+    "city": "Antalya",
+    "date": "2026-10-18",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-61",
+    "name": "Kaş Çevre ve Kültür Derneği",
+    "organization": "Kaş Çevre ve Kültür Derneği",
+    "city": "Antalya",
+    "date": "2026-10-18",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-62",
+    "name": "Eğitim-Sen Kaş Şubesi",
+    "organization": "Eğitim-Sen Kaş Şubesi",
+    "city": "Antalya",
+    "date": "2026-10-18",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "org-63",
+    "name": "Batı Karadeniz Çevre Gönüllüleri",
+    "organization": "Batı Karadeniz Çevre Gönüllüleri",
+    "city": "",
+    "date": "2026-10-18",
+    "type": "institutional",
+    "emailVerified": true
   }
 ];
 
 const OBSOLETE_DUPLICATE_IDS = new Set([
   'sig-rec-alev-yilmaz',
   'sig-rec-mustafa-kolcu',
-  'sig-rec-dogukan-onder'
+  'sig-rec-dogukan-onder',
+  'sig-1792312155051',
+  'sig-1792314824835'
 ]);
 
 const INDIVIDUAL_PROFESSION_REGEX =
@@ -616,7 +2535,11 @@ function getSignatoryKey(sig) {
     sig.type === 'institutional' ||
     Boolean(sig.organization && sig.organization === sig.name);
   if (isInst) {
-    return `inst:${normalizeTrKey(sig.organization || sig.name)}`;
+    let orgKey = normalizeTrKey(sig.organization || sig.name);
+    if (orgKey === 'antalya sanatçılar derneği') orgKey = 'ansan antalya sanatçılar derneği';
+    if (orgKey === 'kaş eğitim sen') orgKey = 'eğitim-sen kaş şubesi';
+    if (orgKey === 'kaş koruma insiyatifi') orgKey = 'kaş koruma inisiyatifi';
+    return `inst:${orgKey}`;
   }
   return `ind:${normalizeTrKey(sig.name)}`;
 }

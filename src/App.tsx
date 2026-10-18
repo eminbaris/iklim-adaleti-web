@@ -73,7 +73,9 @@ function resolveRouteFromLocation(): { section: string; eventSlug: string | null
 const OBSOLETE_DUPLICATE_IDS = new Set([
   'sig-rec-alev-yilmaz',
   'sig-rec-mustafa-kolcu',
-  'sig-rec-dogukan-onder'
+  'sig-rec-dogukan-onder',
+  'sig-1792312155051',
+  'sig-1792314824835'
 ]);
 
 function normalizeTrKey(str: string | undefined): string {
@@ -88,7 +90,11 @@ function getSignatoryIdentityKey(sig: Signatory): string {
     sig.type === 'institutional' ||
     Boolean(sig.organization && sig.organization === sig.name);
   if (isInst) {
-    return `inst:${normalizeTrKey(sig.organization || sig.name)}`;
+    let orgKey = normalizeTrKey(sig.organization || sig.name);
+    if (orgKey === 'antalya sanatçılar derneği') orgKey = 'ansan antalya sanatçılar derneği';
+    if (orgKey === 'kaş eğitim sen') orgKey = 'eğitim-sen kaş şubesi';
+    if (orgKey === 'kaş koruma insiyatifi') orgKey = 'kaş koruma inisiyatifi';
+    return `inst:${orgKey}`;
   }
   return `ind:${normalizeTrKey(sig.name)}`;
 }
@@ -101,10 +107,15 @@ function mergeAndDeduplicateSignatories(
   const map = new Map<string, Signatory>();
 
   for (const list of lists) {
-    for (const sig of list) {
-      if (!sig || (!sig.name && !sig.organization)) continue;
-      const idKey = String(sig.id || '').trim().toLowerCase();
+    for (const rawSig of list) {
+      if (!rawSig || (!rawSig.name && !rawSig.organization)) continue;
+      const idKey = String(rawSig.id || '').trim().toLowerCase();
       if (OBSOLETE_DUPLICATE_IDS.has(idKey)) continue;
+      const sig = { ...rawSig };
+      if (normalizeTrKey(sig.organization || sig.name) === 'antalya sanatçılar derneği') {
+        sig.name = 'ANSAN Antalya Sanatçılar Derneği';
+        sig.organization = 'ANSAN Antalya Sanatçılar Derneği';
+      }
       const nameKey = String(sig.organization || sig.name || '').trim().toLowerCase();
       const identityKey = getSignatoryIdentityKey(sig);
       if (

@@ -48,7 +48,7 @@ export const INITIAL_SIGNATORY_ORGANIZATIONS: string[] = [
   'Marmara Ereğlisi Çevre Gönüllüleri',
   'Tekirdağ Kent Konseyi',
   'Kırsal Çevre ve Ormancılık Sorunları Araştırma Derneği',
-  'Antalya Sanatçılar Derneği',
+  'ANSAN Antalya Sanatçılar Derneği',
   'Yeşil Artvin Derneği',
   'Derelerin Kardeşliği Platformu (DEKAP)',
   'Sol Feminist Hareketi',
@@ -58,19 +58,34 @@ export const INITIAL_SIGNATORY_ORGANIZATIONS: string[] = [
   'Validebağ Gönüllüleri Derneği',
   'Vaminon (Arhavi Maden İstemiyor)',
   'Fethiye Kent Konseyi',
-  'Varto Ekoloji platformu',
+  'Varto Ekoloji Platformu',
   'Validebağ Savunması',
   'Toroçder',
-  'İzmir Varto Ekoloji'
+  'İzmir Varto Ekoloji',
+  'Haliç Dayanışması',
+  'Gazipaşa Hepimiz Platformu',
+  'Kaş Kadın Platformu',
+  'Kaş Koruma İnisiyatifi',
+  'Kaş Hayvanseverler',
+  'Kaş Çevre ve Kültür Derneği',
+  'Eğitim-Sen Kaş Şubesi',
+  'Batı Karadeniz Çevre Gönüllüleri'
 ];
 
 const INITIAL_ORGANIZATION_CITIES: Record<string, string> = {
-  'Antalya Sanatçılar Derneği': 'Antalya',
+  'ANSAN Antalya Sanatçılar Derneği': 'Antalya',
   'Yeşil Artvin Derneği': 'Artvin',
   'Derelerin Kardeşliği Platformu (DEKAP)': 'Artvin-Rize-Trabzon-Giresun-Ordu-Samsun',
-  'Varto Ekoloji platformu': 'Muş Varto',
+  'Varto Ekoloji Platformu': 'Muş Varto',
   'Validebağ Savunması': 'İstanbul',
-  'İzmir Varto Ekoloji': 'İzmir'
+  'İzmir Varto Ekoloji': 'İzmir',
+  'Haliç Dayanışması': 'İstanbul',
+  'Gazipaşa Hepimiz Platformu': 'Antalya',
+  'Kaş Kadın Platformu': 'Antalya',
+  'Kaş Koruma İnisiyatifi': 'Antalya',
+  'Kaş Hayvanseverler': 'Antalya',
+  'Kaş Çevre ve Kültür Derneği': 'Antalya',
+  'Eğitim-Sen Kaş Şubesi': 'Antalya'
 };
 
 export const CALL_TEXT_FULL = `COP31'e DOĞRU İKLİM ADALETİ FORUMU
