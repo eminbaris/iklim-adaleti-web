@@ -17,6 +17,8 @@ import Footer from './components/Footer.tsx';
 import ArticleModal from './components/ArticleModal.tsx';
 import SignDeclarationModal from './components/SignDeclarationModal.tsx';
 import AdminPanelModal from './components/AdminPanelModal.tsx';
+import LegalModal from './components/LegalModal.tsx';
+import CookieConsentBanner from './components/CookieConsentBanner.tsx';
 
 import {
   INITIAL_SIGNATORIES,
@@ -75,7 +77,8 @@ const OBSOLETE_DUPLICATE_IDS = new Set([
   'sig-rec-mustafa-kolcu',
   'sig-rec-dogukan-onder',
   'sig-1792312155051',
-  'sig-1792314824835'
+  'sig-1792314824835',
+  'sig-1792238544395'
 ]);
 
 function normalizeTrKey(str: string | undefined): string {
@@ -180,6 +183,7 @@ export default function App() {
   });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+  const [legalModalTab, setLegalModalTab] = useState<'kvkk' | 'cookies' | null>(null);
 
   const [activeSection, setActiveSection] = useState<string>(() => resolveRouteFromLocation().section);
   const [selectedEventSlug, setSelectedEventSlug] = useState<string | null>(
@@ -555,6 +559,7 @@ export default function App() {
         onOpenSignModal={() => setSignModalOpen(true)}
         onOpenAdminModal={() => setAdminModalOpen(true)}
         onNavigate={handleNavigate}
+        onOpenLegalModal={(tab) => setLegalModalTab(tab)}
       />
 
       {/* Modals */}
@@ -562,6 +567,17 @@ export default function App() {
         isOpen={signModalOpen}
         onClose={() => setSignModalOpen(false)}
         onAddSignatory={handleAddSignatory}
+        onOpenLegalModal={(tab) => setLegalModalTab(tab)}
+      />
+
+      <LegalModal
+        isOpen={legalModalTab !== null}
+        initialTab={legalModalTab || 'kvkk'}
+        onClose={() => setLegalModalTab(null)}
+      />
+
+      <CookieConsentBanner
+        onOpenLegalModal={(tab) => setLegalModalTab(tab)}
       />
 
       <AdminPanelModal

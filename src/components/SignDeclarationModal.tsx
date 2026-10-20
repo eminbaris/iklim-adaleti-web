@@ -11,6 +11,7 @@ interface SignDeclarationModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAddSignatory: (signatory: Omit<Signatory, 'id' | 'date'>) => void;
+  onOpenLegalModal?: (tab: 'kvkk' | 'cookies') => void;
 }
 
 const INDIVIDUAL_PROFESSION_PATTERN =
@@ -65,7 +66,8 @@ export function classifySignatoryInput(input: {
 export default function SignDeclarationModal({
   isOpen,
   onClose,
-  onAddSignatory
+  onAddSignatory,
+  onOpenLegalModal
 }: SignDeclarationModalProps) {
   const [signType, setSignType] = useState<'institutional' | 'individual'>('individual');
   const [step, setStep] = useState<'form' | 'success'>('form');
@@ -383,6 +385,22 @@ export default function SignDeclarationModal({
                   placeholder="Çağrıya ilişkin mesajınız..."
                   className="w-full px-3.5 py-2 text-sm text-stone-900 bg-stone-50 border border-stone-300 rounded-lg focus:bg-white focus:outline-none focus:border-[#0B4F71] transition-colors resize-none"
                 />
+              </div>
+
+              <div className="p-2.5 rounded-lg bg-stone-50 border border-stone-200/80 text-[11px] text-stone-600 leading-relaxed">
+                🔒 <strong>E-posta adresiniz kesinlikle herkese açık yayınlanmaz</strong> ve üçüncü kişilerle paylaşılmaz. Bilgileriniz{' '}
+                {onOpenLegalModal ? (
+                  <button
+                    type="button"
+                    onClick={() => onOpenLegalModal('kvkk')}
+                    className="text-[#0B4F71] font-semibold underline cursor-pointer"
+                  >
+                    KVKK Aydınlatma Metni
+                  </button>
+                ) : (
+                  <span className="font-semibold text-[#0B4F71]">KVKK Aydınlatma Metni</span>
+                )}{' '}
+                kapsamında korunmaktadır.
               </div>
 
               <div className="pt-2 flex items-center justify-between gap-3">

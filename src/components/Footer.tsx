@@ -10,12 +10,14 @@ interface FooterProps {
   onOpenSignModal: () => void;
   onOpenAdminModal?: () => void;
   onNavigate?: (sectionId: string, path: string) => void;
+  onOpenLegalModal?: (tab: 'kvkk' | 'cookies') => void;
 }
 
 export default function Footer({
   onOpenSignModal,
   onOpenAdminModal,
-  onNavigate
+  onNavigate,
+  onOpenLegalModal
 }: FooterProps) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -127,9 +129,31 @@ export default function Footer({
 
         {/* Bottom copyright */}
         <div className="pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-stone-400">
-          <p>
-            © {new Date().getFullYear()} iklimadaleti.org · İklim Adaleti Forumu
-          </p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <p>
+              © {new Date().getFullYear()} iklimadaleti.org · İklim Adaleti Forumu
+            </p>
+            {onOpenLegalModal && (
+              <div className="flex items-center gap-3 text-[11px] text-stone-400">
+                <span className="text-stone-600 hidden sm:inline">·</span>
+                <button
+                  type="button"
+                  onClick={() => onOpenLegalModal('kvkk')}
+                  className="hover:text-white underline underline-offset-2 transition-colors cursor-pointer"
+                >
+                  KVKK Aydınlatma Metni
+                </button>
+                <span className="text-stone-600">·</span>
+                <button
+                  type="button"
+                  onClick={() => onOpenLegalModal('cookies')}
+                  className="hover:text-white underline underline-offset-2 transition-colors cursor-pointer"
+                >
+                  Çerez ve Gizlilik Politikası
+                </button>
+              </div>
+            )}
+          </div>
           <div className="flex items-center gap-4">
             <p className="text-[11px]">
               Başka bir dünyayı birlikte kuralım!
