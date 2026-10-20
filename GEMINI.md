@@ -18,6 +18,7 @@ Bu projede yapılacak tüm kod, tasarım ve sunucu güncellemelerinde aşağıda
 - **Dinamik OpenGraph ve Site Haritası:** `server.js` üzerindeki dinamik OpenGraph (`og:title`, `og:description`, `og:image`), `/sitemap.xml` ve `/robots.txt` üretimi korunmalı; tekil etkinlik linkleri paylaşıldığında etkinliğin kendi afişi ve bilgileri önizleme kartında çıkmalıdır.
 - **Admin Paneli:** `/admin` ve `/yonetim` adresleri ile mevcut yönetici/editör giriş bilgileri ve yetkileri değiştirilmemelidir.
 
-## 4. Ortam ve Dağıtım (Deployment) Bilgileri
+## 4. Ortam, İletişim ve Dağıtım (Deployment) Bilgileri
+- **Resmi E-posta Adresi:** Sitede ve tüm resmi metinlerde (Footer, KVKK, İletişim vb.) kullanılacak tek resmi e-posta adresi **`iklimadaleti2026@gmail.com`** olmalıdır (`iletisim@iklimadaleti.org` vb. varsayımsal adresler kesinlikle kullanılmamalıdır).
 - **Git & Coolify:** Canlı ortam `https://github.com/eminbaris/iklim-adaleti-web.git` (`main` dalı) üzerinden Coolify ile `https://iklimadaleti.org` adresinde çalışmaktadır.
 - **Yerel Node Yolu (Windows):** PowerShell varsayılan `PATH` içinde `node` bulunmadığında `C:\Users\MSI\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe` kullanılarak `node --check server.js` ile sözdizimi doğrulaması yapılmalıdır.

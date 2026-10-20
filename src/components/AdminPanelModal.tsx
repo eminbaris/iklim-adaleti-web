@@ -1108,7 +1108,7 @@ export default function AdminPanelModal({
                           type="text"
                           value={gCoord}
                           onChange={(e) => setGCoord(e.target.value)}
-                          placeholder="Örn: iletisim@iklimadaleti.org"
+                          placeholder="Örn: iklimadaleti2026@gmail.com"
                           className="w-full px-3 py-2 text-sm bg-white border border-stone-300 rounded-lg"
                         />
                       </div>

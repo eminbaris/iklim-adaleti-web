@@ -52,11 +52,11 @@ export default function Footer({
               </a>
 
               <a
-                href="mailto:iletisim@iklimadaleti.org"
+                href="mailto:iklimadaleti2026@gmail.com"
                 className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-medium text-stone-200 transition-colors"
               >
                 <Mail className="w-4 h-4 text-stone-300" />
-                <span>iletisim@iklimadaleti.org</span>
+                <span>iklimadaleti2026@gmail.com</span>
               </a>
             </div>
           </div>

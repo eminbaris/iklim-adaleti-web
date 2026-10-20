@@ -144,7 +144,7 @@ export default function BrosurlerSection({
           </div>
 
           <a
-            href="mailto:iletisim@iklimadaleti.org?subject=Basili%20Brosur%20Talep"
+            href="mailto:iklimadaleti2026@gmail.com?subject=Basili%20Brosur%20Talep"
             className="px-4 py-2 text-xs font-semibold text-stone-800 bg-stone-100 hover:bg-stone-200 rounded transition-colors whitespace-nowrap self-start md:self-auto"
           >
             Matbaa Kalıbı Talep Et

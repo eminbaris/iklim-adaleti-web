@@ -140,10 +140,10 @@ export default function LegalModal({
                 bilgilerinizin düzeltilmesini, güncellenmesini ya da tamamen silinmesini talep
                 etme hakkına sahipsiniz. Taleplerinizi{' '}
                 <a
-                  href="mailto:iletisim@iklimadaleti.org"
+                  href="mailto:iklimadaleti2026@gmail.com"
                   className="text-[#0B4F71] font-bold underline"
                 >
-                  iletisim@iklimadaleti.org
+                  iklimadaleti2026@gmail.com
                 </a>{' '}
                 adresine iletebilirsiniz; başvurunuz en kısa sürede yerine getirilir.
               </p>
@@ -198,11 +198,11 @@ export default function LegalModal({
         {/* Footer */}
         <div className="px-6 py-3.5 bg-stone-50 border-t border-stone-200 flex flex-wrap items-center justify-between gap-3">
           <a
-            href="mailto:iletisim@iklimadaleti.org"
+            href="mailto:iklimadaleti2026@gmail.com"
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0B4F71] hover:underline"
           >
             <Mail className="w-3.5 h-3.5" />
-            <span>iletisim@iklimadaleti.org</span>
+            <span>iklimadaleti2026@gmail.com</span>
           </a>
           <button
             type="button"
