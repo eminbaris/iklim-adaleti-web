@@ -4477,6 +4477,128 @@ const DEFAULT_SIGNATORIES = [
     "date": "2026-10-20",
     "type": "individual",
     "emailVerified": true
+  },
+  {
+    "id": "sig-1792494719774",
+    "name": "Müyesser Yazaroğlu",
+    "organization": "Emekli",
+    "city": "Muğla",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792495697214",
+    "name": "Gonul Hatipoglu",
+    "organization": "Emekli Sekreter",
+    "city": "Muğla",
+    "message": "Doğayı koruyalim",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792495793930",
+    "name": "Neziha Özdemir",
+    "organization": "Emekli",
+    "city": "Bursa",
+    "message": "Doğa olmadan biz olamayız.Fakat biz olmadan Doğa çok güzel olur.Onun için farkına varalım.",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792495918932",
+    "name": "Hamit Can",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "message": "İşçilerin, emekçilerin, halkın birliği semayeyi yenecek!",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792496566376",
+    "name": "Mustafa yetkil",
+    "organization": "Emekli öğretmen",
+    "city": "İzmir",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792497833789",
+    "name": "Dilşat demir",
+    "organization": "Emekli",
+    "city": "İzmşr",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792498526833",
+    "name": "Yılmaz keleş",
+    "organization": "İşçi",
+    "city": "Antalya",
+    "message": "Foruma katılıp detaylı bilgi almak istiyorum",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792501427097",
+    "name": "Süleyman Nalbant",
+    "organization": "Emekli",
+    "city": "Muğla",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792504170963",
+    "name": "Özgür Ceylan AYTAÇ",
+    "organization": "Avukat",
+    "city": "İstanbul",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792512237806",
+    "name": "kadri Ergün",
+    "organization": "Emekli",
+    "city": "ANTALYA",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792514141569",
+    "name": "Tevfik  bugskaptan",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "message": "Doğa yalanına hayır",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792515138966",
+    "name": "Ali Akçapınar",
+    "organization": "Emekli",
+    "city": "Uşak",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "org-66",
+    "name": "Kayınormanı Derneği",
+    "organization": "Kayınormanı Derneği",
+    "city": "",
+    "date": "2026-10-20",
+    "type": "institutional",
+    "emailVerified": true
   }
 ];
 
@@ -4560,6 +4682,8 @@ function getSignatoryKey(sig) {
     if (orgKey === 'kaş eğitim sen') orgKey = 'eğitim-sen kaş şubesi';
     if (orgKey === 'kaş koruma insiyatifi') orgKey = 'kaş koruma inisiyatifi';
     if (orgKey === 'edremit sol parti ilçe başkanı') orgKey = 'edremit sol parti ilçe başkanlığı';
+    if (orgKey === 'insancı felsefe sanat ve bilim çevresi') orgKey = 'insanca felsefe sanat ve bilim çevresi';
+    if (orgKey === 'gazipaşa hepimizin platformu') orgKey = 'gazipaşa hepimiz platformu';
     return `inst:${orgKey}`;
   }
   return `ind:${normalizeTrKey(sig.name)}`;

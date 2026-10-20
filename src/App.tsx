@@ -97,6 +97,8 @@ function getSignatoryIdentityKey(sig: Signatory): string {
     if (orgKey === 'kaş eğitim sen') orgKey = 'eğitim-sen kaş şubesi';
     if (orgKey === 'kaş koruma insiyatifi') orgKey = 'kaş koruma inisiyatifi';
     if (orgKey === 'edremit sol parti ilçe başkanı') orgKey = 'edremit sol parti ilçe başkanlığı';
+    if (orgKey === 'insancı felsefe sanat ve bilim çevresi') orgKey = 'insanca felsefe sanat ve bilim çevresi';
+    if (orgKey === 'gazipaşa hepimizin platformu') orgKey = 'gazipaşa hepimiz platformu';
     return `inst:${orgKey}`;
   }
   return `ind:${normalizeTrKey(sig.name)}`;
