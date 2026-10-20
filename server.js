@@ -142,6 +142,15 @@ const DEFAULT_SIGNATORIES = [
     "emailVerified": true
   },
   {
+    "id": "sig-1792238544395",
+    "name": "Edremit Sol Parti İlçe Başkanlığı",
+    "organization": "Edremit Sol Parti İlçe Başkanlığı",
+    "city": "Balıkesir",
+    "date": "2026-10-17",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
     "id": "sig-1792231766729",
     "name": "Sol Feminist Hareketi",
     "organization": "Sol Feminist Hareketi",
@@ -4476,8 +4485,7 @@ const OBSOLETE_DUPLICATE_IDS = new Set([
   'sig-rec-mustafa-kolcu',
   'sig-rec-dogukan-onder',
   'sig-1792312155051',
-  'sig-1792314824835',
-  'sig-1792238544395'
+  'sig-1792314824835'
 ]);
 
 const INDIVIDUAL_PROFESSION_REGEX =
@@ -4551,6 +4559,7 @@ function getSignatoryKey(sig) {
     if (orgKey === 'antalya sanatçılar derneği') orgKey = 'ansan antalya sanatçılar derneği';
     if (orgKey === 'kaş eğitim sen') orgKey = 'eğitim-sen kaş şubesi';
     if (orgKey === 'kaş koruma insiyatifi') orgKey = 'kaş koruma inisiyatifi';
+    if (orgKey === 'edremit sol parti ilçe başkanı') orgKey = 'edremit sol parti ilçe başkanlığı';
     return `inst:${orgKey}`;
   }
   return `ind:${normalizeTrKey(sig.name)}`;
@@ -4559,7 +4568,9 @@ function getSignatoryKey(sig) {
 function getRemovedSignatorySet(cmsData) {
   const cms = cmsData || readRawCmsFromDisk();
   return new Set(
-    (cms.removedSignatoryIds || []).map((id) => String(id).trim().toLowerCase())
+    (cms.removedSignatoryIds || [])
+      .map((id) => String(id).trim().toLowerCase())
+      .filter((id) => id !== 'sig-1792238544395' && !id.includes('edremit sol parti'))
   );
 }
 

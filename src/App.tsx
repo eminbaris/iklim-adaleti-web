@@ -77,8 +77,7 @@ const OBSOLETE_DUPLICATE_IDS = new Set([
   'sig-rec-mustafa-kolcu',
   'sig-rec-dogukan-onder',
   'sig-1792312155051',
-  'sig-1792314824835',
-  'sig-1792238544395'
+  'sig-1792314824835'
 ]);
 
 function normalizeTrKey(str: string | undefined): string {
@@ -97,6 +96,7 @@ function getSignatoryIdentityKey(sig: Signatory): string {
     if (orgKey === 'antalya sanatçılar derneği') orgKey = 'ansan antalya sanatçılar derneği';
     if (orgKey === 'kaş eğitim sen') orgKey = 'eğitim-sen kaş şubesi';
     if (orgKey === 'kaş koruma insiyatifi') orgKey = 'kaş koruma inisiyatifi';
+    if (orgKey === 'edremit sol parti ilçe başkanı') orgKey = 'edremit sol parti ilçe başkanlığı';
     return `inst:${orgKey}`;
   }
   return `ind:${normalizeTrKey(sig.name)}`;
@@ -106,7 +106,11 @@ function mergeAndDeduplicateSignatories(
   lists: Signatory[][],
   removedIds: string[]
 ): Signatory[] {
-  const removedSet = new Set(removedIds.map((r) => String(r).trim().toLowerCase()));
+  const removedSet = new Set(
+    removedIds
+      .map((r) => String(r).trim().toLowerCase())
+      .filter((r) => r !== 'sig-1792238544395' && !r.includes('edremit sol parti'))
+  );
   const map = new Map<string, Signatory>();
 
   for (const list of lists) {
@@ -118,6 +122,10 @@ function mergeAndDeduplicateSignatories(
       if (normalizeTrKey(sig.organization || sig.name) === 'antalya sanatçılar derneği') {
         sig.name = 'ANSAN Antalya Sanatçılar Derneği';
         sig.organization = 'ANSAN Antalya Sanatçılar Derneği';
+      }
+      if (normalizeTrKey(sig.organization || sig.name) === 'edremit sol parti ilçe başkanı') {
+        sig.name = 'Edremit Sol Parti İlçe Başkanlığı';
+        sig.organization = 'Edremit Sol Parti İlçe Başkanlığı';
       }
       const nameKey = String(sig.organization || sig.name || '').trim().toLowerCase();
       const identityKey = getSignatoryIdentityKey(sig);

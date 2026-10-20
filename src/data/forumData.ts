@@ -69,7 +69,8 @@ export const INITIAL_SIGNATORY_ORGANIZATIONS: string[] = [
   'Kaş Hayvanseverler',
   'Kaş Çevre ve Kültür Derneği',
   'Eğitim-Sen Kaş Şubesi',
-  'Batı Karadeniz Çevre Gönüllüleri'
+  'Batı Karadeniz Çevre Gönüllüleri',
+  'Edremit Sol Parti İlçe Başkanlığı'
 ];
 
 const INITIAL_ORGANIZATION_CITIES: Record<string, string> = {
@@ -85,7 +86,8 @@ const INITIAL_ORGANIZATION_CITIES: Record<string, string> = {
   'Kaş Koruma İnisiyatifi': 'Antalya',
   'Kaş Hayvanseverler': 'Antalya',
   'Kaş Çevre ve Kültür Derneği': 'Antalya',
-  'Eğitim-Sen Kaş Şubesi': 'Antalya'
+  'Eğitim-Sen Kaş Şubesi': 'Antalya',
+  'Edremit Sol Parti İlçe Başkanlığı': 'Balıkesir'
 };
 
 export const CALL_TEXT_FULL = `COP31'e DOĞRU İKLİM ADALETİ FORUMU
