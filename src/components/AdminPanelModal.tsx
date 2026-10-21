@@ -524,22 +524,38 @@ export default function AdminPanelModal({
 
   // Delete Signatory
   const handleRemoveSignatory = async (sig: Signatory) => {
-    const nameLower = String(sig.organization || sig.name || '').trim().toLowerCase();
-    const instKey = `inst:${nameLower}`;
-    const indKey = `ind:${String(sig.name || '').trim().toLowerCase()}|${String(sig.city || '').trim().toLowerCase()}`;
+    const norm = (s: string | undefined) =>
+      String(s || '')
+        .trim()
+        .toLocaleLowerCase('tr-TR')
+        .replace(/\u0307/g, '')
+        .replace(/\s+/g, ' ');
+    const isInst =
+      sig.type === 'institutional' ||
+      Boolean(sig.organization && sig.organization === sig.name);
+    const primaryName = isInst
+      ? norm(sig.organization || sig.name)
+      : norm(sig.name);
+    const identityKey = isInst ? `inst:${primaryName}` : `ind:${primaryName}`;
+    const indWithCity = `ind:${norm(sig.name)}|${norm(sig.city)}`;
     const nextRemoved = [
       ...new Set([
         ...removedSignatoryIds,
         sig.id,
-        nameLower,
-        sig.type === 'institutional' ? instKey : indKey
+        primaryName,
+        identityKey,
+        ...(isInst ? [] : [indWithCity])
       ])
     ];
-    const nextExtra = extraSignatories.filter(
-      (s) =>
-        s.id !== sig.id &&
-        String(s.organization || s.name || '').trim().toLowerCase() !== nameLower
-    );
+    const nextExtra = extraSignatories.filter((s) => {
+      const sIsInst =
+        s.type === 'institutional' ||
+        Boolean(s.organization && s.organization === s.name);
+      const sPrimary = sIsInst
+        ? norm(s.organization || s.name)
+        : norm(s.name);
+      return s.id !== sig.id && sPrimary !== primaryName;
+    });
     await triggerSave({
       signatories: nextExtra,
       removedSignatoryIds: nextRemoved

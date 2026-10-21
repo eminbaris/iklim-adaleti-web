@@ -77,13 +77,15 @@ const OBSOLETE_DUPLICATE_IDS = new Set([
   'sig-rec-mustafa-kolcu',
   'sig-rec-dogukan-onder',
   'sig-1792312155051',
-  'sig-1792314824835'
+  'sig-1792314824835',
+  'sig-1792238544395'
 ]);
 
 function normalizeTrKey(str: string | undefined): string {
   return String(str || '')
     .trim()
     .toLocaleLowerCase('tr-TR')
+    .replace(/\u0307/g, '')
     .replace(/\s+/g, ' ');
 }
 
@@ -96,7 +98,6 @@ function getSignatoryIdentityKey(sig: Signatory): string {
     if (orgKey === 'antalya sanatçılar derneği') orgKey = 'ansan antalya sanatçılar derneği';
     if (orgKey === 'kaş eğitim sen') orgKey = 'eğitim-sen kaş şubesi';
     if (orgKey === 'kaş koruma insiyatifi') orgKey = 'kaş koruma inisiyatifi';
-    if (orgKey === 'edremit sol parti ilçe başkanı') orgKey = 'edremit sol parti ilçe başkanlığı';
     if (orgKey === 'insancı felsefe sanat ve bilim çevresi') orgKey = 'insanca felsefe sanat ve bilim çevresi';
     if (orgKey === 'gazipaşa hepimizin platformu') orgKey = 'gazipaşa hepimiz platformu';
     return `inst:${orgKey}`;
@@ -104,32 +105,42 @@ function getSignatoryIdentityKey(sig: Signatory): string {
   return `ind:${normalizeTrKey(sig.name)}`;
 }
 
+function buildNormalizedRemovedSet(removedIds: string[]): Set<string> {
+  const set = new Set<string>();
+  for (const r of removedIds) {
+    const clean = normalizeTrKey(r);
+    if (!clean) continue;
+    set.add(clean);
+    if (clean.startsWith('ind:') && clean.includes('|')) {
+      set.add(clean.split('|')[0]);
+    }
+  }
+  return set;
+}
+
 function mergeAndDeduplicateSignatories(
   lists: Signatory[][],
   removedIds: string[]
 ): Signatory[] {
-  const removedSet = new Set(
-    removedIds
-      .map((r) => String(r).trim().toLowerCase())
-      .filter((r) => r !== 'sig-1792238544395' && !r.includes('edremit sol parti'))
-  );
+  const removedSet = buildNormalizedRemovedSet(removedIds);
   const map = new Map<string, Signatory>();
 
   for (const list of lists) {
     for (const rawSig of list) {
       if (!rawSig || (!rawSig.name && !rawSig.organization)) continue;
-      const idKey = String(rawSig.id || '').trim().toLowerCase();
+      const idKey = normalizeTrKey(rawSig.id);
       if (OBSOLETE_DUPLICATE_IDS.has(idKey)) continue;
       const sig = { ...rawSig };
       if (normalizeTrKey(sig.organization || sig.name) === 'antalya sanatçılar derneği') {
         sig.name = 'ANSAN Antalya Sanatçılar Derneği';
         sig.organization = 'ANSAN Antalya Sanatçılar Derneği';
       }
-      if (normalizeTrKey(sig.organization || sig.name) === 'edremit sol parti ilçe başkanı') {
-        sig.name = 'Edremit Sol Parti İlçe Başkanlığı';
-        sig.organization = 'Edremit Sol Parti İlçe Başkanlığı';
-      }
-      const nameKey = String(sig.organization || sig.name || '').trim().toLowerCase();
+      const isInst =
+        sig.type === 'institutional' ||
+        Boolean(sig.organization && sig.organization === sig.name);
+      const nameKey = isInst
+        ? normalizeTrKey(sig.organization || sig.name)
+        : normalizeTrKey(sig.name);
       const identityKey = getSignatoryIdentityKey(sig);
       if (
         removedSet.has(idKey) ||
@@ -225,12 +236,18 @@ export default function App() {
         if (Array.isArray(data.policies) && data.policies.length > 0) setPolicies(data.policies);
         if (Array.isArray(data.events) && data.events.length > 0) setEvents(data.events);
         if (Array.isArray(data.signatories)) {
-          setExtraSignatories((prev) =>
-            mergeAndDeduplicateSignatories(
+          setExtraSignatories((prev) => {
+            const merged = mergeAndDeduplicateSignatories(
               [INITIAL_EXTRA_SIGNATORIES, prev, data.signatories],
               removed
-            )
-          );
+            );
+            try {
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+            } catch {
+              // ignore storage errors
+            }
+            return merged;
+          });
         }
       })
       .catch(() => {

@@ -117,15 +117,6 @@
     "emailVerified": true
   },
   {
-    "id": "sig-1792238544395",
-    "name": "Edremit Sol Parti İlçe Başkanlığı",
-    "organization": "Edremit Sol Parti İlçe Başkanlığı",
-    "city": "Balıkesir",
-    "date": "2026-10-17",
-    "type": "institutional",
-    "emailVerified": true
-  },
-  {
     "id": "sig-1792231766729",
     "name": "Sol Feminist Hareketi",
     "organization": "Sol Feminist Hareketi",
@@ -4573,6 +4564,143 @@
     "city": "",
     "date": "2026-10-20",
     "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792518756645",
+    "name": "Mustafa Deniz Altınkurt",
+    "organization": "Akademisyen",
+    "city": "Kocaeli",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792521251493",
+    "name": "Mehmet Yücel",
+    "organization": "Emekli İşçi",
+    "city": "İstanbul",
+    "message": "Küresel ısınmayı durdurmaya mecburuz.",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792523749288",
+    "name": "Hamit Ülger",
+    "organization": "Emekli",
+    "city": "Muğla",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792535079433",
+    "name": "Selamettin PULAT",
+    "organization": "Emekli Öğretmen",
+    "city": "SAKARYA",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792557324613",
+    "name": "İsmail Öztürk",
+    "organization": "Emekli",
+    "city": "Sakarya",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792559435756",
+    "name": "Adem Çiftçi",
+    "city": "ANKARA",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792562736047",
+    "name": "Rıza Türkoğlu",
+    "organization": "Emekli",
+    "city": "MUĞLA",
+    "message": "Yaşanılacak bir dünya. Aç gözlü emperyalistlerin, doymak bilmeyen kartellere bu dünya bırakılmamalı",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792564903629",
+    "name": "Nursel Şahin",
+    "organization": "Prof Dr",
+    "city": "Antalya",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792566121630",
+    "name": "Sezgin Ozcan",
+    "city": "Düzce",
+    "message": "Çağrıyı tüm katılımcılar nezdinde selamlıyorum.",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792566571794",
+    "name": "Mümtaz Serkan Özkaya",
+    "organization": "Teknik Öğretmen",
+    "city": "ANTALYA",
+    "message": "Sömürü düzenine karşı çıkmak bir insanlık borcudur!",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792567239515",
+    "name": "vicdan Küçükarslan",
+    "city": "Antalya",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792569421068",
+    "name": "Erdal Giden",
+    "organization": "Emekli",
+    "city": "Samsun",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792569648216",
+    "name": "Halis Demirci",
+    "organization": "Emekli",
+    "city": "Ankara",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792571128113",
+    "name": "Hüseyin Pala",
+    "organization": "Emekli",
+    "city": "MERSİN",
+    "message": "Yaşam alanımız yok edilmesin",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792575397085",
+    "name": "Bulut Yavuz",
+    "organization": "Akademisyen (izmir katip çelebi üniversitesi)",
+    "city": "İzmir",
+    "date": "2026-10-21",
+    "type": "individual",
     "emailVerified": true
   }
 ]

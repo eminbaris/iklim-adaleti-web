@@ -142,15 +142,6 @@ const DEFAULT_SIGNATORIES = [
     "emailVerified": true
   },
   {
-    "id": "sig-1792238544395",
-    "name": "Edremit Sol Parti İlçe Başkanlığı",
-    "organization": "Edremit Sol Parti İlçe Başkanlığı",
-    "city": "Balıkesir",
-    "date": "2026-10-17",
-    "type": "institutional",
-    "emailVerified": true
-  },
-  {
     "id": "sig-1792231766729",
     "name": "Sol Feminist Hareketi",
     "organization": "Sol Feminist Hareketi",
@@ -4599,6 +4590,143 @@ const DEFAULT_SIGNATORIES = [
     "date": "2026-10-20",
     "type": "institutional",
     "emailVerified": true
+  },
+  {
+    "id": "sig-1792518756645",
+    "name": "Mustafa Deniz Altınkurt",
+    "organization": "Akademisyen",
+    "city": "Kocaeli",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792521251493",
+    "name": "Mehmet Yücel",
+    "organization": "Emekli İşçi",
+    "city": "İstanbul",
+    "message": "Küresel ısınmayı durdurmaya mecburuz.",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792523749288",
+    "name": "Hamit Ülger",
+    "organization": "Emekli",
+    "city": "Muğla",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792535079433",
+    "name": "Selamettin PULAT",
+    "organization": "Emekli Öğretmen",
+    "city": "SAKARYA",
+    "date": "2026-10-20",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792557324613",
+    "name": "İsmail Öztürk",
+    "organization": "Emekli",
+    "city": "Sakarya",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792559435756",
+    "name": "Adem Çiftçi",
+    "city": "ANKARA",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792562736047",
+    "name": "Rıza Türkoğlu",
+    "organization": "Emekli",
+    "city": "MUĞLA",
+    "message": "Yaşanılacak bir dünya. Aç gözlü emperyalistlerin, doymak bilmeyen kartellere bu dünya bırakılmamalı",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792564903629",
+    "name": "Nursel Şahin",
+    "organization": "Prof Dr",
+    "city": "Antalya",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792566121630",
+    "name": "Sezgin Ozcan",
+    "city": "Düzce",
+    "message": "Çağrıyı tüm katılımcılar nezdinde selamlıyorum.",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792566571794",
+    "name": "Mümtaz Serkan Özkaya",
+    "organization": "Teknik Öğretmen",
+    "city": "ANTALYA",
+    "message": "Sömürü düzenine karşı çıkmak bir insanlık borcudur!",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792567239515",
+    "name": "vicdan Küçükarslan",
+    "city": "Antalya",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792569421068",
+    "name": "Erdal Giden",
+    "organization": "Emekli",
+    "city": "Samsun",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792569648216",
+    "name": "Halis Demirci",
+    "organization": "Emekli",
+    "city": "Ankara",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792571128113",
+    "name": "Hüseyin Pala",
+    "organization": "Emekli",
+    "city": "MERSİN",
+    "message": "Yaşam alanımız yok edilmesin",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792575397085",
+    "name": "Bulut Yavuz",
+    "organization": "Akademisyen (izmir katip çelebi üniversitesi)",
+    "city": "İzmir",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
   }
 ];
 
@@ -4607,7 +4735,8 @@ const OBSOLETE_DUPLICATE_IDS = new Set([
   'sig-rec-mustafa-kolcu',
   'sig-rec-dogukan-onder',
   'sig-1792312155051',
-  'sig-1792314824835'
+  'sig-1792314824835',
+  'sig-1792238544395'
 ]);
 
 const INDIVIDUAL_PROFESSION_REGEX =
@@ -4668,6 +4797,7 @@ function normalizeTrKey(str) {
   return String(str || '')
     .trim()
     .toLocaleLowerCase('tr-TR')
+    .replace(/\u0307/g, '')
     .replace(/\s+/g, ' ');
 }
 
@@ -4681,7 +4811,6 @@ function getSignatoryKey(sig) {
     if (orgKey === 'antalya sanatçılar derneği') orgKey = 'ansan antalya sanatçılar derneği';
     if (orgKey === 'kaş eğitim sen') orgKey = 'eğitim-sen kaş şubesi';
     if (orgKey === 'kaş koruma insiyatifi') orgKey = 'kaş koruma inisiyatifi';
-    if (orgKey === 'edremit sol parti ilçe başkanı') orgKey = 'edremit sol parti ilçe başkanlığı';
     if (orgKey === 'insancı felsefe sanat ve bilim çevresi') orgKey = 'insanca felsefe sanat ve bilim çevresi';
     if (orgKey === 'gazipaşa hepimizin platformu') orgKey = 'gazipaşa hepimiz platformu';
     return `inst:${orgKey}`;
@@ -4691,18 +4820,28 @@ function getSignatoryKey(sig) {
 
 function getRemovedSignatorySet(cmsData) {
   const cms = cmsData || readRawCmsFromDisk();
-  return new Set(
-    (cms.removedSignatoryIds || [])
-      .map((id) => String(id).trim().toLowerCase())
-      .filter((id) => id !== 'sig-1792238544395' && !id.includes('edremit sol parti'))
-  );
+  const set = new Set();
+  for (const id of cms.removedSignatoryIds || []) {
+    const clean = normalizeTrKey(id);
+    if (!clean) continue;
+    set.add(clean);
+    if (clean.startsWith('ind:') && clean.includes('|')) {
+      set.add(clean.split('|')[0]);
+    }
+  }
+  return set;
 }
 
 function isSignatoryRemoved(sig, removedSet) {
   if (!sig) return true;
-  const idKey = String(sig.id || '').trim().toLowerCase();
+  const idKey = normalizeTrKey(sig.id);
   if (OBSOLETE_DUPLICATE_IDS.has(idKey)) return true;
-  const nameKey = String(sig.organization || sig.name || '').trim().toLowerCase();
+  const isInst =
+    sig.type === 'institutional' ||
+    Boolean(sig.organization && sig.organization === sig.name);
+  const nameKey = isInst
+    ? normalizeTrKey(sig.organization || sig.name)
+    : normalizeTrKey(sig.name);
   const sigKey = getSignatoryKey(sig);
   return removedSet.has(idKey) || removedSet.has(nameKey) || removedSet.has(sigKey);
 }
