@@ -4046,15 +4046,6 @@
     "emailVerified": true
   },
   {
-    "id": "sig-1792398314815",
-    "name": "Mürüvet Uğuz",
-    "organization": "Mürüvet Uğuz",
-    "city": "İzmir",
-    "date": "2026-10-19",
-    "type": "institutional",
-    "emailVerified": true
-  },
-  {
     "id": "sig-1792399569962",
     "name": "Mesut kökten",
     "organization": "Emekli memur",
@@ -4701,6 +4692,187 @@
     "city": "İzmir",
     "date": "2026-10-21",
     "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792581371341",
+    "name": "İlker Yılfız",
+    "organization": "Öğretmem",
+    "city": "Sakarya",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792581493344",
+    "name": "Sakarya Tüm Ememlilerin Sendikası",
+    "organization": "Sakarya Tüm Ememlilerin Sendikası",
+    "city": "Sakarya",
+    "date": "2026-10-21",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-admin-1792586554741",
+    "name": "Fethiye Emekliler Dayanışması",
+    "organization": "Fethiye Emekliler Dayanışması",
+    "city": "Fethiye",
+    "date": "2026-10-21",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792591016649",
+    "name": "VELİ DER Antalya Şubesi",
+    "organization": "VELİ DER Antalya Şubesi",
+    "city": "Antalya",
+    "date": "2026-10-21",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792596556870",
+    "name": "Fatma Karaca Akyol",
+    "organization": "Emekli",
+    "city": "Balıkesir",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792597701727",
+    "name": "Can Hasanoğlu",
+    "organization": "Makine mühendisi",
+    "city": "İzmir",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792601373027",
+    "name": "Fatoş keklik",
+    "organization": "Emekli Gastronomi Öğretmeni",
+    "city": "Balıkesir Gömeç Tüm emekliler sendikası",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792605247169",
+    "name": "Aysun",
+    "organization": "Emekli",
+    "city": "Uğur",
+    "message": "Bizi  dogrudan etkileyen herseyde soz sahibi",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792616238153",
+    "name": "Yusuf Kemal Tengirşenk",
+    "organization": "Emekli",
+    "city": "İstanbul",
+    "date": "2026-10-21",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792653904135",
+    "name": "Alperen Çelik",
+    "organization": "Avukat",
+    "city": "Antalya",
+    "date": "2026-10-22",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792658930268",
+    "name": "Artvin Çevre Platformu",
+    "organization": "Artvin Çevre Platformu",
+    "city": "Ankara",
+    "date": "2026-10-22",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792658981303",
+    "name": "Artvin Kültür Yardımlaşma Derneği",
+    "organization": "Artvin Kültür Yardımlaşma Derneği",
+    "city": "ANKARA",
+    "date": "2026-10-22",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792660111649",
+    "name": "Ümit nektar",
+    "organization": "Serbest",
+    "city": "Aydın",
+    "date": "2026-10-22",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792661617329",
+    "name": "Munzur Koruma Kurulu (Dedef)",
+    "organization": "Munzur Koruma Kurulu (Dedef)",
+    "city": "Ankara",
+    "date": "2026-10-22",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792674514520",
+    "name": "Giresun Doğa ve Çevre Derneği",
+    "organization": "Giresun Doğa ve Çevre Derneği",
+    "city": "",
+    "date": "2026-10-22",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792674514894",
+    "name": "Taşova Çevre Platformu",
+    "organization": "Taşova Çevre Platformu",
+    "city": "",
+    "date": "2026-10-22",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792674515047",
+    "name": "Alaçam Dürtmen Komite",
+    "organization": "Alaçam Dürtmen Komite",
+    "city": "",
+    "date": "2026-10-22",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792674515227",
+    "name": "Ünye Çevre Platformu",
+    "organization": "Ünye Çevre Platformu",
+    "city": "",
+    "date": "2026-10-22",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792674515403",
+    "name": "Fenerbahçe Kalamış Dayanışması",
+    "organization": "Fenerbahçe Kalamış Dayanışması",
+    "city": "",
+    "date": "2026-10-22",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792674515572",
+    "name": "Fatsa Doğa ve Çevre Derneği",
+    "organization": "Fatsa Doğa ve Çevre Derneği",
+    "city": "",
+    "date": "2026-10-22",
+    "type": "institutional",
     "emailVerified": true
   }
 ]

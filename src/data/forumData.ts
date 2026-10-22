@@ -70,7 +70,13 @@ export const INITIAL_SIGNATORY_ORGANIZATIONS: string[] = [
   'Kaş Çevre ve Kültür Derneği',
   'Eğitim-Sen Kaş Şubesi',
   'Batı Karadeniz Çevre Gönüllüleri',
-  'Kayınormanı Derneği'
+  'Kayınormanı Derneği',
+  'Giresun Doğa ve Çevre Derneği',
+  'Taşova Çevre Platformu',
+  'Alaçam Dürtmen Komite',
+  'Ünye Çevre Platformu',
+  'Fenerbahçe Kalamış Dayanışması',
+  'Fatsa Doğa ve Çevre Derneği'
 ];
 
 const INITIAL_ORGANIZATION_CITIES: Record<string, string> = {
