@@ -562,6 +562,92 @@ export default function AdminPanelModal({
     });
   };
 
+  // Export / Print Signatories as Formatted PDF (3-column card layout like website)
+  const handleExportSignatoriesPdf = (mode: 'all' | 'institutional' | 'individual') => {
+    const inst = allSignatories.filter(
+      (s) => s.type === 'institutional' || Boolean(s.organization && s.organization === s.name)
+    );
+    const ind = allSignatories.filter(
+      (s) => s.type === 'individual' || (!s.type && s.organization !== s.name)
+    );
+    const esc = (s: string | undefined) =>
+      String(s || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+    const instHtml =
+      mode === 'all' || mode === 'institutional'
+        ? `<h2>İMZACI KURUMLAR (${inst.length})</h2>
+           <div class="grid">
+             ${inst
+               .map(
+                 (s, i) =>
+                   `<div class="card"><span class="num">${i + 1}.</span><div><span class="name">${esc(s.organization || s.name)}</span>${s.city ? `<span class="meta">${esc(s.city)}</span>` : ''}</div></div>`
+               )
+               .join('')}
+           </div>`
+        : '';
+
+    const indHtml =
+      mode === 'all' || mode === 'individual'
+        ? `<h2 class="${mode === 'all' ? 'ind-title page-break' : 'ind-title'}">BİREYSEL İMZACILAR (${ind.length})</h2>
+           <div class="grid ind">
+             ${ind
+               .map(
+                 (s, i) =>
+                   `<div class="card"><span class="num">${i + 1}.</span><div><span class="name">${esc(s.name)}</span>${s.organization || s.city ? `<span class="meta">${esc([s.organization, s.city].filter(Boolean).join(' · '))}</span>` : ''}</div></div>`
+               )
+               .join('')}
+           </div>`
+        : '';
+
+    const html = `<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>İklim Adaleti Forumu – İmza Listesi</title>
+<style>
+  @page { size: A4; margin: 12mm; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1c1917; background: #fff; margin: 0; padding: 16px; }
+  .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0B4F71; padding-bottom: 12px; margin-bottom: 18px; }
+  h1 { font-size: 18px; color: #0B4F71; margin: 0 0 4px 0; }
+  .sub { font-size: 12px; color: #57534e; margin: 0; font-weight: 600; }
+  .btn { background: #0B4F71; color: #fff; border: none; padding: 9px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 12px; }
+  h2 { font-size: 14px; color: #0B4F71; margin: 16px 0 10px 0; padding-bottom: 5px; border-bottom: 1px solid #e7e5e4; }
+  h2.ind-title { color: #3E8226; margin-top: 22px; }
+  .page-break { page-break-before: always; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+  .card { padding: 7px 9px; border: 1px solid #e7e5e4; border-radius: 7px; background: #fafaf9; font-size: 10.5px; break-inside: avoid; display: flex; gap: 5px; align-items: flex-start; }
+  .num { font-weight: 700; color: #0B4F71; min-width: 22px; }
+  .ind .num { color: #3E8226; }
+  .name { font-weight: 600; color: #1c1917; line-height: 1.25; }
+  .meta { display: block; font-size: 9px; color: #78716c; margin-top: 2px; }
+  @media print { body { padding: 0; } .no-print { display: none; } }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>COP31’e Doğru İklim Adaleti Forumu – İmza Listesi</h1>
+      <p class="sub">${inst.length} İmzacı Kurum · ${ind.length} Bireysel İmzacı (iklimadaleti.org)</p>
+    </div>
+    <button class="btn no-print" onclick="window.print()">PDF Olarak Kaydet / Yazdır</button>
+  </div>
+  ${instHtml}
+  ${indHtml}
+  <script>setTimeout(() => window.print(), 300);</script>
+</body>
+</html>`;
+
+    const win = window.open('', '_blank');
+    if (win) {
+      win.document.open();
+      win.document.write(html);
+      win.document.close();
+    }
+  };
+
   // Add New Editor User
   const handleAddUser = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1792,10 +1878,38 @@ export default function AdminPanelModal({
                     </button>
                   </form>
 
-                  <div className="space-y-2">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500">
-                      Tüm İmzalar ({allSignatories.length})
-                    </h4>
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2 bg-stone-50 border border-stone-200 rounded-xl p-3">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-stone-700">
+                        Tüm İmzalar ({allSignatories.length}) — PDF Çıktı Al
+                      </h4>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleExportSignatoriesPdf('all')}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0B4F71] hover:bg-[#083B54] text-white text-xs font-bold rounded-lg cursor-pointer"
+                        >
+                          <FileText className="w-3.5 h-3.5" />
+                          <span>Tümünü PDF Al (Kurum + Birey)</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleExportSignatoriesPdf('institutional')}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-50 hover:bg-sky-100 border border-sky-200 text-[#0B4F71] text-xs font-bold rounded-lg cursor-pointer"
+                        >
+                          <Building2 className="w-3.5 h-3.5" />
+                          <span>Sadece Kurumsal PDF</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleExportSignatoriesPdf('individual')}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-[#3E8226] text-xs font-bold rounded-lg cursor-pointer"
+                        >
+                          <Users className="w-3.5 h-3.5" />
+                          <span>Sadece Bireysel PDF</span>
+                        </button>
+                      </div>
+                    </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {allSignatories.map((sig, idx) => (
                         <div
