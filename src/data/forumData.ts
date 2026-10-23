@@ -98,7 +98,8 @@ export const INITIAL_SIGNATORY_ORGANIZATIONS: string[] = [
   'Fenerbahçe Kalamış Dayanışması',
   'Fatsa Doğa ve Çevre Derneği',
   'Alakır - Karacaören Doğa Kültür Derneği',
-  'Döşemealtı Gönüllüleri'
+  'Döşemealtı Gönüllüleri',
+  'Murgul Siyanüre Hayır Platformu'
 ];
 
 const INITIAL_ORGANIZATION_CITIES: Record<string, string> = {
@@ -115,7 +116,8 @@ const INITIAL_ORGANIZATION_CITIES: Record<string, string> = {
   'Kaş Koruma İnisiyatifi': 'Antalya',
   'Kaş Hayvanseverler': 'Antalya',
   'Kaş Çevre ve Kültür Derneği': 'Antalya',
-  'Eğitim-Sen Kaş Şubesi': 'Antalya'
+  'Eğitim-Sen Kaş Şubesi': 'Antalya',
+  'Murgul Siyanüre Hayır Platformu': 'Artvin'
 };
 
 export const CALL_TEXT_FULL = `COP31'e DOĞRU İKLİM ADALETİ FORUMU

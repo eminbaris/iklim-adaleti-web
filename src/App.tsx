@@ -117,20 +117,25 @@ const CANONICAL_INSTITUTION_NAMES: Record<string, string> = {
   'veli -der antalya şubesi': 'VELİ -DER Antalya Şubesi',
   'öğrenci veli derneği (velider)': 'Öğrenci Veli Derneği (VELİDER)',
   'samsun çevre platformu (samçep)': 'Samsun Çevre Platformu (SAMÇEP)',
-  'munzur koruma kurulu (dedef)': 'Munzur Koruma Kurulu (DEDEF)'
+  'munzur koruma kurulu (dedef)': 'Munzur Koruma Kurulu (DEDEF)',
+  'murgul siyanüre hayır platformu': 'Murgul Siyanüre Hayır Platformu'
 };
 
 function getSignatoryIdentityKey(sig: Signatory): string {
+  const normName = normalizeTrKey(sig.name);
   const isInst =
     sig.type === 'institutional' ||
-    Boolean(sig.organization && sig.organization === sig.name);
+    Boolean(sig.organization && sig.organization === sig.name) ||
+    Boolean(CANONICAL_INSTITUTION_NAMES[normName]);
   if (isInst) {
-    const rawOrg = normalizeTrKey(sig.organization || sig.name);
+    const rawOrg = CANONICAL_INSTITUTION_NAMES[normName]
+      ? normName
+      : normalizeTrKey(sig.organization || sig.name);
     const canonical = CANONICAL_INSTITUTION_NAMES[rawOrg];
     const orgKey = canonical ? normalizeTrKey(canonical) : rawOrg;
     return `inst:${orgKey}`;
   }
-  return `ind:${normalizeTrKey(sig.name)}`;
+  return `ind:${normName}`;
 }
 
 function buildNormalizedRemovedSet(removedIds: string[]): Set<string> {
@@ -159,6 +164,12 @@ function mergeAndDeduplicateSignatories(
       const idKey = normalizeTrKey(rawSig.id);
       if (OBSOLETE_DUPLICATE_IDS.has(idKey)) continue;
       const sig = { ...rawSig };
+      const normName = normalizeTrKey(sig.name);
+      if (CANONICAL_INSTITUTION_NAMES[normName]) {
+        sig.type = 'institutional';
+        sig.name = CANONICAL_INSTITUTION_NAMES[normName];
+        sig.organization = CANONICAL_INSTITUTION_NAMES[normName];
+      }
       const isInst =
         sig.type === 'institutional' ||
         Boolean(sig.organization && sig.organization === sig.name);

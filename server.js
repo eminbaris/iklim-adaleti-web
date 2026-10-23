@@ -4991,6 +4991,15 @@ const DEFAULT_SIGNATORIES = [
     "date": "2026-10-23",
     "type": "institutional",
     "emailVerified": true
+  },
+  {
+    "id": "sig-1792677445121",
+    "name": "Murgul Siyan?re Hay?r Platformu",
+    "organization": "Murgul Siyan?re Hay?r Platformu",
+    "city": "Artvin",
+    "date": "2026-10-22",
+    "type": "institutional",
+    "emailVerified": true
   }
 ];
 
@@ -5017,6 +5026,17 @@ function classifySignatoryOnServer({ name, organization, city, message, type }) 
     : undefined;
 
   if (type === 'individual') {
+    const instKeywordRegex =
+      /\b(platformu|platform|derneği|dernegi|dernek|sendikası|sendikasi|sendika|vakfı|vakfi|vakıf|barosu|baro|odası|odasi|meclisi|inisiyatifi|insiyatifi|dayanışması|dayanismasi|savunması|savunmasi|konseyi|federasyonu|konfederasyonu|kooperatifi|kurulu|temsilciliği|şubesi)\b/i;
+    if (cleanName && instKeywordRegex.test(cleanName)) {
+      return {
+        name: cleanName,
+        organization: cleanName,
+        city: cleanCity,
+        message: cleanMsg,
+        type: 'institutional'
+      };
+    }
     return {
       name: cleanName || cleanOrg || '',
       organization: cleanOrg && cleanOrg !== cleanName ? cleanOrg : undefined,
@@ -5093,21 +5113,26 @@ const CANONICAL_INSTITUTION_NAMES = {
   'veli -der antalya şubesi': 'VELİ -DER Antalya Şubesi',
   'öğrenci veli derneği (velider)': 'Öğrenci Veli Derneği (VELİDER)',
   'samsun çevre platformu (samçep)': 'Samsun Çevre Platformu (SAMÇEP)',
-  'munzur koruma kurulu (dedef)': 'Munzur Koruma Kurulu (DEDEF)'
+  'munzur koruma kurulu (dedef)': 'Munzur Koruma Kurulu (DEDEF)',
+  'murgul siyanüre hayır platformu': 'Murgul Siyanüre Hayır Platformu'
 };
 
 function getSignatoryKey(sig) {
   if (!sig) return '';
+  const normName = normalizeTrKey(sig.name);
   const isInst =
     sig.type === 'institutional' ||
-    Boolean(sig.organization && sig.organization === sig.name);
+    Boolean(sig.organization && sig.organization === sig.name) ||
+    Boolean(CANONICAL_INSTITUTION_NAMES[normName]);
   if (isInst) {
-    const rawOrg = normalizeTrKey(sig.organization || sig.name);
+    const rawOrg = CANONICAL_INSTITUTION_NAMES[normName]
+      ? normName
+      : normalizeTrKey(sig.organization || sig.name);
     const canonical = CANONICAL_INSTITUTION_NAMES[rawOrg];
     const orgKey = canonical ? normalizeTrKey(canonical) : rawOrg;
     return `inst:${orgKey}`;
   }
-  return `ind:${normalizeTrKey(sig.name)}`;
+  return `ind:${normName}`;
 }
 
 function getRemovedSignatorySet(cmsData) {
@@ -5144,6 +5169,12 @@ function deduplicateSignatories(list, removedSet = new Set()) {
     if (!rawSig || (!rawSig.name && !rawSig.organization)) continue;
     if (isSignatoryRemoved(rawSig, removedSet)) continue;
     const sig = { ...rawSig };
+    const normName = normalizeTrKey(sig.name);
+    if (CANONICAL_INSTITUTION_NAMES[normName]) {
+      sig.type = 'institutional';
+      sig.name = CANONICAL_INSTITUTION_NAMES[normName];
+      sig.organization = CANONICAL_INSTITUTION_NAMES[normName];
+    }
     const isInst =
       sig.type === 'institutional' ||
       Boolean(sig.organization && sig.organization === sig.name);

@@ -4966,5 +4966,14 @@
     "date": "2026-10-23",
     "type": "institutional",
     "emailVerified": true
+  },
+  {
+    "id": "sig-1792677445121",
+    "name": "Murgul Siyan?re Hay?r Platformu",
+    "organization": "Murgul Siyan?re Hay?r Platformu",
+    "city": "Artvin",
+    "date": "2026-10-22",
+    "type": "institutional",
+    "emailVerified": true
   }
 ]
