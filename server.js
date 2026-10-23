@@ -4910,15 +4910,6 @@ const DEFAULT_SIGNATORIES = [
     "emailVerified": true
   },
   {
-    "id": "sig-1792677445121",
-    "name": "Murgul Siyanüre Hayır Platformu",
-    "organization": "ÇEVRE PLATFORMU",
-    "city": "ARTVİN",
-    "date": "2026-10-22",
-    "type": "individual",
-    "emailVerified": true
-  },
-  {
     "id": "sig-1792678383015",
     "name": "Engin ŞENGUL",
     "organization": "Emekli öğretmen",
@@ -4994,8 +4985,8 @@ const DEFAULT_SIGNATORIES = [
   },
   {
     "id": "sig-1792677445121",
-    "name": "Murgul Siyan?re Hay?r Platformu",
-    "organization": "Murgul Siyan?re Hay?r Platformu",
+    "name": "Murgul Siyanüre Hayır Platformu",
+    "organization": "Murgul Siyanüre Hayır Platformu",
     "city": "Artvin",
     "date": "2026-10-22",
     "type": "institutional",
