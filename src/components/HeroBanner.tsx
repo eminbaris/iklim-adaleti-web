@@ -14,7 +14,8 @@ import {
   MapPin,
   ShieldCheck,
   Building2,
-  UserCheck
+  UserCheck,
+  Megaphone
 } from 'lucide-react';
 import ForumLogo from './ForumLogo.tsx';
 import { Signatory } from '../types.ts';
@@ -22,6 +23,7 @@ import { CALL_TEXT_FULL } from '../data/forumData.ts';
 
 interface HeroBannerProps {
   onOpenSignModal: () => void;
+  onOpenSolidarityPopup?: () => void;
   signatories: Signatory[];
   onExploreForums: () => void;
   onExploreWorkingGroups: () => void;
@@ -32,6 +34,7 @@ interface HeroBannerProps {
 
 export default function HeroBanner({
   onOpenSignModal,
+  onOpenSolidarityPopup,
   signatories,
   onExploreForums,
   onExploreWorkingGroups,
@@ -106,10 +109,23 @@ export default function HeroBanner({
         
         {/* Top Meta Bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-stone-200/90 shadow-2xs text-xs font-bold text-[#0B4F71]">
-            <span>iklimadaleti.org</span>
-            <span aria-hidden="true" className="text-stone-300">·</span>
-            <span className="text-[#3E8226]">COP31’e Doğru Çağrı Metni</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-stone-200/90 shadow-2xs text-xs font-bold text-[#0B4F71]">
+              <span>iklimadaleti.org</span>
+              <span aria-hidden="true" className="text-stone-300">·</span>
+              <span className="text-[#3E8226]">COP31’e Doğru Çağrı Metni</span>
+            </div>
+
+            {onOpenSolidarityPopup && (
+              <button
+                type="button"
+                onClick={onOpenSolidarityPopup}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#D96818] hover:bg-[#b85612] text-white shadow-xs text-xs font-extrabold transition-colors cursor-pointer"
+              >
+                <Megaphone className="w-3.5 h-3.5" />
+                <span>Dayanışma Çağrısı (Duyuru)</span>
+              </button>
+            )}
           </div>
 
           <div className="inline-flex items-center gap-3 text-xs font-semibold text-stone-600">

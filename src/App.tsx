@@ -19,6 +19,7 @@ import SignDeclarationModal from './components/SignDeclarationModal.tsx';
 import AdminPanelModal from './components/AdminPanelModal.tsx';
 import LegalModal from './components/LegalModal.tsx';
 import CookieConsentBanner from './components/CookieConsentBanner.tsx';
+import SolidarityPopupModal from './components/SolidarityPopupModal.tsx';
 
 import {
   INITIAL_SIGNATORIES,
@@ -234,6 +235,17 @@ export default function App() {
 
   // Modals & UI States
   const [signModalOpen, setSignModalOpen] = useState(false);
+  const [solidarityPopupOpen, setSolidarityPopupOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const isAdminRoute =
+        window.location.pathname === '/admin' ||
+        window.location.pathname === '/yonetim' ||
+        window.location.hash === '#admin';
+      const initialSection = resolveRouteFromLocation().section;
+      return !isAdminRoute && initialSection === 'anasayfa';
+    }
+    return false;
+  });
   const [adminModalOpen, setAdminModalOpen] = useState(() => {
     if (typeof window !== 'undefined') {
       return (
@@ -570,6 +582,7 @@ export default function App() {
         {activeSection === 'anasayfa' && (
           <HeroBanner
             onOpenSignModal={() => setSignModalOpen(true)}
+            onOpenSolidarityPopup={() => setSolidarityPopupOpen(true)}
             signatories={signatories}
             onExploreForums={() => handleNavigate('forumlar', '/forumlar')}
             onExploreWorkingGroups={() => handleNavigate('calisma-gruplari', '/calisma-gruplari')}
@@ -632,6 +645,11 @@ export default function App() {
       />
 
       {/* Modals */}
+      <SolidarityPopupModal
+        isOpen={solidarityPopupOpen}
+        onClose={() => setSolidarityPopupOpen(false)}
+      />
+
       <SignDeclarationModal
         isOpen={signModalOpen}
         onClose={() => setSignModalOpen(false)}
