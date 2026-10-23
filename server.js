@@ -26,8 +26,8 @@ if (!fs.existsSync(uploadsDir)) {
 const DEFAULT_SIGNATORIES = [
   {
     "id": "org-43",
-    "name": "ANSAN Antalya Sanatçılar Derneği",
-    "organization": "ANSAN Antalya Sanatçılar Derneği",
+    "name": "Antalya Sanatçılar Derneği (ANSAN)",
+    "organization": "Antalya Sanatçılar Derneği (ANSAN)",
     "city": "Antalya",
     "date": "2026-10-16",
     "type": "institutional",
@@ -223,8 +223,8 @@ const DEFAULT_SIGNATORIES = [
   },
   {
     "id": "org-53",
-    "name": "Toroçder",
-    "organization": "Toroçder",
+    "name": "Toroslar ve Akdeniz Kıyıları Çevre Koruma Derneği (TORAÇDER)",
+    "organization": "Toroslar ve Akdeniz Kıyıları Çevre Koruma Derneği (TORAÇDER)",
     "city": "",
     "date": "2026-10-17",
     "type": "institutional",
@@ -557,8 +557,8 @@ const DEFAULT_SIGNATORIES = [
   },
   {
     "id": "org-1",
-    "name": "Öğrenci Veli Derneği (Velider)",
-    "organization": "Öğrenci Veli Derneği (Velider)",
+    "name": "Öğrenci Veli Derneği (VELİDER)",
+    "organization": "Öğrenci Veli Derneği (VELİDER)",
     "city": "",
     "date": "2026-10-16",
     "type": "institutional",
@@ -647,8 +647,8 @@ const DEFAULT_SIGNATORIES = [
   },
   {
     "id": "org-11",
-    "name": "Samsun Çevre Platformu (Samçep)",
-    "organization": "Samsun Çevre Platformu (Samçep)",
+    "name": "Samsun Çevre Platformu (SAMÇEP)",
+    "organization": "Samsun Çevre Platformu (SAMÇEP)",
     "city": "",
     "date": "2026-10-16",
     "type": "institutional",
@@ -1991,8 +1991,8 @@ const DEFAULT_SIGNATORIES = [
   },
   {
     "id": "sig-1792319809234",
-    "name": "ZERLANİS  - Keşan Görsel Sanatlar ve Kültürel Araştırmalar Derneği",
-    "organization": "ZERLANİS  - Keşan Görsel Sanatlar ve Kültürel Araştırmalar Derneği",
+    "name": "Keşan Görsel Sanatlar ve Kültürel Araştırmalar Derneği (ZERLANİS)",
+    "organization": "Keşan Görsel Sanatlar ve Kültürel Araştırmalar Derneği (ZERLANİS)",
     "city": "Edirne / Keşan",
     "message": "Susma, Ses Ver!",
     "date": "2026-10-18",
@@ -2468,8 +2468,8 @@ const DEFAULT_SIGNATORIES = [
   },
   {
     "id": "sig-1792338843579",
-    "name": "TÜM EMEKLİLERİN SENDİKASI İSKENDERUN TEMSİLCİLİĞİ",
-    "organization": "TÜM EMEKLİLERİN SENDİKASI İSKENDERUN TEMSİLCİLİĞİ",
+    "name": "Tüm Emeklilerin Sendikası İskenderun Temsilciliği",
+    "organization": "Tüm Emeklilerin Sendikası İskenderun Temsilciliği",
     "city": "HATAY",
     "message": "ZAMAN HAKKIMIZI İSTİYORUZ!\nSÖZ, ÖRGÜTLENME VE KARAR HAKKIMIZI İSTİYORUZ!\nÜRETİM VE YAŞAM ÜZERİNDE TOPLUMSAL DENETİM İSTİYORUZ! KURTULUŞ YOK TEK BAŞINA YA HEP BERABER YA HİÇBİRİMİZ.",
     "date": "2026-10-18",
@@ -2613,8 +2613,8 @@ const DEFAULT_SIGNATORIES = [
   },
   {
     "id": "sig-1792339976989",
-    "name": "Eğitim Sen Ödemiş Temsilciliği",
-    "organization": "Eğitim Sen Ödemiş Temsilciliği",
+    "name": "Eğitim Sen- Ödemiş Temsilciliği",
+    "organization": "Eğitim Sen- Ödemiş Temsilciliği",
     "city": "İzmir",
     "date": "2026-10-18",
     "type": "institutional",
@@ -3322,8 +3322,8 @@ const DEFAULT_SIGNATORIES = [
   },
   {
     "id": "sig-1792348974095",
-    "name": "TÜM EMEKLİLERİN SENDİKASI BOZÜYÜK ŞUBESİ",
-    "organization": "TÜM EMEKLİLERİN SENDİKASI BOZÜYÜK ŞUBESİ",
+    "name": "Tüm Emeklilerin Sendikası Bozüyük",
+    "organization": "Tüm Emeklilerin Sendikası Bozüyük",
     "city": "BOZÜYÜK/BİLECİK",
     "date": "2026-10-18",
     "type": "institutional",
@@ -3431,8 +3431,8 @@ const DEFAULT_SIGNATORIES = [
   },
   {
     "id": "sig-1792350288085",
-    "name": "Eğitim  Sen (Bilecik)",
-    "organization": "Eğitim  Sen (Bilecik)",
+    "name": "Eğitim Sen - Bilecik Temsilciliği",
+    "organization": "Eğitim Sen - Bilecik Temsilciliği",
     "city": "Bilecik",
     "date": "2026-10-18",
     "type": "institutional",
@@ -4254,8 +4254,8 @@ const DEFAULT_SIGNATORIES = [
   },
   {
     "id": "sig-1792428332016",
-    "name": "Ank. Karakoçan ve Yöresi Derneği",
-    "organization": "Ank. Karakoçan ve Yöresi Derneği",
+    "name": "Karakoçan ve Yöresi Derneği",
+    "organization": "Karakoçan ve Yöresi Derneği",
     "city": "Ankara",
     "date": "2026-10-19",
     "type": "institutional",
@@ -4316,8 +4316,8 @@ const DEFAULT_SIGNATORIES = [
   },
   {
     "id": "sig-1792440956877",
-    "name": "Batı Antalya çevre platformu",
-    "organization": "Batı Antalya çevre platformu",
+    "name": "Batı Antalya Çevre Platformu",
+    "organization": "Batı Antalya Çevre Platformu",
     "city": "Antalya",
     "date": "2026-10-19",
     "type": "institutional",
@@ -4730,8 +4730,8 @@ const DEFAULT_SIGNATORIES = [
   },
   {
     "id": "sig-1792581493344",
-    "name": "Sakarya Tüm Ememlilerin Sendikası",
-    "organization": "Sakarya Tüm Ememlilerin Sendikası",
+    "name": "Sakarya Tüm Emeklilerin Sendikası",
+    "organization": "Sakarya Tüm Emeklilerin Sendikası",
     "city": "Sakarya",
     "date": "2026-10-21",
     "type": "institutional",
@@ -4748,8 +4748,8 @@ const DEFAULT_SIGNATORIES = [
   },
   {
     "id": "sig-1792591016649",
-    "name": "VELİ DER Antalya Şubesi",
-    "organization": "VELİ DER Antalya Şubesi",
+    "name": "VELİ -DER Antalya Şubesi",
+    "organization": "VELİ -DER Antalya Şubesi",
     "city": "Antalya",
     "date": "2026-10-21",
     "type": "institutional",
@@ -4839,8 +4839,8 @@ const DEFAULT_SIGNATORIES = [
   },
   {
     "id": "sig-1792661617329",
-    "name": "Munzur Koruma Kurulu (Dedef)",
-    "organization": "Munzur Koruma Kurulu (Dedef)",
+    "name": "Munzur Koruma Kurulu (DEDEF)",
+    "organization": "Munzur Koruma Kurulu (DEDEF)",
     "city": "Ankara",
     "date": "2026-10-22",
     "type": "institutional",
@@ -4897,6 +4897,98 @@ const DEFAULT_SIGNATORIES = [
     "organization": "Fatsa Doğa ve Çevre Derneği",
     "city": "",
     "date": "2026-10-22",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792674909443",
+    "name": "Suzan Tümkaya Tan",
+    "organization": "Emekli öğretmen",
+    "city": "Erdek/ Balıkesir",
+    "date": "2026-10-22",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792677445121",
+    "name": "Murgul Siyanüre Hayır Platformu",
+    "organization": "ÇEVRE PLATFORMU",
+    "city": "ARTVİN",
+    "date": "2026-10-22",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792678383015",
+    "name": "Engin ŞENGUL",
+    "organization": "Emekli öğretmen",
+    "city": "Manisa",
+    "message": "Ya hep beraber ya hiç birimiz...",
+    "date": "2026-10-22",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792692912053",
+    "name": "Ahmet Özdemir",
+    "organization": "Eğitimci",
+    "city": "Ordu/Fatsa",
+    "date": "2026-10-22",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792733961241",
+    "name": "ATİLLA ÖZTÜRK",
+    "organization": "Emekli",
+    "city": "Antalya",
+    "message": "Dunya tüm canlılarındır.Sadece sermeyeye tahsis edilmemiştir..",
+    "date": "2026-10-23",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792737362576",
+    "name": "Erdal Barut",
+    "organization": "Emekli",
+    "city": "Manisa",
+    "date": "2026-10-23",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792764244175",
+    "name": "Hayri Aktaş",
+    "organization": "Emekli öğretmen",
+    "city": "İzmir",
+    "date": "2026-10-23",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792767679552",
+    "name": "Mesut Şahin",
+    "organization": "Kimya Mühendisi",
+    "city": "Bursa",
+    "date": "2026-10-23",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792769751774",
+    "name": "Alakır - Karacaören Doğa Kültür Derneği",
+    "organization": "Alakır - Karacaören Doğa Kültür Derneği",
+    "city": "",
+    "date": "2026-10-23",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792769752147",
+    "name": "Döşemealtı Gönüllüleri",
+    "organization": "Döşemealtı Gönüllüleri",
+    "city": "",
+    "date": "2026-10-23",
     "type": "institutional",
     "emailVerified": true
   }
@@ -4973,18 +5065,46 @@ function normalizeTrKey(str) {
     .replace(/\s+/g, ' ');
 }
 
+const CANONICAL_INSTITUTION_NAMES = {
+  'antalya sanatçılar derneği': 'Antalya Sanatçılar Derneği (ANSAN)',
+  'ansan antalya sanatçılar derneği': 'Antalya Sanatçılar Derneği (ANSAN)',
+  'antalya sanatçılar derneği (ansan)': 'Antalya Sanatçılar Derneği (ANSAN)',
+  'toroçder': 'Toroslar ve Akdeniz Kıyıları Çevre Koruma Derneği (TORAÇDER)',
+  'toroslar ve akdeniz kıyıları çevre koruma derneği (toraçder)': 'Toroslar ve Akdeniz Kıyıları Çevre Koruma Derneği (TORAÇDER)',
+  'kaş eğitim sen': 'Eğitim-Sen Kaş Şubesi',
+  'kaş koruma insiyatifi': 'Kaş Koruma İnisiyatifi',
+  'insancı felsefe sanat ve bilim çevresi': 'İnsanca Felsefe Sanat ve Bilim Çevresi',
+  'gazipaşa hepimizin platformu': 'Gazipaşa Hepimiz Platformu',
+  'zerlanis - keşan görsel sanatlar ve kültürel araştırmalar derneği': 'Keşan Görsel Sanatlar ve Kültürel Araştırmalar Derneği (ZERLANİS)',
+  'keşan görsel sanatlar ve kültürel araştırmalar derneği (zerlanis)': 'Keşan Görsel Sanatlar ve Kültürel Araştırmalar Derneği (ZERLANİS)',
+  'tüm emeklilerin sendikası iskenderun temsilciliği': 'Tüm Emeklilerin Sendikası İskenderun Temsilciliği',
+  'eğitim sen ödemiş temsilciliği': 'Eğitim Sen- Ödemiş Temsilciliği',
+  'eğitim sen- ödemiş temsilciliği': 'Eğitim Sen- Ödemiş Temsilciliği',
+  'tüm emeklilerin sendikası bozüyük şubesi': 'Tüm Emeklilerin Sendikası Bozüyük',
+  'tüm emeklilerin sendikası bozüyük': 'Tüm Emeklilerin Sendikası Bozüyük',
+  'eğitim sen (bilecik)': 'Eğitim Sen - Bilecik Temsilciliği',
+  'eğitim sen - bilecik temsilciliği': 'Eğitim Sen - Bilecik Temsilciliği',
+  'ank. karakoçan ve yöresi derneği': 'Karakoçan ve Yöresi Derneği',
+  'karakoçan ve yöresi derneği': 'Karakoçan ve Yöresi Derneği',
+  'batı antalya çevre platformu': 'Batı Antalya Çevre Platformu',
+  'sakarya tüm ememlilerin sendikası': 'Sakarya Tüm Emeklilerin Sendikası',
+  'sakarya tüm emeklilerin sendikası': 'Sakarya Tüm Emeklilerin Sendikası',
+  'veli der antalya şubesi': 'VELİ -DER Antalya Şubesi',
+  'veli -der antalya şubesi': 'VELİ -DER Antalya Şubesi',
+  'öğrenci veli derneği (velider)': 'Öğrenci Veli Derneği (VELİDER)',
+  'samsun çevre platformu (samçep)': 'Samsun Çevre Platformu (SAMÇEP)',
+  'munzur koruma kurulu (dedef)': 'Munzur Koruma Kurulu (DEDEF)'
+};
+
 function getSignatoryKey(sig) {
   if (!sig) return '';
   const isInst =
     sig.type === 'institutional' ||
     Boolean(sig.organization && sig.organization === sig.name);
   if (isInst) {
-    let orgKey = normalizeTrKey(sig.organization || sig.name);
-    if (orgKey === 'antalya sanatçılar derneği') orgKey = 'ansan antalya sanatçılar derneği';
-    if (orgKey === 'kaş eğitim sen') orgKey = 'eğitim-sen kaş şubesi';
-    if (orgKey === 'kaş koruma insiyatifi') orgKey = 'kaş koruma inisiyatifi';
-    if (orgKey === 'insancı felsefe sanat ve bilim çevresi') orgKey = 'insanca felsefe sanat ve bilim çevresi';
-    if (orgKey === 'gazipaşa hepimizin platformu') orgKey = 'gazipaşa hepimiz platformu';
+    const rawOrg = normalizeTrKey(sig.organization || sig.name);
+    const canonical = CANONICAL_INSTITUTION_NAMES[rawOrg];
+    const orgKey = canonical ? normalizeTrKey(canonical) : rawOrg;
     return `inst:${orgKey}`;
   }
   return `ind:${normalizeTrKey(sig.name)}`;
@@ -5020,9 +5140,20 @@ function isSignatoryRemoved(sig, removedSet) {
 
 function deduplicateSignatories(list, removedSet = new Set()) {
   const map = new Map();
-  for (const sig of list) {
-    if (!sig || (!sig.name && !sig.organization)) continue;
-    if (isSignatoryRemoved(sig, removedSet)) continue;
+  for (const rawSig of list) {
+    if (!rawSig || (!rawSig.name && !rawSig.organization)) continue;
+    if (isSignatoryRemoved(rawSig, removedSet)) continue;
+    const sig = { ...rawSig };
+    const isInst =
+      sig.type === 'institutional' ||
+      Boolean(sig.organization && sig.organization === sig.name);
+    if (isInst) {
+      const canonical = CANONICAL_INSTITUTION_NAMES[normalizeTrKey(sig.organization || sig.name)];
+      if (canonical) {
+        sig.name = canonical;
+        sig.organization = canonical;
+      }
+    }
     const key = getSignatoryKey(sig);
     if (!key) continue;
     const prev = map.get(key);

@@ -89,17 +89,45 @@ function normalizeTrKey(str: string | undefined): string {
     .replace(/\s+/g, ' ');
 }
 
+const CANONICAL_INSTITUTION_NAMES: Record<string, string> = {
+  'antalya sanatçılar derneği': 'Antalya Sanatçılar Derneği (ANSAN)',
+  'ansan antalya sanatçılar derneği': 'Antalya Sanatçılar Derneği (ANSAN)',
+  'antalya sanatçılar derneği (ansan)': 'Antalya Sanatçılar Derneği (ANSAN)',
+  'toroçder': 'Toroslar ve Akdeniz Kıyıları Çevre Koruma Derneği (TORAÇDER)',
+  'toroslar ve akdeniz kıyıları çevre koruma derneği (toraçder)': 'Toroslar ve Akdeniz Kıyıları Çevre Koruma Derneği (TORAÇDER)',
+  'kaş eğitim sen': 'Eğitim-Sen Kaş Şubesi',
+  'kaş koruma insiyatifi': 'Kaş Koruma İnisiyatifi',
+  'insancı felsefe sanat ve bilim çevresi': 'İnsanca Felsefe Sanat ve Bilim Çevresi',
+  'gazipaşa hepimizin platformu': 'Gazipaşa Hepimiz Platformu',
+  'zerlanis - keşan görsel sanatlar ve kültürel araştırmalar derneği': 'Keşan Görsel Sanatlar ve Kültürel Araştırmalar Derneği (ZERLANİS)',
+  'keşan görsel sanatlar ve kültürel araştırmalar derneği (zerlanis)': 'Keşan Görsel Sanatlar ve Kültürel Araştırmalar Derneği (ZERLANİS)',
+  'tüm emeklilerin sendikası iskenderun temsilciliği': 'Tüm Emeklilerin Sendikası İskenderun Temsilciliği',
+  'eğitim sen ödemiş temsilciliği': 'Eğitim Sen- Ödemiş Temsilciliği',
+  'eğitim sen- ödemiş temsilciliği': 'Eğitim Sen- Ödemiş Temsilciliği',
+  'tüm emeklilerin sendikası bozüyük şubesi': 'Tüm Emeklilerin Sendikası Bozüyük',
+  'tüm emeklilerin sendikası bozüyük': 'Tüm Emeklilerin Sendikası Bozüyük',
+  'eğitim sen (bilecik)': 'Eğitim Sen - Bilecik Temsilciliği',
+  'eğitim sen - bilecik temsilciliği': 'Eğitim Sen - Bilecik Temsilciliği',
+  'ank. karakoçan ve yöresi derneği': 'Karakoçan ve Yöresi Derneği',
+  'karakoçan ve yöresi derneği': 'Karakoçan ve Yöresi Derneği',
+  'batı antalya çevre platformu': 'Batı Antalya Çevre Platformu',
+  'sakarya tüm ememlilerin sendikası': 'Sakarya Tüm Emeklilerin Sendikası',
+  'sakarya tüm emeklilerin sendikası': 'Sakarya Tüm Emeklilerin Sendikası',
+  'veli der antalya şubesi': 'VELİ -DER Antalya Şubesi',
+  'veli -der antalya şubesi': 'VELİ -DER Antalya Şubesi',
+  'öğrenci veli derneği (velider)': 'Öğrenci Veli Derneği (VELİDER)',
+  'samsun çevre platformu (samçep)': 'Samsun Çevre Platformu (SAMÇEP)',
+  'munzur koruma kurulu (dedef)': 'Munzur Koruma Kurulu (DEDEF)'
+};
+
 function getSignatoryIdentityKey(sig: Signatory): string {
   const isInst =
     sig.type === 'institutional' ||
     Boolean(sig.organization && sig.organization === sig.name);
   if (isInst) {
-    let orgKey = normalizeTrKey(sig.organization || sig.name);
-    if (orgKey === 'antalya sanatçılar derneği') orgKey = 'ansan antalya sanatçılar derneği';
-    if (orgKey === 'kaş eğitim sen') orgKey = 'eğitim-sen kaş şubesi';
-    if (orgKey === 'kaş koruma insiyatifi') orgKey = 'kaş koruma inisiyatifi';
-    if (orgKey === 'insancı felsefe sanat ve bilim çevresi') orgKey = 'insanca felsefe sanat ve bilim çevresi';
-    if (orgKey === 'gazipaşa hepimizin platformu') orgKey = 'gazipaşa hepimiz platformu';
+    const rawOrg = normalizeTrKey(sig.organization || sig.name);
+    const canonical = CANONICAL_INSTITUTION_NAMES[rawOrg];
+    const orgKey = canonical ? normalizeTrKey(canonical) : rawOrg;
     return `inst:${orgKey}`;
   }
   return `ind:${normalizeTrKey(sig.name)}`;
@@ -131,13 +159,16 @@ function mergeAndDeduplicateSignatories(
       const idKey = normalizeTrKey(rawSig.id);
       if (OBSOLETE_DUPLICATE_IDS.has(idKey)) continue;
       const sig = { ...rawSig };
-      if (normalizeTrKey(sig.organization || sig.name) === 'antalya sanatçılar derneği') {
-        sig.name = 'ANSAN Antalya Sanatçılar Derneği';
-        sig.organization = 'ANSAN Antalya Sanatçılar Derneği';
-      }
       const isInst =
         sig.type === 'institutional' ||
         Boolean(sig.organization && sig.organization === sig.name);
+      if (isInst) {
+        const canonical = CANONICAL_INSTITUTION_NAMES[normalizeTrKey(sig.organization || sig.name)];
+        if (canonical) {
+          sig.name = canonical;
+          sig.organization = canonical;
+        }
+      }
       const nameKey = isInst
         ? normalizeTrKey(sig.organization || sig.name)
         : normalizeTrKey(sig.name);
