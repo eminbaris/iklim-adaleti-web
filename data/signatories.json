@@ -207,10 +207,10 @@
   },
   {
     "id": "org-54",
-    "name": "İzmir Varto Ekoloji",
-    "organization": "İzmir Varto Ekoloji",
+    "name": "İzmir Varto ekoloji",
+    "organization": "İzmir Varto ekoloji",
     "city": "İzmir",
-    "date": "2026-10-17",
+    "date": "2026-10-25",
     "type": "institutional",
     "emailVerified": true
   },
@@ -4965,6 +4965,50 @@
     "city": "Artvin",
     "date": "2026-10-22",
     "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792878002465",
+    "name": "Duygu Kozanoğlu",
+    "organization": "Avukat",
+    "city": "Antalya",
+    "date": "2026-10-24",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792956772209",
+    "name": "Hande Selin Aydın",
+    "organization": "Avukat",
+    "city": "Antalya",
+    "date": "2026-10-25",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1792958431199",
+    "name": "Ş. Can Göksu",
+    "organization": "Avukat",
+    "city": "Antalya",
+    "date": "2026-10-25",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793005547392",
+    "name": "Mine Batur",
+    "organization": "Emekli",
+    "city": "Sinop",
+    "date": "2026-10-26",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793015902650",
+    "name": "Neslihan Öztabur",
+    "city": "Antalya",
+    "date": "2026-10-26",
+    "type": "individual",
     "emailVerified": true
   }
 ]

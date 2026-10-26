@@ -25,6 +25,7 @@ import {
   INITIAL_SIGNATORIES,
   INITIAL_EXTRA_SIGNATORIES,
   INITIAL_FORUMS,
+  INITIAL_DECLARATIONS,
   INITIAL_POLICIES,
   INITIAL_EVENTS
 } from './data/forumData.ts';
@@ -214,7 +215,7 @@ function mergeAndDeduplicateSignatories(
 export default function App() {
   const [forums, setForums] = useState<Article[]>(INITIAL_FORUMS);
   const [workingGroups, setWorkingGroups] = useState<WorkingGroup[]>([]);
-  const [declarations, setDeclarations] = useState<Article[]>([]);
+  const [declarations, setDeclarations] = useState<Article[]>(INITIAL_DECLARATIONS);
   const [policies, setPolicies] = useState<Article[]>(INITIAL_POLICIES);
   const [events, setEvents] = useState<ForumEvent[]>(INITIAL_EVENTS);
   const [removedSignatoryIds, setRemovedSignatoryIds] = useState<string[]>([]);
@@ -286,7 +287,7 @@ export default function App() {
         setRemovedSignatoryIds(removed);
         if (Array.isArray(data.forums) && data.forums.length > 0) setForums(data.forums);
         if (Array.isArray(data.workingGroups)) setWorkingGroups(data.workingGroups);
-        if (Array.isArray(data.declarations)) setDeclarations(data.declarations);
+        if (Array.isArray(data.declarations) && data.declarations.length > 0) setDeclarations(data.declarations);
         if (Array.isArray(data.policies) && data.policies.length > 0) setPolicies(data.policies);
         if (Array.isArray(data.events) && data.events.length > 0) setEvents(data.events);
         if (Array.isArray(data.signatories)) {

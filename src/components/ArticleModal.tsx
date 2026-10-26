@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { X, Calendar, Clock, Share2, Printer, Check, Tag, FileText } from 'lucide-react';
 import { Article } from '../types.ts';
 import { formatTurkishDate } from '../utils/contentLogic.ts';
+import { renderFormattedDeclarationParagraph } from './SonucBildirgesiSection.tsx';
 
 interface ArticleModalProps {
   article: Article | null;
@@ -173,29 +174,9 @@ export default function ArticleModal({
 
           {/* Article Full Content with Editorial Paragraphs */}
           <div className="text-stone-800 text-sm sm:text-base leading-relaxed space-y-4 font-sans">
-            {paragraphs.map((paragraph, idx) => {
-              if (idx === 0) {
-                return (
-                  <p key={idx} className="editorial-drop-cap">
-                    {paragraph}
-                  </p>
-                );
-              }
-
-              if (
-                paragraph.startsWith('TEMEL TALEPLERİMİZ') ||
-                paragraph.startsWith('Önerdiğimiz') ||
-                paragraph.startsWith('Bizler')
-              ) {
-                return (
-                  <h4 key={idx} className="font-serif text-lg font-bold text-stone-900 pt-3">
-                    {paragraph}
-                  </h4>
-                );
-              }
-
-              return <p key={idx}>{paragraph}</p>;
-            })}
+            {paragraphs.map((paragraph, idx) =>
+              renderFormattedDeclarationParagraph(paragraph, idx)
+            )}
           </div>
 
           {/* Signable CTA if it is the declaration */}

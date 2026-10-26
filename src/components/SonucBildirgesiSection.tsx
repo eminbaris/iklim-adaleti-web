@@ -3,7 +3,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { RefreshCw, FileText, ArrowUpRight } from 'lucide-react';
+import { useState } from 'react';
+import {
+  RefreshCw,
+  FileText,
+  ArrowUpRight,
+  Calendar,
+  MapPin,
+  Users,
+  ChevronDown,
+  ChevronUp,
+  CheckCircle2
+} from 'lucide-react';
 import { Article } from '../types.ts';
 import { getYoutubeEmbedUrl } from './ArticleModal.tsx';
 
@@ -13,10 +24,89 @@ interface SonucBildirgesiSectionProps {
   onOpenSignModal: () => void;
 }
 
+const DECLARATION_SECTION_HEADINGS = new Set([
+  'Forumun Katılımcı Yapısı ve Demokratik İşleyişi',
+  'Forumun Kuruluşu ve Niteliği',
+  'Sekreteryanın Kurulması ve Yapısı',
+  'İklim Adaleti Tanımı ve İlkeleri',
+  'Antalya Bağlamında İklim Adaletsizliği: Yerel Sorunlar ve İhlaller',
+  'Forumun Amacı ve Misyonu',
+  'Dayanışma ve Ulusal/Uluslararası Zemin',
+  'Gelecek Planlaması ve Yol Haritası',
+  'SONUÇ: Katılımcı Demokrasiyle İklim Adaleti Mücadelesine Çağrı'
+]);
+
+export function renderFormattedDeclarationParagraph(paragraph: string, idx: number) {
+  const trimmed = paragraph.trim();
+
+  if (DECLARATION_SECTION_HEADINGS.has(trimmed)) {
+    return (
+      <h4
+        key={idx}
+        className="font-serif text-lg sm:text-xl font-bold text-[#0B4F71] pt-5 pb-1.5 border-b border-stone-200"
+      >
+        {trimmed}
+      </h4>
+    );
+  }
+
+  if (trimmed === 'İklim Adaleti Forumu Sekreteryası') {
+    return (
+      <p
+        key={idx}
+        className="font-serif text-base sm:text-lg font-bold text-stone-900 pt-3 text-right"
+      >
+        — {trimmed}
+      </p>
+    );
+  }
+
+  // Numbered article (e.g. "1. Antalya İklim Adaleti Forumu...")
+  const numMatch = trimmed.match(/^(\d{1,2}\.)\s+([\s\S]+)$/);
+  if (numMatch) {
+    return (
+      <p key={idx} className="text-stone-800 leading-relaxed">
+        <span className="inline-flex items-center justify-center px-2 py-0.5 mr-2 rounded-md bg-[#0B4F71]/10 text-[#0B4F71] font-bold text-xs sm:text-sm">
+          Madde {numMatch[1].replace('.', '')}
+        </span>
+        {numMatch[2]}
+      </p>
+    );
+  }
+
+  // Sub-topic with colon (e.g. "Kıyıların ve Doğal Alanların Tahribatı: ...")
+  const colonMatch = trimmed.match(/^([A-ZÇĞİÖŞÜ][^:]{3,55}:)\s+([\s\S]+)$/);
+  if (colonMatch) {
+    return (
+      <div
+        key={idx}
+        className="pl-3.5 sm:pl-4 border-l-3 border-[#3E8226]/70 bg-stone-50/80 py-2.5 px-3 rounded-r-lg text-stone-800 leading-relaxed"
+      >
+        <strong className="text-stone-950 font-bold">{colonMatch[1]} </strong>
+        <span>{colonMatch[2]}</span>
+      </div>
+    );
+  }
+
+  return (
+    <p key={idx} className="text-stone-800 leading-relaxed">
+      {trimmed}
+    </p>
+  );
+}
+
 export default function SonucBildirgesiSection({
   declarations = [],
   onReadFull
 }: SonucBildirgesiSectionProps) {
+  const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({
+    'decl-antalya-2026-01-28': true
+  });
+
+  const toggleExpand = (id: string) => {
+    setExpandedIds((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
   return (
     <section
       id="sonuc-bildirgeleri"
@@ -38,7 +128,9 @@ export default function SonucBildirgesiSection({
           </div>
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-stone-100 text-stone-600 text-xs font-semibold">
             <RefreshCw className="w-3.5 h-3.5 text-[#0B4F71]" />
-            <span>{declarations.length > 0 ? `${declarations.length} Bildirge` : 'Güncelleniyor'}</span>
+            <span>
+              {declarations.length > 0 ? `${declarations.length} Bildirge` : 'Güncelleniyor'}
+            </span>
           </span>
         </div>
 
@@ -48,37 +140,60 @@ export default function SonucBildirgesiSection({
               İçerik güncelleniyor...
             </p>
             <p className="text-sm text-stone-500 max-w-lg mx-auto">
-              Gerçekleştirilen forumların sonuç bildirgeleri ve ortak karar metinleri yakında bu bölümde yayınlanacaktır.
+              Gerçekleştirilen forumların sonuç bildirgeleri ve ortak karar metinleri yakında bu
+              bölümde yayınlanacaktır.
             </p>
           </div>
         ) : (
-          <div className="mt-8 space-y-6">
+          <div className="mt-8 space-y-8">
             {declarations.map((decl) => {
               const ytEmbed = getYoutubeEmbedUrl(decl.videoUrl);
+              const isExpanded = Boolean(expandedIds[decl.id]);
+              const paragraphs = Array.isArray(decl.content)
+                ? decl.content
+                : String(decl.content || '').split('\n\n');
+
               return (
-                <div
+                <article
                   key={decl.id}
-                  className="bg-[#FBF9F5] border border-stone-200 rounded-xl p-6 sm:p-8 flex flex-col gap-6"
+                  className="bg-[#FBF9F5] border border-stone-200/90 rounded-2xl p-6 sm:p-8 shadow-xs flex flex-col gap-6"
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                    <div className="space-y-2 max-w-3xl">
-                      <div className="flex items-center gap-2 text-xs font-bold text-[#0B4F71]">
-                        <span>{decl.date}</span>
-                        <span>·</span>
-                        <span>{decl.author}</span>
-                      </div>
-                      <h3 className="font-serif text-xl sm:text-2xl font-bold text-stone-900">
+                  {/* 1. Üst Künye Rozetleri */}
+                  <div className="flex flex-wrap items-center gap-2 text-xs font-bold">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0B4F71] text-white">
+                      <Calendar className="w-3.5 h-3.5" />
+                      <span>{decl.date}</span>
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-[#0B4F71]">
+                      <MapPin className="w-3.5 h-3.5" />
+                      <span>{decl.author}</span>
+                    </span>
+                    {decl.authorRole && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[#3E8226]">
+                        <Users className="w-3.5 h-3.5" />
+                        <span>{decl.authorRole}</span>
+                      </span>
+                    )}
+                  </div>
+
+                  {/* 2. Başlık, Özet ve Eylem Butonları */}
+                  <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
+                    <div className="space-y-3 max-w-3xl">
+                      <h3 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900 leading-tight">
                         {decl.title}
                       </h3>
-                      <p className="text-sm text-stone-600 leading-relaxed">{decl.excerpt}</p>
+                      <p className="text-sm sm:text-base text-stone-700 leading-relaxed">
+                        {decl.excerpt}
+                      </p>
                     </div>
-                    <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
+
+                    <div className="flex flex-wrap items-center gap-3 shrink-0">
                       {decl.pdfUrl && (
                         <a
                           href={decl.pdfUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-stone-300 bg-white text-xs font-bold text-stone-700 hover:border-[#0B4F71]"
+                          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-stone-300 bg-white text-xs sm:text-sm font-bold text-stone-700 hover:border-[#0B4F71]"
                         >
                           <FileText className="w-4 h-4 text-[#3E8226]" />
                           <span>PDF İndir / Görüntüle</span>
@@ -86,14 +201,58 @@ export default function SonucBildirgesiSection({
                       )}
                       <button
                         type="button"
-                        onClick={() => onReadFull(decl)}
-                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-[#0B4F71] text-white text-xs font-bold hover:bg-[#083B54] cursor-pointer"
+                        onClick={() => toggleExpand(decl.id)}
+                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-[#0B4F71]/30 bg-white text-[#0B4F71] text-xs sm:text-sm font-bold hover:bg-sky-50 transition-colors cursor-pointer"
                       >
-                        <span>Tam Metni Oku</span>
+                        {isExpanded ? (
+                          <>
+                            <ChevronUp className="w-4 h-4" />
+                            <span>Metni Daralt</span>
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="w-4 h-4" />
+                            <span>Sayfada Tam Metni Aç</span>
+                          </>
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => onReadFull(decl)}
+                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#0B4F71] text-white text-xs sm:text-sm font-bold hover:bg-[#083B54] transition-colors cursor-pointer"
+                      >
+                        <span>Tam Ekran Oku / Yazdır</span>
                         <ArrowUpRight className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
+
+                  {/* 3. Ana Başlıklar Özeti (İçindekiler Şeridi) */}
+                  {decl.keyPoints && decl.keyPoints.length > 0 && (
+                    <div className="bg-white border border-stone-200/90 rounded-xl p-4 sm:p-5">
+                      <span className="text-[11px] font-extrabold uppercase tracking-wider text-stone-500 block mb-3">
+                        Bildirge Ana Başlıkları (26 Madde)
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+                        {decl.keyPoints.map((pt, i) => (
+                          <div
+                            key={i}
+                            className="flex items-start gap-2 text-xs font-semibold text-stone-700 bg-stone-50/80 px-3 py-2 rounded-lg border border-stone-200/60"
+                          >
+                            <CheckCircle2 className="w-3.5 h-3.5 text-[#3E8226] shrink-0 mt-0.5" />
+                            <span>{pt}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 4. Açılır/Kapanır Tam Metin Okuma Alanı */}
+                  {isExpanded && paragraphs.length > 0 && (
+                    <div className="bg-white border border-stone-200 rounded-xl p-5 sm:p-8 space-y-4 text-sm sm:text-base">
+                      {paragraphs.map((p, idx) => renderFormattedDeclarationParagraph(p, idx))}
+                    </div>
+                  )}
 
                   {(decl.imageUrl || decl.videoUrl) && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-stone-200/70">
@@ -122,7 +281,7 @@ export default function SonucBildirgesiSection({
                       )}
                     </div>
                   )}
-                </div>
+                </article>
               );
             })}
           </div>
