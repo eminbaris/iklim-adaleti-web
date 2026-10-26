@@ -5010,5 +5010,14 @@
     "date": "2026-10-26",
     "type": "individual",
     "emailVerified": true
+  },
+  {
+    "id": "sig-1793039325984",
+    "name": "Erdem Erdemir",
+    "organization": "Emekli",
+    "city": "Sinop",
+    "date": "2026-10-26",
+    "type": "individual",
+    "emailVerified": true
   }
 ]

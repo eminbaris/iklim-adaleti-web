@@ -5035,6 +5035,15 @@ const DEFAULT_SIGNATORIES = [
     "date": "2026-10-26",
     "type": "individual",
     "emailVerified": true
+  },
+  {
+    "id": "sig-1793039325984",
+    "name": "Erdem Erdemir",
+    "organization": "Emekli",
+    "city": "Sinop",
+    "date": "2026-10-26",
+    "type": "individual",
+    "emailVerified": true
   }
 ];
 
@@ -6442,9 +6451,9 @@ ${urlsXml}
 </urlset>`);
   });
 
-  app.use(express.static(distPath));
+  app.use(express.static(distPath, { index: false }));
 
-  // 10. Dynamic SEO & WhatsApp/Social OpenGraph Meta Injection for SPA routes
+  // 10. Dynamic SEO, JSON-LD Structured Data & Pre-Rendered Crawler Content for SPA routes
   app.use((req, res) => {
     const indexPath = path.join(distPath, 'index.html');
     if (!fs.existsSync(indexPath)) {
@@ -6454,11 +6463,14 @@ ${urlsXml}
       let html = fs.readFileSync(indexPath, 'utf-8');
       const cleanPath = (req.path || '/').replace(/\/+$/, '') || '/';
       const cms = readCmsData();
+      const signatories = readExtraSignatories(cms);
+      const instCount = signatories.filter((s) => s.type === 'institutional').length;
+      const indCount = signatories.filter((s) => s.type !== 'institutional').length;
 
       let pageTitle =
         'COP31’e Doğru İklim Adaleti Forumu – iklimadaleti.org | Zamanımızı, Yaşamımızı, Geleceğimizi İstiyoruz';
       let pageDesc =
-        'COP31’e Doğru İklim Adaleti Forumu resmi platformu (iklimadaleti.org). Çağrı metni, imzacı kurumlar, yerel iklim adaleti forumları, etkinlik takvimi, politika ve program belgeleri.';
+        `COP31’e Doğru İklim Adaleti Forumu resmi platformu (iklimadaleti.org). Çağrı metni (${instCount} imzacı kurum, ${indCount} bireysel imzacı), Samsun, İzmir ve Antalya sonuç bildirgeleri, yerel forumlar, etkinlik takvimi ve politika belgesi.`;
       let pageUrl = `https://iklimadaleti.org${cleanPath === '/' ? '/' : cleanPath}`;
       let pageImage = 'https://iklimadaleti.org/favicon.png';
 
@@ -6491,7 +6503,7 @@ ${urlsXml}
       } else if (cleanPath === '/etkinlikler' || cleanPath === '/etkinlik-takvimi') {
         pageTitle = 'Etkinlik Takvimi | COP31’e Doğru İklim Adaleti Forumu';
         pageDesc =
-          'Türkiye genelinde düzenlenen yerel İklim Adaleti Forumları, buluşmalar, paneller ve COP31 Antalya hazırlık takvimi.';
+          'Türkiye genelinde düzenlenen yerel İklim Adaleti Forumları, buluşmalar, paneller ve 15–17 Kasım 2026 COP31 Antalya hazırlık takvimi.';
       } else if (cleanPath === '/forumlar') {
         pageTitle = 'Forumlar & Yerel Buluşmalar | COP31’e Doğru İklim Adaleti Forumu';
         pageDesc =
@@ -6501,9 +6513,9 @@ ${urlsXml}
         pageDesc =
           'İklim Adaleti Forumu Program, Örgütlenme ve Strateji Belgesi: Demokratik dönüşüm ve toplumsal denetim programı.';
       } else if (cleanPath === '/sonuc-bildirgeleri') {
-        pageTitle = 'Sonuç Bildirgeleri | COP31’e Doğru İklim Adaleti Forumu';
+        pageTitle = 'Sonuç Bildirgeleri (Samsun, İzmir, Antalya) | COP31’e Doğru İklim Adaleti Forumu';
         pageDesc =
-          'Gerçekleştirilen İklim Adaleti Forumlarının sonuç bildirgeleri ve ortak deklarasyonları.';
+          'Samsun (17 Ekim 2026), İzmir (10 Haziran 2026) ve Antalya (28 Ocak 2026) İklim Adaleti Forumları sonuç bildirgeleri ve ortak deklarasyon metinleri.';
       } else if (cleanPath === '/calisma-gruplari') {
         pageTitle = 'Çalışma Grupları | COP31’e Doğru İklim Adaleti Forumu';
         pageDesc = 'İklim Adaleti Forumu çalışma grupları ve ortak mücadele başlıkları.';
@@ -6513,6 +6525,134 @@ ${urlsXml}
       const safeDesc = escapeHtml(pageDesc);
       const safeUrl = escapeHtml(pageUrl);
       const safeImg = escapeHtml(pageImage);
+
+      // Build Dynamic Schema.org JSON-LD Graph (Articles + Events + Organization + FAQPage)
+      const declarationSchemas = (cms.declarations || []).map((decl) => ({
+        '@type': 'Article',
+        headline: String(decl.title || '').slice(0, 180),
+        description: String(decl.excerpt || '').slice(0, 300),
+        datePublished: '2026-10-17',
+        inLanguage: 'tr-TR',
+        author: {
+          '@type': 'Organization',
+          name: String(decl.author || 'İklim Adaleti Forumu')
+        },
+        publisher: {
+          '@id': 'https://iklimadaleti.org/#organization'
+        },
+        mainEntityOfPage: 'https://iklimadaleti.org/sonuc-bildirgeleri'
+      }));
+
+      const eventSchemas = (cms.events || []).slice(0, 15).map((ev) => ({
+        '@type': 'Event',
+        name: String(ev.title || ''),
+        startDate: '2026-10-17',
+        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+        eventStatus: 'https://schema.org/EventScheduled',
+        location: {
+          '@type': 'Place',
+          name: String(ev.location || 'Türkiye'),
+          address: {
+            '@type': 'PostalAddress',
+            addressLocality: String(ev.location || 'Türkiye'),
+            addressCountry: 'TR'
+          }
+        },
+        description: String(ev.description || ev.title || '').slice(0, 300),
+        organizer: {
+          '@id': 'https://iklimadaleti.org/#organization'
+        },
+        url: `https://iklimadaleti.org/etkinlikler/${encodeURIComponent(toEventSlug(ev))}`
+      }));
+
+      const dynamicJsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'Organization',
+            '@id': 'https://iklimadaleti.org/#organization',
+            name: 'İklim Adaleti Forumu',
+            alternateName: "COP31'e Doğru İklim Adaleti Forumu",
+            url: 'https://iklimadaleti.org',
+            logo: 'https://iklimadaleti.org/favicon.png',
+            email: 'iklimadaleti2026@gmail.com',
+            sameAs: ['https://www.instagram.com/iklimadaletiforumu'],
+            description:
+              "COP31'e Doğru İklim Adaleti Forumu: İklim krizine karşı emeğin, doğanın, demokratik dönüşümün ve toplumsal denetimin ortak mücadele zemini.",
+            knowsAbout: [
+              'İklim Adaleti',
+              'COP31',
+              'COP31 Antalya',
+              'Demokratik Dönüşüm',
+              'Ekolojik Mücadele',
+              'Adil Geçiş',
+              'Sonuç Bildirgesi'
+            ]
+          },
+          {
+            '@type': 'WebSite',
+            '@id': 'https://iklimadaleti.org/#website',
+            url: 'https://iklimadaleti.org',
+            name: 'İklim Adaleti Forumu',
+            inLanguage: 'tr-TR',
+            publisher: {
+              '@id': 'https://iklimadaleti.org/#organization'
+            }
+          },
+          {
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: 'COP31’e Doğru İklim Adaleti Forumu nedir?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'COP31’e Doğru İklim Adaleti Forumu; ekoloji örgütlerinin, emek ve meslek örgütlerinin, kadın ve gençlik hareketlerinin iklim krizine, ekolojik yıkıma ve şirket odaklı yeşil aklama politikalarına karşı 15–16–17 Kasım 2026 Antalya buluşmasına doğru kurduğu ortak mücadele ve dayanışma zeminidir.'
+                }
+              },
+              {
+                '@type': 'Question',
+                name: 'İklim Adaleti Forumu Sonuç Bildirgeleri hangi illerde yayınlandı?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: '28 Ocak 2026 Antalya İklim Adaleti Forumu Sonuç Bildirgesi, 10 Haziran 2026 İzmir İklim Adaleti Forumu Toplantı Raporu ve Sonuç Metni ile 17 Ekim 2026 COP31’e Doğru Yerellerin İklim Adaleti Forumu Samsun Sonuç Bildirgesi resmi olarak yayınlanmıştır.'
+                }
+              },
+              {
+                '@type': 'Question',
+                name: 'İklim Adaleti Forumu Çağrı Metni nasıl imzalanır?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'iklimadaleti.org ana sayfasındaki "Çağrı Metnini İmzala" butonuna tıklayarak kurum adına veya bireysel olarak tek tıkla imzanızı ekleyebilirsiniz.'
+                }
+              }
+            ]
+          },
+          ...declarationSchemas,
+          ...eventSchemas
+        ]
+      };
+
+      const safeJsonLdString = JSON.stringify(dynamicJsonLd)
+        .replace(/</g, '\\u003c')
+        .replace(/>/g, '\\u003e');
+
+      // Build Server-Side Pre-Rendered Semantic HTML inside #root for search engine crawlers
+      const declarationsHtml = (cms.declarations || [])
+        .map(
+          (d) =>
+            `<article><h2>${escapeHtml(d.title)} (${escapeHtml(d.date)})</h2><p>${escapeHtml(d.excerpt)}</p></article>`
+        )
+        .join('');
+      const eventsHtml = (cms.events || [])
+        .slice(0, 20)
+        .map(
+          (e) =>
+            `<li><a href="https://iklimadaleti.org/etkinlikler/${encodeURIComponent(toEventSlug(e))}">${escapeHtml(e.title)} – ${escapeHtml(e.date)} (${escapeHtml(e.location || '')})</a></li>`
+        )
+        .join('');
+
+      const seoPrerenderHtml = `<div id="root"><main style="max-width:960px;margin:0 auto;padding:24px;font-family:sans-serif"><h1>${safeTitle}</h1><p>${safeDesc}</p><nav><a href="https://iklimadaleti.org/">Ana Sayfa &amp; Çağrı Metni</a> | <a href="https://iklimadaleti.org/etkinlikler">Etkinlik Takvimi</a> | <a href="https://iklimadaleti.org/forumlar">Forumlar</a> | <a href="https://iklimadaleti.org/calisma-gruplari">Çalışma Grupları</a> | <a href="https://iklimadaleti.org/sonuc-bildirgeleri">Sonuç Bildirgeleri</a> | <a href="https://iklimadaleti.org/politika-program">Politika / Program Belgesi</a></nav><section>${declarationsHtml}</section><ul>${eventsHtml}</ul></main></div>`;
 
       html = html
         .replace(/<title>[\s\S]*?<\/title>/, `<title>${safeTitle}</title>`)
@@ -6551,9 +6691,17 @@ ${urlsXml}
         .replace(
           /<meta name="twitter:image" content="[^"]*" \/>/,
           `<meta name="twitter:image" content="${safeImg}" />`
-        );
+        )
+        .replace(
+          /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
+          `<script type="application/ld+json">${safeJsonLdString}</script>`
+        )
+        .replace('<div id="root"></div>', seoPrerenderHtml);
 
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+      res.setHeader('X-Frame-Options', 'SAMEORIGIN');
       return res.send(html);
     } catch {
       return res.sendFile(indexPath);
