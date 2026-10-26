@@ -6399,7 +6399,12 @@ function createServer() {
       .replace(/^-+|-+$/g, '');
   }
 
-  // 8. SEO: robots.txt
+  // 8. SEO: robots.txt & Google Search Console verification
+  app.get('/googlec83a48f08a940b2f.html', (_req, res) => {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send('google-site-verification: googlec83a48f08a940b2f.html');
+  });
+
   app.get('/robots.txt', (_req, res) => {
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
     res.send(
