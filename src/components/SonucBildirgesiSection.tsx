@@ -33,7 +33,8 @@ const DECLARATION_SECTION_HEADINGS = new Set([
   'Forumun Amacı ve Misyonu',
   'Dayanışma ve Ulusal/Uluslararası Zemin',
   'Gelecek Planlaması ve Yol Haritası',
-  'SONUÇ: Katılımcı Demokrasiyle İklim Adaleti Mücadelesine Çağrı'
+  'SONUÇ: Katılımcı Demokrasiyle İklim Adaleti Mücadelesine Çağrı',
+  'SON SÖZÜMÜZ'
 ]);
 
 export function renderFormattedDeclarationParagraph(paragraph: string, idx: number) {
@@ -50,7 +51,10 @@ export function renderFormattedDeclarationParagraph(paragraph: string, idx: numb
     );
   }
 
-  if (trimmed === 'İklim Adaleti Forumu Sekreteryası') {
+  if (
+    trimmed === 'İklim Adaleti Forumu Sekreteryası' ||
+    trimmed === 'COP31’E DOĞRU YERELLERİN İKLİM ADALETİ FORUMU - SAMSUN'
+  ) {
     return (
       <p
         key={idx}
@@ -100,7 +104,7 @@ export default function SonucBildirgesiSection({
   onReadFull
 }: SonucBildirgesiSectionProps) {
   const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({
-    'decl-antalya-2026-01-28': true
+    'decl-samsun-2026-10-17': true
   });
 
   const toggleExpand = (id: string) => {
@@ -231,7 +235,7 @@ export default function SonucBildirgesiSection({
                   {decl.keyPoints && decl.keyPoints.length > 0 && (
                     <div className="bg-white border border-stone-200/90 rounded-xl p-4 sm:p-5">
                       <span className="text-[11px] font-extrabold uppercase tracking-wider text-stone-500 block mb-3">
-                        Bildirge Ana Başlıkları (26 Madde)
+                        Bildirge / Rapor Ana Başlıkları ({decl.keyPoints.length} Başlık)
                       </span>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
                         {decl.keyPoints.map((pt, i) => (
