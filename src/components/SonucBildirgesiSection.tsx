@@ -13,7 +13,9 @@ import {
   Users,
   ChevronDown,
   ChevronUp,
-  CheckCircle2
+  CheckCircle2,
+  Share2,
+  Check
 } from 'lucide-react';
 import { Article } from '../types.ts';
 import { getYoutubeEmbedUrl } from './ArticleModal.tsx';
@@ -106,9 +108,17 @@ export default function SonucBildirgesiSection({
   const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({
     'decl-samsun-2026-10-17': true
   });
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const toggleExpand = (id: string) => {
     setExpandedIds((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleCopyLink = (id: string, title: string) => {
+    const shareUrl = 'https://iklimadaleti.org/sonuc-bildirgeleri';
+    navigator.clipboard.writeText(`${title} — ${shareUrl}`);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2500);
   };
 
   return (
@@ -229,6 +239,58 @@ export default function SonucBildirgesiSection({
                         <ArrowUpRight className="w-4 h-4" />
                       </button>
                     </div>
+                  </div>
+
+                  {/* 2.5 Hızlı Sosyal Medya Paylaşım Şeridi */}
+                  <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-stone-200/80">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-stone-500 mr-1">
+                      <Share2 className="w-3.5 h-3.5 text-[#0B4F71]" />
+                      <span>Bildirgeyi Paylaş:</span>
+                    </span>
+                    <a
+                      href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                        `🌱 ${decl.title} (${decl.date}) yayında! Okumak ve paylaşmak için: https://iklimadaleti.org/sonuc-bildirgeleri`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C7E] border border-[#25D366]/30 text-xs font-bold transition-colors"
+                    >
+                      <span>WhatsApp</span>
+                    </a>
+                    <a
+                      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                        `🌱 ${decl.title} (${decl.date}) yayında! #İklimAdaleti #COP31`
+                      )}&url=${encodeURIComponent('https://iklimadaleti.org/sonuc-bildirgeleri')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-stone-900 text-white hover:bg-stone-800 text-xs font-bold transition-colors"
+                    >
+                      <span>X (Twitter)</span>
+                    </a>
+                    <a
+                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                        'https://iklimadaleti.org/sonuc-bildirgeleri'
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1877F2]/10 hover:bg-[#1877F2]/20 text-[#1877F2] border border-[#1877F2]/30 text-xs font-bold transition-colors"
+                    >
+                      <span>Facebook</span>
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => handleCopyLink(decl.id, decl.title)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-stone-100 text-stone-700 border border-stone-300 text-xs font-bold transition-colors cursor-pointer"
+                    >
+                      {copiedId === decl.id ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-700" />
+                          <span className="text-emerald-800">Link Kopyalandı!</span>
+                        </>
+                      ) : (
+                        <span>Linki Kopyala</span>
+                      )}
+                    </button>
                   </div>
 
                   {/* 3. Ana Başlıklar Özeti (İçindekiler Şeridi) */}

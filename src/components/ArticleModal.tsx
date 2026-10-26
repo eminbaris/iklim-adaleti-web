@@ -31,8 +31,10 @@ export default function ArticleModal({
 
   if (!article) return null;
 
+  const shareUrl = 'https://iklimadaleti.org/sonuc-bildirgeleri';
+
   const handleShare = () => {
-    navigator.clipboard.writeText(`https://iklimadaleti.org#${article.slug}`);
+    navigator.clipboard.writeText(`${article.title} — ${shareUrl}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -219,8 +221,38 @@ export default function ArticleModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="pt-4 border-t border-stone-200 flex items-center justify-between text-xs text-stone-500 shrink-0">
-          <span>iklimadaleti.org · Resmi Yayın Arşivi</span>
+        <div className="pt-4 border-t border-stone-200 flex flex-wrap items-center justify-between gap-3 text-xs text-stone-500 shrink-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="font-bold text-stone-600">Paylaş:</span>
+            <a
+              href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                `🌱 ${article.title} (${article.date}) — ${shareUrl}`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-2.5 py-1.5 rounded-md bg-[#25D366]/15 text-[#128C7E] font-bold hover:bg-[#25D366]/25 transition-colors"
+            >
+              WhatsApp
+            </a>
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                `🌱 ${article.title} #İklimAdaleti`
+              )}&url=${encodeURIComponent(shareUrl)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-2.5 py-1.5 rounded-md bg-stone-900 text-white font-bold hover:bg-stone-800 transition-colors"
+            >
+              X (Twitter)
+            </a>
+            <a
+              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-2.5 py-1.5 rounded-md bg-[#1877F2]/15 text-[#1877F2] font-bold hover:bg-[#1877F2]/25 transition-colors"
+            >
+              Facebook
+            </a>
+          </div>
           <button
             type="button"
             onClick={onClose}

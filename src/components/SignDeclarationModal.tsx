@@ -4,7 +4,7 @@
  */
 
 import { useState } from 'react';
-import { X, CheckCircle, Building2, User, Mail, ShieldCheck, PenTool } from 'lucide-react';
+import { X, CheckCircle, Building2, User, Mail, ShieldCheck, PenTool, Share2, Check } from 'lucide-react';
 import { Signatory } from '../types.ts';
 
 interface SignDeclarationModalProps {
@@ -83,6 +83,7 @@ export default function SignDeclarationModal({
   const [error, setError] = useState('');
   const [savedAsType, setSavedAsType] = useState<'institutional' | 'individual'>('individual');
   const [savedDisplayName, setSavedDisplayName] = useState('');
+  const [copiedShareLink, setCopiedShareLink] = useState(false);
 
   if (!isOpen) return null;
 
@@ -96,6 +97,7 @@ export default function SignDeclarationModal({
     setHoneypot('');
     setSubmitting(false);
     setError('');
+    setCopiedShareLink(false);
   };
 
   const handleClose = () => {
@@ -169,9 +171,21 @@ export default function SignDeclarationModal({
     } finally {
       setSubmitting(false);
       setStep('success');
-      setTimeout(() => {
-        handleClose();
-      }, 2800);
+    }
+  };
+
+  const shareText =
+    'COP31’e Doğru İklim Adaleti Forumu Çağrı Metni’ni imzaladım! Zamanımızı, yaşamımızı, geleceğimizi istiyoruz. Sen de imzanla dayanışmaya katıl:';
+  const shareUrl = 'https://iklimadaleti.org';
+  const whatsappShareHref = `https://api.whatsapp.com/send?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`;
+  const twitterShareHref = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+  const facebookShareHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+
+  const handleCopyShareLink = () => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
+      setCopiedShareLink(true);
+      setTimeout(() => setCopiedShareLink(false), 2500);
     }
   };
 
@@ -197,24 +211,90 @@ export default function SignDeclarationModal({
 
         {/* SUCCESS SCREEN */}
         {step === 'success' && (
-          <div className="py-8 text-center">
-            <CheckCircle className="w-14 h-14 text-[#3E8226] mx-auto mb-3" />
-            <h3 className="font-serif text-2xl font-bold text-stone-900 mb-2">
-              İmzanız Başarıyla Eklendi!
-            </h3>
-            <p className="text-sm text-stone-600 max-w-md mx-auto leading-relaxed">
-              {savedAsType === 'institutional' ? (
-                <>
-                  <strong>{savedDisplayName}</strong> çağrı metninin altındaki{' '}
-                  <strong>İmzacı Kurumlar</strong> listesine başarıyla eklendi.
-                </>
-              ) : (
-                <>
-                  Sayın <strong>{savedDisplayName}</strong>, imzanız çağrı metninin altındaki{' '}
-                  <strong>Bireysel İmzacılar</strong> listesine başarıyla eklendi.
-                </>
-              )}
-            </p>
+          <div className="py-4 sm:py-6 text-center space-y-5">
+            <div>
+              <CheckCircle className="w-14 h-14 text-[#3E8226] mx-auto mb-3" />
+              <h3 className="font-serif text-2xl font-bold text-stone-900 mb-2">
+                İmzanız Başarıyla Eklendi!
+              </h3>
+              <p className="text-sm text-stone-600 max-w-md mx-auto leading-relaxed">
+                {savedAsType === 'institutional' ? (
+                  <>
+                    <strong>{savedDisplayName}</strong> çağrı metninin altındaki{' '}
+                    <strong>İmzacı Kurumlar</strong> listesine başarıyla eklendi.
+                  </>
+                ) : (
+                  <>
+                    Sayın <strong>{savedDisplayName}</strong>, imzanız çağrı metninin altındaki{' '}
+                    <strong>Bireysel İmzacılar</strong> listesine başarıyla eklendi.
+                  </>
+                )}
+              </p>
+            </div>
+
+            {/* Viral Share Box */}
+            <div className="bg-[#FBF9F5] border border-stone-200 rounded-xl p-4 sm:p-5 text-left space-y-3">
+              <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-[#0B4F71]">
+                <Share2 className="w-4 h-4 text-[#3E8226]" />
+                <span>Dayanışmayı Büyütün – Çağrıyı Paylaşın!</span>
+              </div>
+              <p className="text-xs text-stone-600 leading-relaxed">
+                Çağrı metnini kendi çevrenizle ve sosyal medya hesaplarınızda paylaşarak daha fazla
+                kişi ve kurumun imzasıyla katılmasına destek olabilirsiniz:
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                <a
+                  href={whatsappShareHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#1ebe57] text-white text-xs font-bold shadow-xs transition-colors"
+                >
+                  <span>WhatsApp’ta Paylaş</span>
+                </a>
+                <a
+                  href={twitterShareHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-stone-900 hover:bg-black text-white text-xs font-bold shadow-xs transition-colors"
+                >
+                  <span>X (Twitter)’da Paylaş</span>
+                </a>
+                <a
+                  href={facebookShareHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#1877F2] hover:bg-[#1565c0] text-white text-xs font-bold shadow-xs transition-colors"
+                >
+                  <span>Facebook’ta Paylaş</span>
+                </a>
+                <button
+                  type="button"
+                  onClick={handleCopyShareLink}
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-stone-300 bg-white hover:bg-stone-100 text-stone-800 text-xs font-bold transition-colors cursor-pointer"
+                >
+                  {copiedShareLink ? (
+                    <>
+                      <Check className="w-4 h-4 text-[#3E8226]" />
+                      <span>Mesaj & Link Kopyalandı!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Share2 className="w-4 h-4 text-[#0B4F71]" />
+                      <span>Davet Linkini Kopyala</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleClose}
+              className="w-full py-2.5 px-4 rounded-xl bg-[#0B4F71] hover:bg-[#083B54] text-white text-xs sm:text-sm font-bold transition-colors cursor-pointer"
+            >
+              Tamam / Kapat
+            </button>
           </div>
         )}
 
