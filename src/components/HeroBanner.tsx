@@ -30,6 +30,7 @@ interface HeroBannerProps {
   onExploreDeclarations: () => void;
   onExplorePolicies?: () => void;
   onExploreEvents?: () => void;
+  onExplorePressReleases?: () => void;
 }
 
 export default function HeroBanner({
@@ -40,7 +41,8 @@ export default function HeroBanner({
   onExploreWorkingGroups,
   onExploreDeclarations,
   onExplorePolicies,
-  onExploreEvents
+  onExploreEvents,
+  onExplorePressReleases
 }: HeroBannerProps) {
   const [copied, setCopied] = useState(false);
 
@@ -140,6 +142,35 @@ export default function HeroBanner({
             </span>
           </div>
         </div>
+
+        {/* Latest Press Release Alert Banner on Anasayfa */}
+        {onExplorePressReleases && (
+          <div className="mb-5 bg-white border-l-4 border-[#B91C1C] border border-stone-200/90 rounded-xl p-4 sm:p-5 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex flex-wrap items-center gap-2 text-xs font-bold">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#B91C1C] text-white uppercase tracking-wide">
+                  <Megaphone className="w-3 h-3" />
+                  <span>Basın Açıklaması</span>
+                </span>
+                <span className="text-stone-500">27 Ekim 2026 · Antalya – Kepez</span>
+              </div>
+              <h2 className="font-serif text-base sm:text-lg font-extrabold text-stone-900">
+                İşçilerin Yaşam Hakkı İklim Adaleti Mücadelesinin Parçasıdır!
+              </h2>
+              <p className="text-xs sm:text-sm text-stone-600 line-clamp-2">
+                26 Ekim 2026 gecesi Antalya&apos;nın Kepez ilçesinde meydana gelen hortum sonucunda, şantiyede barınmak için kullanılan konteynerlerin parçalanmasıyla dört işçi yaşamını yitirmiş, bir işçi yaralanmıştır...
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={onExplorePressReleases}
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#B91C1C] hover:bg-[#991B1B] text-white text-xs sm:text-sm font-bold shrink-0 transition-colors cursor-pointer"
+            >
+              <span>Basın Açıklamasını Oku &amp; Paylaş</span>
+              <span>→</span>
+            </button>
+          </div>
+        )}
 
         {/* Main Editorial Document Sheet - Aligned max-w-7xl with sections below */}
         <article className="bg-white rounded-2xl shadow-sm border border-stone-200/90 p-6 sm:p-8 md:p-10 lg:p-12 mb-6 relative overflow-hidden">

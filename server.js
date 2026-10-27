@@ -6427,6 +6427,7 @@ function createServer() {
     const today = new Date().toISOString().split('T')[0];
     const staticPages = [
       { loc: 'https://iklimadaleti.org/', priority: '1.0', changefreq: 'daily' },
+      { loc: 'https://iklimadaleti.org/basin-aciklamalari', priority: '0.95', changefreq: 'daily' },
       { loc: 'https://iklimadaleti.org/etkinlikler', priority: '0.9', changefreq: 'daily' },
       { loc: 'https://iklimadaleti.org/forumlar', priority: '0.9', changefreq: 'daily' },
       { loc: 'https://iklimadaleti.org/politika-program', priority: '0.8', changefreq: 'weekly' },
@@ -6505,6 +6506,12 @@ ${urlsXml}
               : `https://iklimadaleti.org${matchedEv.imageUrl}`;
           }
         }
+      } else if (cleanPath === '/basin-aciklamalari' || cleanPath.startsWith('/basin-aciklamalari/')) {
+        pageTitle =
+          'İşçilerin Yaşam Hakkı İklim Adaleti Mücadelesinin Parçasıdır! | Basın Açıklamaları – İklim Adaleti Forumu';
+        pageDesc =
+          "26 Ekim 2026 gecesi Antalya'nın Kepez ilçesinde meydana gelen hortum sonucunda dört işçinin yaşamını yitirmesine ilişkin İklim Adaleti Forumu basın açıklaması.";
+        pageImage = 'https://iklimadaleti.org/uploads/basin-aciklamasi-iscilerin-yasam-hakki-1.jpg';
       } else if (cleanPath === '/etkinlikler' || cleanPath === '/etkinlik-takvimi') {
         pageTitle = 'Etkinlik Takvimi | COP31’e Doğru İklim Adaleti Forumu';
         pageDesc =

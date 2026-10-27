@@ -13,6 +13,7 @@ import CalismaGruplariSection from './components/CalismaGruplariSection.tsx';
 import SonucBildirgesiSection from './components/SonucBildirgesiSection.tsx';
 import PolitikaProgramSection from './components/PolitikaProgramSection.tsx';
 import EtkinliklerSection from './components/EtkinliklerSection.tsx';
+import BasinAciklamalariSection from './components/BasinAciklamalariSection.tsx';
 import Footer from './components/Footer.tsx';
 import ArticleModal from './components/ArticleModal.tsx';
 import SignDeclarationModal from './components/SignDeclarationModal.tsx';
@@ -35,6 +36,7 @@ const STORAGE_KEY = 'iklimadaleti_verified_signatories_v1';
 
 const SECTION_LABELS: Record<string, string> = {
   anasayfa: 'Anasayfa',
+  'basin-aciklamalari': 'Basın Açıklamaları',
   forumlar: 'Forumlar',
   'calisma-gruplari': 'Çalışma Grupları',
   'sonuc-bildirgeleri': 'Sonuç Bildirgeleri',
@@ -55,6 +57,9 @@ function resolveRouteFromLocation(): { section: string; eventSlug: string | null
     return { section: 'etkinlik-takvimi', eventSlug: slug };
   }
 
+  if (path === '/basin-aciklamalari' || path.startsWith('/basin-aciklamalari/') || hash === 'basin-aciklamalari') {
+    return { section: 'basin-aciklamalari', eventSlug: null };
+  }
   if (path === '/etkinlikler' || path === '/etkinlik-takvimi' || hash === 'etkinlik-takvimi' || hash === 'etkinlikler') {
     return { section: 'etkinlik-takvimi', eventSlug: null };
   }
@@ -590,6 +595,14 @@ export default function App() {
             onExploreDeclarations={() => handleNavigate('sonuc-bildirgeleri', '/sonuc-bildirgeleri')}
             onExplorePolicies={() => handleNavigate('politika-program', '/politika-program')}
             onExploreEvents={() => handleNavigate('etkinlik-takvimi', '/etkinlikler')}
+            onExplorePressReleases={() => handleNavigate('basin-aciklamalari', '/basin-aciklamalari')}
+          />
+        )}
+
+        {/* 1.5 Basın Açıklamaları */}
+        {activeSection === 'basin-aciklamalari' && (
+          <BasinAciklamalariSection
+            onReadFull={(art) => setSelectedArticle(art)}
           />
         )}
 

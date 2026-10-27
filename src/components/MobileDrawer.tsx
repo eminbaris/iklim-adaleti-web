@@ -25,6 +25,7 @@ export default function MobileDrawer({
 
   const links = [
     { id: 'anasayfa', label: 'Anasayfa', href: '/', icon: ArrowRight },
+    { id: 'basin-aciklamalari', label: 'Basın Açıklamaları', href: '/basin-aciklamalari', icon: FileText },
     { id: 'forumlar', label: 'Forumlar', href: '/forumlar', icon: Users },
     { id: 'calisma-gruplari', label: 'Çalışma Grupları', href: '/calisma-gruplari', icon: Users },
     { id: 'sonuc-bildirgeleri', label: 'Sonuç Bildirgeleri', href: '/sonuc-bildirgeleri', icon: FileText },

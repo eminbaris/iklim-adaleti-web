@@ -23,6 +23,7 @@ export default function Header({
 }: HeaderProps) {
   const navLinks = [
     { id: 'anasayfa', label: 'Anasayfa', href: '/' },
+    { id: 'basin-aciklamalari', label: 'Basın Açıklamaları', href: '/basin-aciklamalari' },
     { id: 'forumlar', label: 'Forumlar', href: '/forumlar' },
     { id: 'calisma-gruplari', label: 'Çalışma Grupları', href: '/calisma-gruplari' },
     { id: 'sonuc-bildirgeleri', label: 'Sonuç Bildirgeleri', href: '/sonuc-bildirgeleri' },
@@ -52,7 +53,7 @@ export default function Header({
 
         {/* Navigation Links */}
         <nav
-          className="hidden lg:flex items-center gap-4 xl:gap-6 text-[14px] xl:text-[15px] font-semibold text-stone-700"
+          className="hidden lg:flex items-center gap-3 xl:gap-5 text-[13px] xl:text-[14.5px] font-semibold text-stone-700"
           aria-label="Ana Menü"
         >
           {navLinks.map((link) => {
