@@ -6548,27 +6548,85 @@ ${urlsXml}
         mainEntityOfPage: 'https://iklimadaleti.org/sonuc-bildirgeleri'
       }));
 
-      const eventSchemas = (cms.events || []).slice(0, 15).map((ev) => ({
-        '@type': 'Event',
-        name: String(ev.title || ''),
-        startDate: '2026-10-17',
-        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-        eventStatus: 'https://schema.org/EventScheduled',
-        location: {
-          '@type': 'Place',
-          name: String(ev.location || 'Türkiye'),
-          address: {
-            '@type': 'PostalAddress',
-            addressLocality: String(ev.location || 'Türkiye'),
-            addressCountry: 'TR'
-          }
-        },
-        description: String(ev.description || ev.title || '').slice(0, 300),
-        organizer: {
-          '@id': 'https://iklimadaleti.org/#organization'
-        },
-        url: `https://iklimadaleti.org/etkinlikler/${encodeURIComponent(toEventSlug(ev))}`
-      }));
+      const trMonthMap = {
+        ocak: '01',
+        şubat: '02',
+        subat: '02',
+        mart: '03',
+        nisan: '04',
+        mayıs: '05',
+        mayis: '05',
+        haziran: '06',
+        temmuz: '07',
+        ağustos: '08',
+        agustos: '08',
+        eylül: '09',
+        eylul: '09',
+        ekim: '10',
+        kasım: '11',
+        kasim: '11',
+        aralık: '12',
+        aralik: '12'
+      };
+
+      const toIsoDate = (rawDateStr) => {
+        const s = String(rawDateStr || '').trim();
+        if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+        const m = s
+          .toLocaleLowerCase('tr-TR')
+          .match(/(\d{1,2})\s+([a-zçğıöşü]+)\s+(\d{4})/);
+        if (m) {
+          const day = m[1].padStart(2, '0');
+          const mon = trMonthMap[m[2]] || '10';
+          return `${m[3]}-${mon}-${day}`;
+        }
+        return '2026-11-15';
+      };
+
+      const eventSchemas = (cms.events || []).slice(0, 15).map((ev) => {
+        const evUrl = `https://iklimadaleti.org/etkinlikler/${encodeURIComponent(toEventSlug(ev))}`;
+        const evImg = ev.imageUrl
+          ? ev.imageUrl.startsWith('http')
+            ? ev.imageUrl
+            : `https://iklimadaleti.org${ev.imageUrl}`
+          : 'https://iklimadaleti.org/favicon.png';
+        const isoDate = toIsoDate(ev.date);
+        return {
+          '@type': 'Event',
+          name: String(ev.title || ''),
+          startDate: isoDate,
+          endDate: isoDate,
+          eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+          eventStatus: 'https://schema.org/EventScheduled',
+          image: [evImg],
+          location: {
+            '@type': 'Place',
+            name: String(ev.location || 'Türkiye'),
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: String(ev.location || 'Türkiye'),
+              addressCountry: 'TR'
+            }
+          },
+          description: String(ev.description || ev.title || '').slice(0, 300),
+          organizer: {
+            '@id': 'https://iklimadaleti.org/#organization'
+          },
+          performer: {
+            '@type': 'Organization',
+            name: String(ev.organizer || 'İklim Adaleti Forumu')
+          },
+          offers: {
+            '@type': 'Offer',
+            url: evUrl,
+            price: '0',
+            priceCurrency: 'TRY',
+            availability: 'https://schema.org/InStock',
+            validFrom: '2026-01-01'
+          },
+          url: evUrl
+        };
+      });
 
       const dynamicJsonLd = {
         '@context': 'https://schema.org',
