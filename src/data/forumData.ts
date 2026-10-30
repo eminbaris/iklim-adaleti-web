@@ -99,7 +99,10 @@ export const INITIAL_SIGNATORY_ORGANIZATIONS: string[] = [
   'Fatsa Doğa ve Çevre Derneği',
   'Alakır - Karacaören Doğa Kültür Derneği',
   'Döşemealtı Gönüllüleri',
-  'Murgul Siyanüre Hayır Platformu'
+  'Murgul Siyanüre Hayır Platformu',
+  'Doğa İçin Sanat Derneği',
+  'Sosyal Adalet Hareketi (SAHİ)',
+  'Çepni Dernekleri Federasyonu'
 ];
 
 const INITIAL_ORGANIZATION_CITIES: Record<string, string> = {
@@ -209,7 +212,7 @@ export const INITIAL_ARTICLES: Article[] = [
 export const BROCHURES: Brochure[] = [];
 
 export const INITIAL_SIGNATORIES: Signatory[] = INITIAL_SIGNATORY_ORGANIZATIONS.map((org, idx) => ({
-  id: `org-${idx + 1}`,
+  id: `init-org-${idx + 1}`,
   name: org,
   organization: org,
   city: INITIAL_ORGANIZATION_CITIES[org] || '',

@@ -1705,10 +1705,10 @@
   {
     "id": "sig-1792313650868",
     "name": "Yalçın Şardağı",
-    "organization": "Emekli mühendis",
+    "organization": "Mühendis",
     "city": "İzmir",
     "message": "Dünyamızın sonunu getirmeden doğa ile barış",
-    "date": "2026-10-18",
+    "date": "2026-10-27",
     "type": "individual",
     "emailVerified": true
   },
@@ -5014,10 +5014,56 @@
   {
     "id": "sig-1793039325984",
     "name": "Erdem Erdemir",
-    "organization": "Emekli",
+    "organization": "Emrkli",
     "city": "Sinop",
     "date": "2026-10-26",
     "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793123929656",
+    "name": "Fehmi Yaşoğlu",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-27",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793142858013",
+    "name": "Alkan Karanlık",
+    "organization": "Emekli Y.Mühendis",
+    "city": "İzmir",
+    "message": "Çok doğru bir yerde, tutumda olan foruma naşarılar diliyorum.",
+    "date": "2026-10-27",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-95",
+    "name": "Doğa İçin Sanat Derneği",
+    "organization": "Doğa İçin Sanat Derneği",
+    "city": "",
+    "date": "2026-10-30",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-96",
+    "name": "Sosyal Adalet Hareketi (SAHİ)",
+    "organization": "Sosyal Adalet Hareketi (SAHİ)",
+    "city": "",
+    "date": "2026-10-30",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-97",
+    "name": "Çepni Dernekleri Federasyonu",
+    "organization": "Çepni Dernekleri Federasyonu",
+    "city": "",
+    "date": "2026-10-30",
+    "type": "institutional",
     "emailVerified": true
   }
 ]

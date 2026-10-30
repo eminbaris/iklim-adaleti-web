@@ -1730,10 +1730,10 @@ const DEFAULT_SIGNATORIES = [
   {
     "id": "sig-1792313650868",
     "name": "Yalçın Şardağı",
-    "organization": "Emekli mühendis",
+    "organization": "Mühendis",
     "city": "İzmir",
     "message": "Dünyamızın sonunu getirmeden doğa ile barış",
-    "date": "2026-10-18",
+    "date": "2026-10-27",
     "type": "individual",
     "emailVerified": true
   },
@@ -5039,10 +5039,56 @@ const DEFAULT_SIGNATORIES = [
   {
     "id": "sig-1793039325984",
     "name": "Erdem Erdemir",
-    "organization": "Emekli",
+    "organization": "Emrkli",
     "city": "Sinop",
     "date": "2026-10-26",
     "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793123929656",
+    "name": "Fehmi Yaşoğlu",
+    "organization": "Emekli",
+    "city": "İzmir",
+    "date": "2026-10-27",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793142858013",
+    "name": "Alkan Karanlık",
+    "organization": "Emekli Y.Mühendis",
+    "city": "İzmir",
+    "message": "Çok doğru bir yerde, tutumda olan foruma naşarılar diliyorum.",
+    "date": "2026-10-27",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-95",
+    "name": "Doğa İçin Sanat Derneği",
+    "organization": "Doğa İçin Sanat Derneği",
+    "city": "",
+    "date": "2026-10-30",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-96",
+    "name": "Sosyal Adalet Hareketi (SAHİ)",
+    "organization": "Sosyal Adalet Hareketi (SAHİ)",
+    "city": "",
+    "date": "2026-10-30",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-97",
+    "name": "Çepni Dernekleri Federasyonu",
+    "organization": "Çepni Dernekleri Federasyonu",
+    "city": "",
+    "date": "2026-10-30",
+    "type": "institutional",
     "emailVerified": true
   }
 ];
@@ -5158,7 +5204,11 @@ const CANONICAL_INSTITUTION_NAMES = {
   'öğrenci veli derneği (velider)': 'Öğrenci Veli Derneği (VELİDER)',
   'samsun çevre platformu (samçep)': 'Samsun Çevre Platformu (SAMÇEP)',
   'munzur koruma kurulu (dedef)': 'Munzur Koruma Kurulu (DEDEF)',
-  'murgul siyanüre hayır platformu': 'Murgul Siyanüre Hayır Platformu'
+  'murgul siyanüre hayır platformu': 'Murgul Siyanüre Hayır Platformu',
+  'doğa için sanat derneği': 'Doğa İçin Sanat Derneği',
+  'sosyal adalet hareketi (sahi)': 'Sosyal Adalet Hareketi (SAHİ)',
+  'çepnı dernekleri federasyonu': 'Çepni Dernekleri Federasyonu',
+  'çepni dernekleri federasyonu': 'Çepni Dernekleri Federasyonu'
 };
 
 function getSignatoryKey(sig) {
@@ -5184,7 +5234,7 @@ function getRemovedSignatorySet(cmsData) {
   const set = new Set();
   for (const id of cms.removedSignatoryIds || []) {
     const clean = normalizeTrKey(id);
-    if (!clean) continue;
+    if (!clean || /^org-\d+$/.test(clean)) continue;
     set.add(clean);
     if (clean.startsWith('ind:') && clean.includes('|')) {
       set.add(clean.split('|')[0]);
@@ -5638,7 +5688,11 @@ function normalizeAndSyncCms(rawCms) {
     (rawCms.deletedItemKeys || []).map((k) => String(k).trim().toLowerCase())
   );
   const removedSigIds = Array.from(
-    new Set((rawCms.removedSignatoryIds || []).map((k) => String(k).trim()))
+    new Set(
+      (rawCms.removedSignatoryIds || [])
+        .map((k) => String(k).trim())
+        .filter((k) => k && !/^org-\d+$/i.test(k) && !k.includes('?'))
+    )
   );
 
   const isDeleted = (item) => {
@@ -5808,10 +5862,12 @@ function writeCmsData(data) {
       ...(data.deletedItemKeys || [])
     ]);
     const nextRemovedSigs = Array.from(
-      new Set([
-        ...(current.removedSignatoryIds || []),
-        ...(data.removedSignatoryIds || [])
-      ])
+      new Set(
+        [
+          ...(current.removedSignatoryIds || []),
+          ...(data.removedSignatoryIds || [])
+        ].filter((k) => k && !/^org-\d+$/i.test(String(k).trim()) && !String(k).includes('?'))
+      )
     );
 
     const isDeleted = (item) => {

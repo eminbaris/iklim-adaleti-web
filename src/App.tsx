@@ -125,7 +125,11 @@ const CANONICAL_INSTITUTION_NAMES: Record<string, string> = {
   'öğrenci veli derneği (velider)': 'Öğrenci Veli Derneği (VELİDER)',
   'samsun çevre platformu (samçep)': 'Samsun Çevre Platformu (SAMÇEP)',
   'munzur koruma kurulu (dedef)': 'Munzur Koruma Kurulu (DEDEF)',
-  'murgul siyanüre hayır platformu': 'Murgul Siyanüre Hayır Platformu'
+  'murgul siyanüre hayır platformu': 'Murgul Siyanüre Hayır Platformu',
+  'doğa için sanat derneği': 'Doğa İçin Sanat Derneği',
+  'sosyal adalet hareketi (sahi)': 'Sosyal Adalet Hareketi (SAHİ)',
+  'çepnı dernekleri federasyonu': 'Çepni Dernekleri Federasyonu',
+  'çepni dernekleri federasyonu': 'Çepni Dernekleri Federasyonu'
 };
 
 function getSignatoryIdentityKey(sig: Signatory): string {
@@ -149,7 +153,7 @@ function buildNormalizedRemovedSet(removedIds: string[]): Set<string> {
   const set = new Set<string>();
   for (const r of removedIds) {
     const clean = normalizeTrKey(r);
-    if (!clean) continue;
+    if (!clean || /^org-\d+$/.test(clean)) continue;
     set.add(clean);
     if (clean.startsWith('ind:') && clean.includes('|')) {
       set.add(clean.split('|')[0]);
