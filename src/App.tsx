@@ -129,7 +129,10 @@ const CANONICAL_INSTITUTION_NAMES: Record<string, string> = {
   'doğa için sanat derneği': 'Doğa İçin Sanat Derneği',
   'sosyal adalet hareketi (sahi)': 'Sosyal Adalet Hareketi (SAHİ)',
   'çepnı dernekleri federasyonu': 'Çepni Dernekleri Federasyonu',
-  'çepni dernekleri federasyonu': 'Çepni Dernekleri Federasyonu'
+  'çepni dernekleri federasyonu': 'Çepni Dernekleri Federasyonu',
+  'smf ekoloji': 'SMF Ekoloji',
+  'gündoğmuş çevre platformu': 'Gündoğmuş Çevre Platformu',
+  'galataport fotoğrafhanesi': 'Galataport Fotoğrafhanesi'
 };
 
 function getSignatoryIdentityKey(sig: Signatory): string {

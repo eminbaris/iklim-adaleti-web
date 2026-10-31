@@ -102,7 +102,10 @@ export const INITIAL_SIGNATORY_ORGANIZATIONS: string[] = [
   'Murgul Siyanüre Hayır Platformu',
   'Doğa İçin Sanat Derneği',
   'Sosyal Adalet Hareketi (SAHİ)',
-  'Çepni Dernekleri Federasyonu'
+  'Çepni Dernekleri Federasyonu',
+  'SMF Ekoloji',
+  'Gündoğmuş Çevre Platformu',
+  'Galataport Fotoğrafhanesi'
 ];
 
 const INITIAL_ORGANIZATION_CITIES: Record<string, string> = {

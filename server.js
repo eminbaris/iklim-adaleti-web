@@ -5090,6 +5090,33 @@ const DEFAULT_SIGNATORIES = [
     "date": "2026-10-30",
     "type": "institutional",
     "emailVerified": true
+  },
+  {
+    "id": "sig-inst-98",
+    "name": "SMF Ekoloji",
+    "organization": "SMF Ekoloji",
+    "city": "",
+    "date": "2026-10-31",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-99",
+    "name": "Gündoğmuş Çevre Platformu",
+    "organization": "Gündoğmuş Çevre Platformu",
+    "city": "",
+    "date": "2026-10-31",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-100",
+    "name": "Galataport Fotoğrafhanesi",
+    "organization": "Galataport Fotoğrafhanesi",
+    "city": "",
+    "date": "2026-10-31",
+    "type": "institutional",
+    "emailVerified": true
   }
 ];
 
@@ -5208,7 +5235,10 @@ const CANONICAL_INSTITUTION_NAMES = {
   'doğa için sanat derneği': 'Doğa İçin Sanat Derneği',
   'sosyal adalet hareketi (sahi)': 'Sosyal Adalet Hareketi (SAHİ)',
   'çepnı dernekleri federasyonu': 'Çepni Dernekleri Federasyonu',
-  'çepni dernekleri federasyonu': 'Çepni Dernekleri Federasyonu'
+  'çepni dernekleri federasyonu': 'Çepni Dernekleri Federasyonu',
+  'smf ekoloji': 'SMF Ekoloji',
+  'gündoğmuş çevre platformu': 'Gündoğmuş Çevre Platformu',
+  'galataport fotoğrafhanesi': 'Galataport Fotoğrafhanesi'
 };
 
 function getSignatoryKey(sig) {

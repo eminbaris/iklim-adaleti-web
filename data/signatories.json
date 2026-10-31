@@ -5065,5 +5065,32 @@
     "date": "2026-10-30",
     "type": "institutional",
     "emailVerified": true
+  },
+  {
+    "id": "sig-inst-98",
+    "name": "SMF Ekoloji",
+    "organization": "SMF Ekoloji",
+    "city": "",
+    "date": "2026-10-31",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-99",
+    "name": "Gündoğmuş Çevre Platformu",
+    "organization": "Gündoğmuş Çevre Platformu",
+    "city": "",
+    "date": "2026-10-31",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-100",
+    "name": "Galataport Fotoğrafhanesi",
+    "organization": "Galataport Fotoğrafhanesi",
+    "city": "",
+    "date": "2026-10-31",
+    "type": "institutional",
+    "emailVerified": true
   }
 ]
