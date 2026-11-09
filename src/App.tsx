@@ -14,6 +14,7 @@ import SonucBildirgesiSection from './components/SonucBildirgesiSection.tsx';
 import PolitikaProgramSection from './components/PolitikaProgramSection.tsx';
 import EtkinliklerSection from './components/EtkinliklerSection.tsx';
 import BasinAciklamalariSection from './components/BasinAciklamalariSection.tsx';
+import ForumProgramiSection from './components/ForumProgramiSection.tsx';
 import Footer from './components/Footer.tsx';
 import ArticleModal from './components/ArticleModal.tsx';
 import SignDeclarationModal from './components/SignDeclarationModal.tsx';
@@ -36,6 +37,7 @@ const STORAGE_KEY = 'iklimadaleti_verified_signatories_v1';
 
 const SECTION_LABELS: Record<string, string> = {
   anasayfa: 'Anasayfa',
+  program: 'Uluslararası Forum Programı (15–17 Kasım)',
   'basin-aciklamalari': 'Basın Açıklamaları',
   forumlar: 'Forumlar',
   'calisma-gruplari': 'Çalışma Grupları',
@@ -57,6 +59,9 @@ function resolveRouteFromLocation(): { section: string; eventSlug: string | null
     return { section: 'etkinlik-takvimi', eventSlug: slug };
   }
 
+  if (path === '/program' || path === '/forum-programi' || hash === 'program') {
+    return { section: 'program', eventSlug: null };
+  }
   if (path === '/basin-aciklamalari' || path.startsWith('/basin-aciklamalari/') || hash === 'basin-aciklamalari') {
     return { section: 'basin-aciklamalari', eventSlug: null };
   }
@@ -637,8 +642,12 @@ export default function App() {
             onExplorePolicies={() => handleNavigate('politika-program', '/politika-program')}
             onExploreEvents={() => handleNavigate('etkinlik-takvimi', '/etkinlikler')}
             onExplorePressReleases={() => handleNavigate('basin-aciklamalari', '/basin-aciklamalari')}
+            onExploreProgram={() => handleNavigate('program', '/program')}
           />
         )}
+
+        {/* 1.2 Uluslararası Forum Programı (15-16-17 Kasım 2026) */}
+        {activeSection === 'program' && <ForumProgramiSection />}
 
         {/* 1.5 Basın Açıklamaları */}
         {activeSection === 'basin-aciklamalari' && (
@@ -703,6 +712,7 @@ export default function App() {
       <SolidarityPopupModal
         isOpen={solidarityPopupOpen}
         onClose={() => setSolidarityPopupOpen(false)}
+        onOpenProgram={() => handleNavigate('program', '/program')}
       />
 
       <SignDeclarationModal

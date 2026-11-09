@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { RefreshCw, Calendar, Clock, MapPin, FileText, X, ZoomIn, Share2, Check, ArrowLeft, ExternalLink } from 'lucide-react';
 import { ForumEvent } from '../types.ts';
 import { getYoutubeEmbedUrl } from './ArticleModal.tsx';
+import ForumProgramiSection from './ForumProgramiSection.tsx';
 
 export function toEventSlug(text: string): string {
   return String(text || '')
@@ -128,6 +129,8 @@ export default function EtkinliklerSection({
       className="py-12 sm:py-16 bg-[#FBF9F5] border-b border-stone-200 scroll-mt-20"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {!matchedSingleEvent && <ForumProgramiSection compact />}
+
         <div className="pb-6 border-b border-stone-200 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <span className="text-xs font-bold uppercase tracking-widest text-[#3E8226] block mb-1.5">

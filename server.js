@@ -6733,6 +6733,7 @@ function createServer() {
     const today = new Date().toISOString().split('T')[0];
     const staticPages = [
       { loc: 'https://iklimadaleti.org/', priority: '1.0', changefreq: 'daily' },
+      { loc: 'https://iklimadaleti.org/program', priority: '0.98', changefreq: 'daily' },
       { loc: 'https://iklimadaleti.org/basin-aciklamalari', priority: '0.95', changefreq: 'daily' },
       { loc: 'https://iklimadaleti.org/etkinlikler', priority: '0.9', changefreq: 'daily' },
       { loc: 'https://iklimadaleti.org/forumlar', priority: '0.9', changefreq: 'daily' },
@@ -6876,6 +6877,18 @@ ${urlsXml}
           pageUrl = 'https://iklimadaleti.org/etkinlikler';
           routeBodyHtml = `<section><h1>Etkinlik Bulunamadı</h1><p><a href="https://iklimadaleti.org/etkinlikler">Etkinlik Takvimine Dön</a></p></section>`;
         }
+      } else if (cleanPath === '/program' || cleanPath === '/forum-programi') {
+        if (cleanPath === '/forum-programi') {
+          return res.redirect(301, 'https://iklimadaleti.org/program');
+        }
+        pageTitle =
+          'Uluslararası İklim Adaleti Forumu Programı (15–16–17 Kasım 2026, Antalya) | İklim Adaleti Forumu';
+        pageDesc =
+          '15 Kasım Büyük İklim Adaleti Yürüyüşü ve Halk Kürsüsü, 16 Kasım Ekolojinin Politik Ekonomisi ve İklim Adaleti, 17 Kasım Müşterekler, Haklar ve Demokratik Güvenceler oturumları ve konuşmacıları.';
+        pageUrl = 'https://iklimadaleti.org/program';
+        pageImage =
+          'https://iklimadaleti.org/uploads/uluslararasi-iklim-adaleti-forumu-programi-15-17-kasim-2026.jpg';
+        routeBodyHtml = `<article><h1>Uluslararası İklim Adaleti Forumu Programı (15–16–17 Kasım 2026, Antalya)</h1><p>${escapeHtml(pageDesc)}</p><img src="${escapeHtml(pageImage)}" alt="Uluslararası İklim Adaleti Forumu Programı" /><section><h2>15 Kasım 2026 – Yaşam Alanları, Mücadeleler ve İklim Adaleti</h2><p>13.00–14.30 Büyük İklim Adaleti Yürüyüşü (Yıkılan Antalya Müzesinden Antalya Barosuna) · 14.30–15.00 Açılış ve Açılış Konuşmaları · 15.00–20.00 Halk Kürsüsü</p></section><section><h2>16 Kasım 2026 – Ekolojinin Politik Ekonomisi ve İklim Adaleti</h2><p>I. Oturum: Doğanın Metalaştırılması, Büyüme ve Sermaye Birikimi · II. Oturum: Ekoloji Mücadelesinde Adalet · III. Oturum: İklim Krizinin Emeklilere Olumsuz Etkileri · IV. Oturum: Küresel Afetler Çağında Adalet · V. Oturum: İklim Politikalarında Kamuculuk, Bağımsızlık ve Demokrasi · VI. Oturum: Toplumsal Cinsiyet ve İklim Adaleti</p></section><section><h2>17 Kasım 2026 – Müşterekler, Haklar ve Demokratik Güvenceler</h2><p>I. Oturum: Uluslararası İklim Hukuku Göstergeleri, İklim Adaleti ve Kırılgan Alanlar · II. Oturum: İklim Adaleti ve Hukuki Mücadele Araçları · III. Oturum: Ekoloji Haberciliği, Şirket Suçları ve Bilgi Hakkı · IV. Oturum: Hayvan: Özne mi, Kaynak mı, Şiddetin Nesnesi mi? Türler Arası İklim Adaleti · V. Oturum: Endüstriyel Tarımın İklim Krizine ve Çalışanlara Etkileri ve Gıda Egemenliği · VI. Oturum: Şirketlerin Enerji ve Madencilik Adına Doğayı Yağması ve Bunlara Karşı Yerelde Mücadele Yürütenler · VII. Oturum: Gıdanın ve İklim Krizinin Halk Sağlığına Etkileri</p></section></article>`;
       } else if (cleanPath === '/basin-aciklamalari') {
         pageTitle =
           'Basın Açıklamaları – İşçilerin Yaşam Hakkı İklim Adaleti Mücadelesinin Parçasıdır! | İklim Adaleti Forumu';

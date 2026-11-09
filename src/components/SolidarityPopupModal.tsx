@@ -5,6 +5,7 @@ import ForumLogo from './ForumLogo.tsx';
 interface SolidarityPopupModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenProgram?: () => void;
 }
 
 interface ContactPerson {
@@ -131,7 +132,11 @@ const REGIONAL_CONTACTS: RegionalLine[] = [
   }
 ];
 
-export default function SolidarityPopupModal({ isOpen, onClose }: SolidarityPopupModalProps) {
+export default function SolidarityPopupModal({
+  isOpen,
+  onClose,
+  onOpenProgram
+}: SolidarityPopupModalProps) {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -236,6 +241,30 @@ ${contactsText}`;
               className="w-full max-w-[210px] sm:max-w-[240px] h-auto mx-auto"
             />
           </div>
+
+          {/* 15-16-17 Kasım Forum Programı Callout inside Popup */}
+          {onOpenProgram && (
+            <div className="p-3.5 sm:p-4 rounded-xl bg-[#233D36] text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+              <div className="space-y-0.5">
+                <span className="text-[11px] font-extrabold uppercase tracking-wider text-amber-300 block">
+                  📅 15 – 16 – 17 Kasım 2026 · Antalya
+                </span>
+                <p className="text-sm sm:text-base font-bold leading-snug">
+                  Uluslararası İklim Adaleti Forumu Programı Yayınlandı!
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onOpenProgram();
+                }}
+                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 text-xs font-extrabold shrink-0 transition-colors cursor-pointer"
+              >
+                <span>Programı İncele →</span>
+              </button>
+            </div>
+          )}
 
           {/* Headline */}
           <div className="space-y-2 text-center sm:text-left">

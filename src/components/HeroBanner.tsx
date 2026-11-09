@@ -31,6 +31,7 @@ interface HeroBannerProps {
   onExplorePolicies?: () => void;
   onExploreEvents?: () => void;
   onExplorePressReleases?: () => void;
+  onExploreProgram?: () => void;
 }
 
 export default function HeroBanner({
@@ -42,7 +43,8 @@ export default function HeroBanner({
   onExploreDeclarations,
   onExplorePolicies,
   onExploreEvents,
-  onExplorePressReleases
+  onExplorePressReleases,
+  onExploreProgram
 }: HeroBannerProps) {
   const [copied, setCopied] = useState(false);
 
@@ -142,6 +144,47 @@ export default function HeroBanner({
             </span>
           </div>
         </div>
+
+        {/* 15-16-17 Kasım Forum Programı Featured Banner on Anasayfa */}
+        {onExploreProgram && (
+          <div className="mb-5 bg-white border-l-4 border-[#1F3A33] border border-stone-200/90 rounded-xl p-4 sm:p-5 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <img
+                src="/uploads/uluslararasi-iklim-adaleti-forumu-programi-15-17-kasim-2026.jpg"
+                alt="Uluslararası İklim Adaleti Forumu Programı"
+                onClick={onExploreProgram}
+                className="w-full sm:w-36 h-24 object-cover rounded-lg border border-stone-200 cursor-pointer shrink-0"
+              />
+              <div className="space-y-1.5">
+                <div className="flex flex-wrap items-center gap-2 text-xs font-bold">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#1F3A33] text-white uppercase tracking-wide">
+                    <Calendar className="w-3 h-3 text-emerald-300" />
+                    <span>15 – 16 – 17 Kasım 2026 · Antalya</span>
+                  </span>
+                  <span className="text-[#9A4B1A] font-extrabold">
+                    Uluslararası Forum Programı Açıklandı!
+                  </span>
+                </div>
+                <h2 className="font-serif text-base sm:text-lg font-extrabold text-stone-900">
+                  Uluslararası İklim Adaleti Forumu Programı (Yürüyüş, Halk Kürsüsü ve Oturumlar)
+                </h2>
+                <p className="text-xs sm:text-sm text-stone-600">
+                  <strong>15 Kasım:</strong> Büyük İklim Adaleti Yürüyüşü &amp; Halk Kürsüsü ·{' '}
+                  <strong>16 Kasım:</strong> Ekolojinin Politik Ekonomisi ·{' '}
+                  <strong>17 Kasım:</strong> Müşterekler, Haklar ve Demokratik Güvenceler
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={onExploreProgram}
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#1F3A33] hover:bg-[#152823] text-white text-xs sm:text-sm font-bold shrink-0 transition-colors cursor-pointer"
+            >
+              <span>3 Günlük Programı &amp; Konuşmacıları Aç</span>
+              <span>→</span>
+            </button>
+          </div>
+        )}
 
         {/* Latest Press Release Alert Banner on Anasayfa */}
         {onExplorePressReleases && (
