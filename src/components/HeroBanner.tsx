@@ -150,7 +150,7 @@ export default function HeroBanner({
           <div className="mb-5 bg-white border-l-4 border-[#1F3A33] border border-stone-200/90 rounded-xl p-4 sm:p-5 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div className="flex flex-col sm:flex-row sm:items-center gap-4">
               <img
-                src="/uploads/uluslararasi-iklim-adaleti-forumu-programi-15-17-kasim-2026.jpg"
+                src="/uploads/uluslararasi-iklim-adaleti-forumu-programi-15-17-kasim-2026.jpg?v=3"
                 alt="Uluslararası İklim Adaleti Forumu Programı"
                 onClick={onExploreProgram}
                 className="w-full sm:w-36 h-24 object-cover rounded-lg border border-stone-200 cursor-pointer shrink-0"

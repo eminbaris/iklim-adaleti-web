@@ -39,7 +39,7 @@ export interface ProgramDay {
 }
 
 export const FORUM_PROGRAM_POSTER_URL =
-  '/uploads/uluslararasi-iklim-adaleti-forumu-programi-15-17-kasim-2026.jpg';
+  '/uploads/uluslararasi-iklim-adaleti-forumu-programi-15-17-kasim-2026.jpg?v=3';
 
 export const FORUM_PROGRAM_DAYS: ProgramDay[] = [
   {
@@ -156,7 +156,7 @@ export const FORUM_PROGRAM_DAYS: ProgramDay[] = [
         time: '16.30–18.30',
         title:
           'V. Oturum: İklim Politikalarında Kamuculuk, Bağımsızlık ve Demokrasi',
-        chair: 'Prof. Dr. Nursel Şahin, Çağdaş Hekimler Grubu',
+        chair: 'Prof. Dr. Nursel Şahin, Çağdaş Hekimler',
         items: [
           {
             topic:
