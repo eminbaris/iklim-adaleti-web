@@ -156,7 +156,7 @@ export const FORUM_PROGRAM_DAYS: ProgramDay[] = [
         time: '16.30–18.30',
         title:
           'V. Oturum: İklim Politikalarında Kamuculuk, Bağımsızlık ve Demokrasi',
-        chair: 'Prof. Dr. Nursel Şahin, Çağdaş Hekimler',
+        chair: 'Prof. Dr. Nursel Şahin, Çağdaş Hekimler Grubu',
         items: [
           {
             topic:
