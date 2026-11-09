@@ -240,15 +240,6 @@ const DEFAULT_SIGNATORIES = [
     "emailVerified": true
   },
   {
-    "id": "org-55",
-    "name": "Validebağ Savunması",
-    "organization": "Validebağ Savunması",
-    "city": "İstanbul",
-    "date": "2026-10-17",
-    "type": "institutional",
-    "emailVerified": true
-  },
-  {
     "id": "sig-rec-asli-odman",
     "name": "Aslı Odman",
     "organization": "Akademisyen",
@@ -566,10 +557,10 @@ const DEFAULT_SIGNATORIES = [
   },
   {
     "id": "org-2",
-    "name": "Tüm Emeklilerin Sendikası",
-    "organization": "Tüm Emeklilerin Sendikası",
-    "city": "İzmir",
-    "date": "2026-10-18",
+    "name": "Tüm emeklilerin Sendikası",
+    "organization": "Tüm emeklilerin Sendikası",
+    "city": "Antalya",
+    "date": "2026-11-03",
     "type": "institutional",
     "emailVerified": true
   },
@@ -5117,6 +5108,235 @@ const DEFAULT_SIGNATORIES = [
     "date": "2026-10-31",
     "type": "institutional",
     "emailVerified": true
+  },
+  {
+    "id": "sig-1793501346376",
+    "name": "Ekolojik Sistemi Koruma Derneği",
+    "organization": "Ekolojik Sistemi Koruma Derneği",
+    "city": "Ankara",
+    "message": "👏",
+    "date": "2026-11-01",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-admin-1793562221257",
+    "name": "Dünya Mirası Adalar",
+    "organization": "Dünya Mirası Adalar",
+    "city": "",
+    "date": "2026-11-01",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-admin-1793562238159",
+    "name": "Adalar Sivil İnisiyatifi",
+    "organization": "Adalar Sivil İnisiyatifi",
+    "city": "",
+    "date": "2026-11-01",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793606433895",
+    "name": "Özlem Günel",
+    "organization": "Belgesel Fotoğrafçı",
+    "city": "İzmir",
+    "date": "2026-11-02",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793633632853",
+    "name": "Veli BEYAZGÜL",
+    "organization": "Kamu Emekçisi / Sendikacı/Yazar/İst. Varto Ekoloji Platformu",
+    "city": "İstanbul /  Muş Varto",
+    "message": "İklim krizinin, ekolojik sarsıntıları yaratanlar, bu kötülüğün sebebi olanlar çözüm olamazlar. Topyekün bir değişim için ülke çapında memleketi kucaklayan bir Ekoloji mücadelesinin  ilmek ilmek örülmesi için Akbelen'den Varto'ya Mücadele Büyüyor sloganını hayatın içinde gerçek kılmak adına ben de varım. Hepimize kolay gelsin.",
+    "date": "2026-11-02",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793643249062",
+    "name": "Osman Uğur özveren",
+    "organization": "Emekli",
+    "city": "Eskişehir",
+    "date": "2026-11-02",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793651170588",
+    "name": "Agora Senfoni Orkestrası",
+    "organization": "Agora Senfoni Orkestrası",
+    "city": "Ankara",
+    "date": "2026-11-02",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793720814845",
+    "name": "Ferzan Sarsılmaz",
+    "organization": "Emekli",
+    "city": "Antalya",
+    "date": "2026-11-03",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793721011194",
+    "name": "Oya UMUR",
+    "organization": "Emekli",
+    "city": "Antalya",
+    "date": "2026-11-03",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793721075671",
+    "name": "Erdogan Umur",
+    "organization": "Emekli",
+    "city": "Antalya",
+    "date": "2026-11-03",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793721230202",
+    "name": "Ayşe Şimşek",
+    "organization": "Emekli",
+    "city": "Antalya",
+    "date": "2026-11-03",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793725299910",
+    "name": "İrfan Akgündüz",
+    "organization": "Gazeteci",
+    "city": "Muğla",
+    "date": "2026-11-03",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793725693407",
+    "name": "cemre",
+    "organization": "uzman psikolog",
+    "city": "çelik",
+    "date": "2026-11-03",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793730732671",
+    "name": "Saltanat Baykal",
+    "organization": "Emekli",
+    "city": "Antalya",
+    "date": "2026-11-03",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793730938656",
+    "name": "Ufuk Aydın",
+    "organization": "Öğretmen",
+    "city": "Antalya",
+    "message": "Yan yana, omuz omuza güzel yarınlara,sağlıklı çevre ile birlikte ulaşalım.",
+    "date": "2026-11-03",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793731434787",
+    "name": "Nihat Çalışkan",
+    "organization": "Turizmci",
+    "city": "Antalya",
+    "date": "2026-11-03",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793732269128",
+    "name": "Vicdan Kücükarslan",
+    "city": "Antalya",
+    "date": "2026-11-03",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793734038255",
+    "name": "Nuray Kaya",
+    "city": "Antalya",
+    "date": "2026-11-03",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793735178828",
+    "name": "Gaksal yilmaz Yilmaz",
+    "organization": "Emekli öğretmen",
+    "city": "Antalya",
+    "message": "Doğanın talanına hayır",
+    "date": "2026-11-03",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793735250117",
+    "name": "Emine Fırat",
+    "organization": "Emekli",
+    "city": "Aydın",
+    "date": "2026-11-03",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793737278005",
+    "name": "Hüsniye Pınar",
+    "organization": "Emekli",
+    "city": "Antalya",
+    "date": "2026-11-03",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793738460345",
+    "name": "BARIŞ AKSOY",
+    "organization": "Ögretmen",
+    "city": "Antalya",
+    "date": "2026-11-03",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793765122882",
+    "name": "Leyla Erdemir",
+    "organization": "Emekli öğretmen",
+    "city": "Manisa",
+    "message": "Sonuna kadar katılıyorum.",
+    "date": "2026-11-04",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793769538830",
+    "name": "Yüksel aydın",
+    "organization": "Eğitimci",
+    "city": "Antalya",
+    "date": "2026-11-04",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1793773595832",
+    "name": "Gülşen Mevsim",
+    "organization": "Dr",
+    "city": "Antalya",
+    "message": "Dayanışma yaşatır.",
+    "date": "2026-11-04",
+    "type": "individual",
+    "emailVerified": true
   }
 ];
 
@@ -6545,38 +6765,72 @@ ${urlsXml}
 
   app.use(express.static(distPath, { index: false }));
 
-  // 10. Dynamic SEO, JSON-LD Structured Data & Pre-Rendered Crawler Content for SPA routes
+  // 10. Dynamic SEO, 301 Canonical Redirects, JSON-LD Structured Data & Pre-Rendered Crawler Content for SPA routes
   app.use((req, res) => {
+    const hostHeader = String(req.headers['x-forwarded-host'] || req.headers.host || '').toLowerCase();
+    const rawPath = req.path || '/';
+    const cleanPath = rawPath.replace(/\/+$/, '') || '/';
+
+    // 301 Redirect: www -> non-www
+    if (hostHeader.startsWith('www.iklimadaleti.org')) {
+      return res.redirect(301, `https://iklimadaleti.org${req.originalUrl || '/'}`);
+    }
+
+    // 301 Redirect: duplicate route aliases & trailing slashes
+    if (cleanPath === '/etkinlik-takvimi') {
+      return res.redirect(301, 'https://iklimadaleti.org/etkinlikler');
+    }
+    if (cleanPath === '/politika') {
+      return res.redirect(301, 'https://iklimadaleti.org/politika-program');
+    }
+    if (cleanPath.startsWith('/etkinlik/') || cleanPath.startsWith('/etkinlik-takvimi/')) {
+      const parts = cleanPath.split('/').filter(Boolean);
+      const slug = parts[1] || '';
+      return res.redirect(301, `https://iklimadaleti.org/etkinlikler/${slug}`);
+    }
+    if (cleanPath.startsWith('/basin-aciklamalari/')) {
+      return res.redirect(301, 'https://iklimadaleti.org/basin-aciklamalari');
+    }
+    if (rawPath.length > 1 && rawPath.endsWith('/')) {
+      return res.redirect(301, `https://iklimadaleti.org${cleanPath}`);
+    }
+
     const indexPath = path.join(distPath, 'index.html');
     if (!fs.existsSync(indexPath)) {
       return res.status(404).send('Not found');
     }
     try {
       let html = fs.readFileSync(indexPath, 'utf-8');
-      const cleanPath = (req.path || '/').replace(/\/+$/, '') || '/';
       const cms = readCmsData();
       const signatories = readExtraSignatories(cms);
-      const instCount = signatories.filter((s) => s.type === 'institutional').length;
+      const instSigs = signatories.filter((s) => s.type === 'institutional');
+      const instCount = instSigs.length;
       const indCount = signatories.filter((s) => s.type !== 'institutional').length;
 
+      let statusCode = 200;
+      let robotsMeta = 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
       let pageTitle =
         'COP31’e Doğru İklim Adaleti Forumu – iklimadaleti.org | Zamanımızı, Yaşamımızı, Geleceğimizi İstiyoruz';
       let pageDesc =
         `COP31’e Doğru İklim Adaleti Forumu resmi platformu (iklimadaleti.org). Çağrı metni (${instCount} imzacı kurum, ${indCount} bireysel imzacı), Samsun, İzmir ve Antalya sonuç bildirgeleri, yerel forumlar, etkinlik takvimi ve politika belgesi.`;
       let pageUrl = `https://iklimadaleti.org${cleanPath === '/' ? '/' : cleanPath}`;
       let pageImage = 'https://iklimadaleti.org/favicon.png';
+      let routeBodyHtml = '';
+      let extraSchemaItems = [];
 
-      if (
-        cleanPath.startsWith('/etkinlikler/') ||
-        cleanPath.startsWith('/etkinlik/') ||
-        cleanPath.startsWith('/etkinlik-takvimi/')
-      ) {
+      const navHtml = `<nav aria-label="Ana Menü"><a href="https://iklimadaleti.org/">Ana Sayfa &amp; Çağrı Metni</a> | <a href="https://iklimadaleti.org/basin-aciklamalari">Basın Açıklamaları</a> | <a href="https://iklimadaleti.org/etkinlikler">Etkinlik Takvimi</a> | <a href="https://iklimadaleti.org/forumlar">Forumlar</a> | <a href="https://iklimadaleti.org/calisma-gruplari">Çalışma Grupları</a> | <a href="https://iklimadaleti.org/sonuc-bildirgeleri">Sonuç Bildirgeleri</a> | <a href="https://iklimadaleti.org/politika-program">Politika / Program Belgesi</a></nav>`;
+
+      if (cleanPath.startsWith('/etkinlikler/')) {
         const parts = cleanPath.split('/').filter(Boolean);
         const slug = parts[1] ? decodeURIComponent(parts[1]) : '';
         const matchedEv = (cms.events || []).find(
           (ev) => toEventSlug(ev) === slug || ev.id === slug
         );
         if (matchedEv) {
+          const canonicalSlug = encodeURIComponent(toEventSlug(matchedEv));
+          if (parts[1] !== canonicalSlug && decodeURIComponent(parts[1] || '') !== toEventSlug(matchedEv)) {
+            return res.redirect(301, `https://iklimadaleti.org/etkinlikler/${canonicalSlug}`);
+          }
           pageTitle = `${matchedEv.title} (${matchedEv.date}) – İklim Adaleti Forumu`;
           const rawDesc = String(matchedEv.description || '')
             .replace(/\s+/g, ' ')
@@ -6585,38 +6839,128 @@ ${urlsXml}
           pageDesc =
             rawDesc ||
             `${matchedEv.title} · Tarih: ${matchedEv.date}${matchedEv.time ? ` ${matchedEv.time}` : ''} · Yer: ${matchedEv.location || 'Türkiye'}`;
-          pageUrl = `https://iklimadaleti.org/etkinlikler/${encodeURIComponent(toEventSlug(matchedEv))}`;
+          pageUrl = `https://iklimadaleti.org/etkinlikler/${canonicalSlug}`;
           if (matchedEv.imageUrl) {
             pageImage = matchedEv.imageUrl.startsWith('http')
               ? matchedEv.imageUrl
               : `https://iklimadaleti.org${matchedEv.imageUrl}`;
           }
+          const paragraphsHtml = String(matchedEv.description || '')
+            .split(/\n+/)
+            .filter(Boolean)
+            .map((p) => `<p>${escapeHtml(p)}</p>`)
+            .join('');
+          routeBodyHtml = `<article><h1>${escapeHtml(matchedEv.title)}</h1><p><strong>Tarih:</strong> ${escapeHtml(matchedEv.date)}${matchedEv.time ? ` · <strong>Saat:</strong> ${escapeHtml(matchedEv.time)}` : ''} · <strong>Yer:</strong> ${escapeHtml(matchedEv.location || 'Türkiye')} · <strong>Kategori:</strong> ${escapeHtml(matchedEv.type || 'Forum')}</p>${matchedEv.imageUrl ? `<img src="${escapeHtml(pageImage)}" alt="${escapeHtml(matchedEv.title)}" />` : ''}${paragraphsHtml}<p><a href="https://iklimadaleti.org/etkinlikler">Tüm Etkinlik Takvimine Dön</a></p></article>`;
+          extraSchemaItems.push({
+            '@type': 'Event',
+            name: matchedEv.title,
+            description: String(matchedEv.description || pageDesc).slice(0, 500),
+            startDate: matchedEv.date,
+            eventStatus: 'https://schema.org/EventScheduled',
+            eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+            location: {
+              '@type': 'Place',
+              name: matchedEv.location || 'Türkiye',
+              address: matchedEv.location || 'Türkiye'
+            },
+            image: [pageImage],
+            organizer: {
+              '@id': 'https://iklimadaleti.org/#organization'
+            }
+          });
+        } else {
+          statusCode = 404;
+          robotsMeta = 'noindex, nofollow';
+          pageTitle = 'Etkinlik Bulunamadı – İklim Adaleti Forumu';
+          pageDesc = 'Aradığınız etkinlik sayfası bulunamadı.';
+          pageUrl = 'https://iklimadaleti.org/etkinlikler';
+          routeBodyHtml = `<section><h1>Etkinlik Bulunamadı</h1><p><a href="https://iklimadaleti.org/etkinlikler">Etkinlik Takvimine Dön</a></p></section>`;
         }
-      } else if (cleanPath === '/basin-aciklamalari' || cleanPath.startsWith('/basin-aciklamalari/')) {
+      } else if (cleanPath === '/basin-aciklamalari') {
         pageTitle =
-          'İşçilerin Yaşam Hakkı İklim Adaleti Mücadelesinin Parçasıdır! | Basın Açıklamaları – İklim Adaleti Forumu';
+          'Basın Açıklamaları – İşçilerin Yaşam Hakkı İklim Adaleti Mücadelesinin Parçasıdır! | İklim Adaleti Forumu';
         pageDesc =
-          "26 Ekim 2026 gecesi Antalya'nın Kepez ilçesinde meydana gelen hortum sonucunda dört işçinin yaşamını yitirmesine ilişkin İklim Adaleti Forumu basın açıklaması.";
+          "26 Ekim 2026 gecesi Antalya'nın Kepez ilçesinde meydana gelen hortum sonucunda dört işçinin yaşamını yitirmesine ilişkin İklim Adaleti Forumu basın açıklaması ve kamuoyu duyuruları.";
+        pageUrl = 'https://iklimadaleti.org/basin-aciklamalari';
         pageImage = 'https://iklimadaleti.org/uploads/basin-aciklamasi-iscilerin-yasam-hakki-1.jpg';
-      } else if (cleanPath === '/etkinlikler' || cleanPath === '/etkinlik-takvimi') {
+        routeBodyHtml = `<article><h1>İşçilerin Yaşam Hakkı İklim Adaleti Mücadelesinin Parçasıdır!</h1><p><strong>Tarih:</strong> 29 Ekim 2026 · <strong>Yayınlayan:</strong> İklim Adaleti Forumu – Basına ve Kamuoyuna</p><p>26 Ekim 2026 gecesi Antalya'nın Kepez ilçesinde meydana gelen hortum sonucunda, bir şantiyede konteynerde kalan dört işçinin yaşamını yitirdiğini derin bir üzüntü ve öfkeyle öğrenmiş bulunuyoruz.</p><p>İklim krizi yalnızca doğayı değil, doğrudan doğruya emekçilerin yaşam hakkını, barınma ve çalışma koşullarını hedef almaktadır. Afetlere karşı güvencesiz bırakılan şantiyeler, denetimsiz çalışma alanları ve iş cinayetleri kader değildir.</p><p>İklim Adaleti Forumu olarak, yaşamını yitiren işçilerin yakınlarına başsağlığı diliyor; tüm sorumluların hesap vermesini ve aşırı hava olaylarına karşı işçilerin yaşam güvenliğini esas alan bağlayıcı kamusal denetim mekanizmalarının derhal hayata geçirilmesini talep ediyoruz.</p></article>`;
+      } else if (cleanPath === '/etkinlikler') {
         pageTitle = 'Etkinlik Takvimi | COP31’e Doğru İklim Adaleti Forumu';
         pageDesc =
           'Türkiye genelinde düzenlenen yerel İklim Adaleti Forumları, buluşmalar, paneller ve 15–17 Kasım 2026 COP31 Antalya hazırlık takvimi.';
+        pageUrl = 'https://iklimadaleti.org/etkinlikler';
+        const eventsListHtml = (cms.events || [])
+          .map(
+            (e) =>
+              `<article><h2><a href="https://iklimadaleti.org/etkinlikler/${encodeURIComponent(toEventSlug(e))}">${escapeHtml(e.title)}</a></h2><p><strong>Tarih:</strong> ${escapeHtml(e.date)}${e.time ? ` ${escapeHtml(e.time)}` : ''} · <strong>Yer:</strong> ${escapeHtml(e.location || '')}</p><p>${escapeHtml(String(e.description || '').slice(0, 350))}</p></article>`
+          )
+          .join('');
+        routeBodyHtml = `<section><h1>${escapeHtml(pageTitle)}</h1><p>${escapeHtml(pageDesc)}</p>${eventsListHtml}</section>`;
       } else if (cleanPath === '/forumlar') {
         pageTitle = 'Forumlar & Yerel Buluşmalar | COP31’e Doğru İklim Adaleti Forumu';
         pageDesc =
-          'İklim Adaleti Forumu yerel buluşmaları, forum duyuruları, raporlar ve tartışma metinleri.';
-      } else if (cleanPath === '/politika-program' || cleanPath === '/politika') {
+          'İklim Adaleti Forumu yerel buluşmaları, Rize, Samsun, Eskişehir, Uşak, Döşemealtı, Fethiye forum duyuruları, raporlar ve tartışma metinleri.';
+        pageUrl = 'https://iklimadaleti.org/forumlar';
+        const forumsListHtml = (cms.forums || [])
+          .map(
+            (f) =>
+              `<article><h2>${escapeHtml(f.title)} (${escapeHtml(f.date || '')})</h2><p>${escapeHtml(f.excerpt || '')}</p></article>`
+          )
+          .join('');
+        routeBodyHtml = `<section><h1>${escapeHtml(pageTitle)}</h1><p>${escapeHtml(pageDesc)}</p>${forumsListHtml}</section>`;
+      } else if (cleanPath === '/politika-program') {
         pageTitle = 'Politika / Program Belgesi | COP31’e Doğru İklim Adaleti Forumu';
         pageDesc =
-          'İklim Adaleti Forumu Program, Örgütlenme ve Strateji Belgesi: Demokratik dönüşüm ve toplumsal denetim programı.';
+          'İklim Adaleti Forumu Program, Örgütlenme ve Strateji Belgesi: Demokratik dönüşüm, kamusal mülkiyet ve toplumsal denetim programı.';
+        pageUrl = 'https://iklimadaleti.org/politika-program';
+        const policiesListHtml = (cms.policies || [])
+          .map(
+            (p) =>
+              `<article><h2>${escapeHtml(p.title)} (${escapeHtml(p.date || '')})</h2><p>${escapeHtml(p.excerpt || '')}</p>${Array.isArray(p.content) ? p.content.map((c) => `<p>${escapeHtml(c)}</p>`).join('') : ''}</article>`
+          )
+          .join('');
+        routeBodyHtml = `<section><h1>${escapeHtml(pageTitle)}</h1><p>${escapeHtml(pageDesc)}</p>${policiesListHtml}</section>`;
       } else if (cleanPath === '/sonuc-bildirgeleri') {
         pageTitle = 'Sonuç Bildirgeleri (Samsun, İzmir, Antalya) | COP31’e Doğru İklim Adaleti Forumu';
         pageDesc =
           'Samsun (17 Ekim 2026), İzmir (10 Haziran 2026) ve Antalya (28 Ocak 2026) İklim Adaleti Forumları sonuç bildirgeleri ve ortak deklarasyon metinleri.';
+        pageUrl = 'https://iklimadaleti.org/sonuc-bildirgeleri';
+        const declListHtml = (cms.declarations || [])
+          .map(
+            (d) =>
+              `<article><h2>${escapeHtml(d.title)} (${escapeHtml(d.date || '')})</h2><p>${escapeHtml(d.excerpt || '')}</p>${Array.isArray(d.content) ? d.content.map((c) => `<p>${escapeHtml(c)}</p>`).join('') : ''}</article>`
+          )
+          .join('');
+        routeBodyHtml = `<section><h1>${escapeHtml(pageTitle)}</h1><p>${escapeHtml(pageDesc)}</p>${declListHtml}</section>`;
       } else if (cleanPath === '/calisma-gruplari') {
         pageTitle = 'Çalışma Grupları | COP31’e Doğru İklim Adaleti Forumu';
-        pageDesc = 'İklim Adaleti Forumu çalışma grupları ve ortak mücadele başlıkları.';
+        pageDesc =
+          'İklim Adaleti Forumu çalışma grupları: Enerji ve Madencilik, Su ve Ekosistem Hakları, Tarım ve Gıda Egemenliği, Kent ve Emek çalışma grupları.';
+        pageUrl = 'https://iklimadaleti.org/calisma-gruplari';
+        const groupsListHtml = (cms.workingGroups || [])
+          .map(
+            (g) =>
+              `<article><h2>${escapeHtml(g.name || g.title || '')}</h2><p>${escapeHtml(g.description || '')}</p></article>`
+          )
+          .join('');
+        routeBodyHtml = `<section><h1>${escapeHtml(pageTitle)}</h1><p>${escapeHtml(pageDesc)}</p><p>COP31 sürecinde enerji, tarım, su varlıkları, sanayi, kent hakkı ve emek eksenlerinde ortak politika ve mücadele yürüten çalışma gruplarımıza katılabilirsiniz.</p>${groupsListHtml}</section>`;
+      } else if (cleanPath === '/admin' || cleanPath === '/yonetim') {
+        robotsMeta = 'noindex, nofollow';
+        pageTitle = 'Yönetim Paneli – İklim Adaleti Forumu';
+        pageUrl = 'https://iklimadaleti.org/';
+        routeBodyHtml = `<section><h1>Yönetim Paneli</h1></section>`;
+      } else if (cleanPath === '/') {
+        const instNamesHtml = instSigs
+          .map((s, idx) => `<li>${idx + 1}. ${escapeHtml(s.organization || s.name)}${s.city ? ` (${escapeHtml(s.city)})` : ''}</li>`)
+          .join('');
+        routeBodyHtml = `<article><h1>COP31’e Doğru İklim Adaleti Forumu Çağrı Metni: Zamanımızı, Yaşamımızı, Geleceğimizi İstiyoruz!</h1><p><strong>COP31 Şirketlerin Değil, Emeğin ve Halklarındır!</strong> 15–16–17 Kasım 2026 tarihlerinde Antalya’da buluşuyoruz.</p><p>${escapeHtml(pageDesc)}</p><h2>İmzacı Kurumlar (${instCount})</h2><ul>${instNamesHtml}</ul></article>`;
+      } else {
+        statusCode = 404;
+        robotsMeta = 'noindex, nofollow';
+        pageTitle = 'Sayfa Bulunamadı – İklim Adaleti Forumu';
+        pageDesc = 'Aradığınız sayfa bulunamadı.';
+        pageUrl = 'https://iklimadaleti.org/';
+        routeBodyHtml = `<section><h1>Sayfa Bulunamadı (404)</h1><p><a href="https://iklimadaleti.org/">Ana Sayfaya Dön</a></p></section>`;
       }
 
       const safeTitle = escapeHtml(pageTitle);
@@ -6624,22 +6968,25 @@ ${urlsXml}
       const safeUrl = escapeHtml(pageUrl);
       const safeImg = escapeHtml(pageImage);
 
-      // Build Dynamic Schema.org JSON-LD Graph (Articles + Organization + WebSite + FAQPage)
-      const declarationSchemas = (cms.declarations || []).map((decl) => ({
-        '@type': 'Article',
-        headline: String(decl.title || '').slice(0, 180),
-        description: String(decl.excerpt || '').slice(0, 300),
-        datePublished: '2026-10-17',
-        inLanguage: 'tr-TR',
-        author: {
-          '@type': 'Organization',
-          name: String(decl.author || 'İklim Adaleti Forumu')
-        },
-        publisher: {
-          '@id': 'https://iklimadaleti.org/#organization'
-        },
-        mainEntityOfPage: 'https://iklimadaleti.org/sonuc-bildirgeleri'
-      }));
+      // Build Dynamic Schema.org JSON-LD Graph (Articles + Organization + WebSite + FAQPage + Event)
+      const declarationSchemas =
+        cleanPath === '/' || cleanPath === '/sonuc-bildirgeleri'
+          ? (cms.declarations || []).map((decl) => ({
+              '@type': 'Article',
+              headline: String(decl.title || '').slice(0, 180),
+              description: String(decl.excerpt || '').slice(0, 300),
+              datePublished: '2026-10-17',
+              inLanguage: 'tr-TR',
+              author: {
+                '@type': 'Organization',
+                name: String(decl.author || 'İklim Adaleti Forumu')
+              },
+              publisher: {
+                '@id': 'https://iklimadaleti.org/#organization'
+              },
+              mainEntityOfPage: 'https://iklimadaleti.org/sonuc-bildirgeleri'
+            }))
+          : [];
 
       const dynamicJsonLd = {
         '@context': 'https://schema.org',
@@ -6675,36 +7022,41 @@ ${urlsXml}
               '@id': 'https://iklimadaleti.org/#organization'
             }
           },
-          {
-            '@type': 'FAQPage',
-            mainEntity: [
-              {
-                '@type': 'Question',
-                name: 'COP31’e Doğru İklim Adaleti Forumu nedir?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'COP31’e Doğru İklim Adaleti Forumu; ekoloji örgütlerinin, emek ve meslek örgütlerinin, kadın ve gençlik hareketlerinin iklim krizine, ekolojik yıkıma ve şirket odaklı yeşil aklama politikalarına karşı 15–16–17 Kasım 2026 Antalya buluşmasına doğru kurduğu ortak mücadele ve dayanışma zeminidir.'
+          ...(cleanPath === '/'
+            ? [
+                {
+                  '@type': 'FAQPage',
+                  mainEntity: [
+                    {
+                      '@type': 'Question',
+                      name: 'COP31’e Doğru İklim Adaleti Forumu nedir?',
+                      acceptedAnswer: {
+                        '@type': 'Answer',
+                        text: 'COP31’e Doğru İklim Adaleti Forumu; ekoloji örgütlerinin, emek ve meslek örgütlerinin, kadın ve gençlik hareketlerinin iklim krizine, ekolojik yıkıma ve şirket odaklı yeşil aklama politikalarına karşı 15–16–17 Kasım 2026 Antalya buluşmasına doğru kurduğu ortak mücadele ve dayanışma zeminidir.'
+                      }
+                    },
+                    {
+                      '@type': 'Question',
+                      name: 'İklim Adaleti Forumu Sonuç Bildirgeleri hangi illerde yayınlandı?',
+                      acceptedAnswer: {
+                        '@type': 'Answer',
+                        text: '28 Ocak 2026 Antalya İklim Adaleti Forumu Sonuç Bildirgesi, 10 Haziran 2026 İzmir İklim Adaleti Forumu Toplantı Raporu ve Sonuç Metni ile 17 Ekim 2026 COP31’e Doğru Yerellerin İklim Adaleti Forumu Samsun Sonuç Bildirgesi resmi olarak yayınlanmıştır.'
+                      }
+                    },
+                    {
+                      '@type': 'Question',
+                      name: 'İklim Adaleti Forumu Çağrı Metni nasıl imzalanır?',
+                      acceptedAnswer: {
+                        '@type': 'Answer',
+                        text: 'iklimadaleti.org ana sayfasındaki "Çağrı Metnini İmzala" butonuna tıklayarak kurum adına veya bireysel olarak tek tıkla imzanızı ekleyebilirsiniz.'
+                      }
+                    }
+                  ]
                 }
-              },
-              {
-                '@type': 'Question',
-                name: 'İklim Adaleti Forumu Sonuç Bildirgeleri hangi illerde yayınlandı?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: '28 Ocak 2026 Antalya İklim Adaleti Forumu Sonuç Bildirgesi, 10 Haziran 2026 İzmir İklim Adaleti Forumu Toplantı Raporu ve Sonuç Metni ile 17 Ekim 2026 COP31’e Doğru Yerellerin İklim Adaleti Forumu Samsun Sonuç Bildirgesi resmi olarak yayınlanmıştır.'
-                }
-              },
-              {
-                '@type': 'Question',
-                name: 'İklim Adaleti Forumu Çağrı Metni nasıl imzalanır?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'iklimadaleti.org ana sayfasındaki "Çağrı Metnini İmzala" butonuna tıklayarak kurum adına veya bireysel olarak tek tıkla imzanızı ekleyebilirsiniz.'
-                }
-              }
-            ]
-          },
-          ...declarationSchemas
+              ]
+            : []),
+          ...declarationSchemas,
+          ...extraSchemaItems
         ]
       };
 
@@ -6712,28 +7064,17 @@ ${urlsXml}
         .replace(/</g, '\\u003c')
         .replace(/>/g, '\\u003e');
 
-      // Build Server-Side Pre-Rendered Semantic HTML inside #root for search engine crawlers
-      const declarationsHtml = (cms.declarations || [])
-        .map(
-          (d) =>
-            `<article><h2>${escapeHtml(d.title)} (${escapeHtml(d.date)})</h2><p>${escapeHtml(d.excerpt)}</p></article>`
-        )
-        .join('');
-      const eventsHtml = (cms.events || [])
-        .slice(0, 20)
-        .map(
-          (e) =>
-            `<li><a href="https://iklimadaleti.org/etkinlikler/${encodeURIComponent(toEventSlug(e))}">${escapeHtml(e.title)} – ${escapeHtml(e.date)} (${escapeHtml(e.location || '')})</a></li>`
-        )
-        .join('');
-
-      const seoPrerenderHtml = `<div id="root"><main style="max-width:960px;margin:0 auto;padding:24px;font-family:sans-serif"><h1>${safeTitle}</h1><p>${safeDesc}</p><nav><a href="https://iklimadaleti.org/">Ana Sayfa &amp; Çağrı Metni</a> | <a href="https://iklimadaleti.org/etkinlikler">Etkinlik Takvimi</a> | <a href="https://iklimadaleti.org/forumlar">Forumlar</a> | <a href="https://iklimadaleti.org/calisma-gruplari">Çalışma Grupları</a> | <a href="https://iklimadaleti.org/sonuc-bildirgeleri">Sonuç Bildirgeleri</a> | <a href="https://iklimadaleti.org/politika-program">Politika / Program Belgesi</a></nav><section>${declarationsHtml}</section><ul>${eventsHtml}</ul></main></div>`;
+      const seoPrerenderHtml = `<div id="root"><main style="max-width:960px;margin:0 auto;padding:24px;font-family:sans-serif">${navHtml}${routeBodyHtml}</main></div>`;
 
       html = html
         .replace(/<title>[\s\S]*?<\/title>/, `<title>${safeTitle}</title>`)
         .replace(
           /<meta name="description" content="[^"]*" \/>/,
           `<meta name="description" content="${safeDesc}" />`
+        )
+        .replace(
+          /<meta name="robots" content="[^"]*" \/>/,
+          `<meta name="robots" content="${robotsMeta}" />`
         )
         .replace(
           /<link rel="canonical" href="[^"]*" \/>/,
@@ -6773,6 +7114,7 @@ ${urlsXml}
         )
         .replace('<div id="root"></div>', seoPrerenderHtml);
 
+      res.status(statusCode);
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       res.setHeader('X-Content-Type-Options', 'nosniff');
       res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');

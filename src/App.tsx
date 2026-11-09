@@ -472,9 +472,21 @@ export default function App() {
     };
   }, []);
 
-  // Update browser tab title dynamically for SEO & usability
+  // Update browser tab title & canonical link dynamically for SEO & usability
   useEffect(() => {
     const baseTitle = 'COP31’e Doğru İklim Adaleti Forumu – iklimadaleti.org';
+    const sectionPaths: Record<string, string> = {
+      anasayfa: '/',
+      'basin-aciklamalari': '/basin-aciklamalari',
+      forumlar: '/forumlar',
+      'calisma-gruplari': '/calisma-gruplari',
+      'sonuc-bildirgeleri': '/sonuc-bildirgeleri',
+      'politika-program': '/politika-program',
+      'etkinlik-takvimi': '/etkinlikler'
+    };
+
+    let canonicalPath = sectionPaths[activeSection] || '/';
+
     if (activeSection === 'etkinlik-takvimi' && selectedEventSlug) {
       const matched = events.find((ev) => {
         const slug = String(ev.title || ev.id)
@@ -490,14 +502,36 @@ export default function App() {
         return slug === selectedEventSlug || ev.id === selectedEventSlug;
       });
       if (matched) {
+        const cleanSlug = String(matched.title || matched.id)
+          .toLowerCase()
+          .replace(/ğ/g, 'g')
+          .replace(/ü/g, 'u')
+          .replace(/ş/g, 's')
+          .replace(/ı/g, 'i')
+          .replace(/ö/g, 'o')
+          .replace(/ç/g, 'c')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        canonicalPath = `/etkinlikler/${encodeURIComponent(cleanSlug)}`;
         document.title = `${matched.title} (${matched.date}) | İklim Adaleti Forumu`;
-        return;
+      } else {
+        canonicalPath = `/etkinlikler/${encodeURIComponent(selectedEventSlug)}`;
+        document.title = `Etkinlik Detayı | ${baseTitle}`;
       }
-    }
-    if (activeSection !== 'anasayfa' && SECTION_LABELS[activeSection]) {
+    } else if (activeSection !== 'anasayfa' && SECTION_LABELS[activeSection]) {
       document.title = `${SECTION_LABELS[activeSection]} | ${baseTitle}`;
     } else {
       document.title = `${baseTitle} | Zamanımızı, Yaşamımızı, Geleceğimizi İstiyoruz`;
+    }
+
+    const fullCanonical = `https://iklimadaleti.org${canonicalPath}`;
+    const canonicalEl = document.querySelector('link[rel="canonical"]');
+    if (canonicalEl) {
+      canonicalEl.setAttribute('href', fullCanonical);
+    }
+    const ogUrlEl = document.querySelector('meta[property="og:url"]');
+    if (ogUrlEl) {
+      ogUrlEl.setAttribute('content', fullCanonical);
     }
   }, [activeSection, selectedEventSlug, events]);
 
