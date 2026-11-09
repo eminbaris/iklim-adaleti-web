@@ -85,7 +85,8 @@ export const FORUM_PROGRAM_DAYS: ProgramDay[] = [
       },
       {
         time: '10.30–12.00',
-        title: 'I. Oturum: Doğanın Metalaştırılması, Büyüme ve Sermaye Birikimi',
+        title:
+          'I. Oturum: Kapitalist Kriz Çağında Doğanın Metalaştırılması, Büyüme ve Sermaye Birikimi',
         chair: 'Dr. Ali Yalçın Göymen, Potsdam Üniversitesi',
         items: [
           {
@@ -111,7 +112,7 @@ export const FORUM_PROGRAM_DAYS: ProgramDay[] = [
         items: [
           {
             speaker:
-              'Şükrü Kibar, Emine Büyüknohutçu, Duygu Yıldız, Ulaş Lokumcu, Öznur Tosun'
+              'Ali Şükrü Kibar, Emine Büyüknohutçu, Duygu Yıldız, Ulaş Lokumcu, Öznur Tosun'
           }
         ]
       },
@@ -147,8 +148,7 @@ export const FORUM_PROGRAM_DAYS: ProgramDay[] = [
           {
             topic:
               'İklim Değişikliği, Afet Dirençli Olmayan Planlama ve Mühendislik Faaliyetlerinin Hatalarını Perdeleyebilir mi? Antalya’dan Örnekler',
-            speaker:
-              'Prof. Dr. Nihat Dipova, Akdeniz Üniversitesi İnşaat Mühendisliği Bölümü'
+            speaker: 'Prof. Dr. Nihat Dipova, Akdeniz Üniversitesi'
           }
         ]
       },
@@ -156,7 +156,7 @@ export const FORUM_PROGRAM_DAYS: ProgramDay[] = [
         time: '16.30–18.30',
         title:
           'V. Oturum: İklim Politikalarında Kamuculuk, Bağımsızlık ve Demokrasi',
-        chair: 'Prof. Dr. Nursel Şahin, Çağdaş Hekimler',
+        chair: 'Prof. Dr. Nursel Şahin, Çağdaş Hekimler Grubu',
         items: [
           {
             topic:
@@ -202,7 +202,7 @@ export const FORUM_PROGRAM_DAYS: ProgramDay[] = [
             topic:
               'İklim Krizi Evin İçinde: Kadınların Görünmeyen Emeği, Derinleşen Eşitsizlik ve Şiddet',
             speaker:
-              'Didem Erkıvanç Türkay, Antalya Kadın Danışma ve Dayanışma Derneği'
+              'Didem Erkıvanç Türkay, Antalya Kadın Danışma Merkezi ve Dayanışma Derneği'
           }
         ]
       }
@@ -258,7 +258,8 @@ export const FORUM_PROGRAM_DAYS: ProgramDay[] = [
           {
             topic:
               'Anayasa ve İklim Sözleşmeleri Karşısında Devletin Yükümlülükleri',
-            speaker: 'Prof. Dr. İbrahim Özden Kaboğlu, Anayasa Hukukçusu'
+            speaker:
+              'Prof. Dr. İbrahim Özden Kaboğlu, Karşılaştırmalı Çevre Hukuku Uluslararası Merkezi (CIDCE) Başkan Yardımcısı, TBMM Üyesi (2018-2023), İstanbul Barosu Başkanı (2024-2026)'
           },
           {
             topic: 'Biyosferik İlişkiler ve Hukuk Devleti',
@@ -352,10 +353,10 @@ export const FORUM_PROGRAM_DAYS: ProgramDay[] = [
               'Ali Bülent Erdem, Çiftçiler Sendikası (Çiftçi-Sen) Genel Başkanı'
           },
           {
-            speaker: 'Funda Öz Akcura, Çevre Aktivisti'
+            speaker: 'Funda Öz Akcura, Doğa Savunucusu'
           },
           {
-            speaker: 'Alev Yılmaz, Ekoloji Aktivisti'
+            speaker: 'Alev Yılmaz, Doğa Savunucusu'
           }
         ]
       },
