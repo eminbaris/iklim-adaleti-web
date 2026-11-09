@@ -643,12 +643,28 @@ export default function ForumProgramiSection({
                   <span>Afişi Tam Ekran Büyüt</span>
                 </button>
                 <a
-                  href={FORUM_PROGRAM_POSTER_URL}
-                  download="uluslararasi-iklim-adaleti-forumu-programi-15-17-kasim-2026.jpg"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#0B4F71] hover:bg-[#083B54] text-white text-xs font-bold transition-colors"
+                  href="/uploads/uluslararasi-iklim-adaleti-forumu-programi-15-17-kasim-2026.png"
+                  download="Uluslararasi-Iklim-Adaleti-Forumu-Programi-BASKI.png"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1F3A33] hover:bg-[#162924] text-white text-xs font-bold transition-colors"
                 >
                   <Download className="w-4 h-4" />
-                  <span>Orijinal Afişi İndir (JPG)</span>
+                  <span>Baskı İçin PNG İndir (300 DPI)</span>
+                </a>
+                <a
+                  href="/uploads/uluslararasi-iklim-adaleti-forumu-programi-15-17-kasim-2026.pdf"
+                  download="Uluslararasi-Iklim-Adaleti-Forumu-Programi-BASKI.pdf"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#A64B2A] hover:bg-[#8C3D20] text-white text-xs font-bold transition-colors"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Baskı İçin PDF İndir (A3 Yatay)</span>
+                </a>
+                <a
+                  href={FORUM_PROGRAM_POSTER_URL}
+                  download="uluslararasi-iklim-adaleti-forumu-programi-15-17-kasim-2026.jpg"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#0B4F71] hover:bg-[#083B54] text-white text-xs font-bold transition-colors"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>JPG İndir</span>
                 </a>
               </div>
             </div>
