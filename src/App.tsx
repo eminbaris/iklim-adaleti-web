@@ -137,7 +137,20 @@ const CANONICAL_INSTITUTION_NAMES: Record<string, string> = {
   'çepni dernekleri federasyonu': 'Çepni Dernekleri Federasyonu',
   'smf ekoloji': 'SMF Ekoloji',
   'gündoğmuş çevre platformu': 'Gündoğmuş Çevre Platformu',
-  'galataport fotoğrafhanesi': 'Galataport Fotoğrafhanesi'
+  'galataport fotoğrafhanesi': 'Galataport Fotoğrafhanesi',
+  'dünya mirası adalar': 'Dünya Mirası Adalar',
+  'adalar sivil inisiyatifi': 'Adalar Sivil İnisiyatifi',
+  'ekolojik sistemi koruma derneği': 'Ekolojik Sistemi Koruma Derneği',
+  'agora senfoni orkestrası': 'Agora Senfoni Orkestrası',
+  'yeni kuşak köy enstitüleri derneği antalya şube (ykked)': 'Yeni Kuşak Köy Enstitüleri Derneği Antalya Şube (YKKED)',
+  'barınma hakkı meclisleri': 'Barınma Hakkı Meclisleri',
+  'karakoçan dayanışma inisiyatifi': 'Karakoçan Dayanışma İnisiyatifi',
+  'sarıyer kent konseyi hayvan hakları k.ç. g.': 'Sarıyer Kent Konseyi Hayvan Hakları K.Ç. G.',
+  'kuzey ormanları savunması': 'Kuzey Ormanları Savunması',
+  'türkiye ormancılar derneği marmara şubesi': 'Türkiye Ormancılar Derneği Marmara Şubesi',
+  'ümraniye savunması': 'Ümraniye Savunması',
+  'sarıyer kent dayanışması': 'Sarıyer Kent Dayanışması',
+  'eskişehir doğa ve yaşam platformu': 'Eskişehir Doğa ve Yaşam Platformu'
 };
 
 function getSignatoryIdentityKey(sig: Signatory): string {

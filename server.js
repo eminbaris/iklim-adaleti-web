@@ -1350,10 +1350,10 @@ const DEFAULT_SIGNATORIES = [
   },
   {
     "id": "sig-1792303158308",
-    "name": "Fatma Şahin",
-    "organization": "Muhasebeci / Emekli",
+    "name": "Fatma ŞAHİN",
+    "organization": "Muhasebeci Emekli",
     "city": "Antalya",
-    "date": "2026-10-18",
+    "date": "2026-11-09",
     "type": "individual",
     "emailVerified": true
   },
@@ -5337,6 +5337,151 @@ const DEFAULT_SIGNATORIES = [
     "date": "2026-11-04",
     "type": "individual",
     "emailVerified": true
+  },
+  {
+    "id": "sig-1794259277155",
+    "name": "Bayram KANKAL",
+    "organization": "Emekli APK Uzmanı, sosyal siyasetçi",
+    "city": "Antalya",
+    "message": "Konaklama için parasal katkı",
+    "date": "2026-11-09",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1794400621087",
+    "name": "Ertan Tümay",
+    "city": "İstanbul",
+    "message": "Taşımız, Toprağımız, Akarsuyumuz, Gölümüz, Denizimiz tüm egemenlik hakları bizimdir, Bu hakkı kamu adına kullanırız.",
+    "date": "2026-11-11",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1794434811977",
+    "name": "Mustafa Tacar",
+    "organization": "Emekli",
+    "city": "Samsun",
+    "date": "2026-11-11",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1794507555319",
+    "name": "HIDIR KIRKICI",
+    "organization": "Serbest Avukat",
+    "city": "ISPARTA",
+    "message": "Doğanın haklarını da savunmadan insan olunamaz!",
+    "date": "2026-11-12",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1794517518151",
+    "name": "Sevgi Tabak",
+    "city": "Muğla",
+    "date": "2026-11-12",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1794597558046",
+    "name": "kadriye bakşi",
+    "organization": "emekli sosyal hizmet uzmanı",
+    "city": "Muğla",
+    "date": "2026-11-13",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-1794602234561",
+    "name": "Turan Güleç",
+    "organization": "Emekli",
+    "city": "Antalya",
+    "date": "2026-11-13",
+    "type": "individual",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-105",
+    "name": "Yeni Kuşak Köy Enstitüleri Derneği Antalya Şube (YKKED)",
+    "organization": "Yeni Kuşak Köy Enstitüleri Derneği Antalya Şube (YKKED)",
+    "city": "",
+    "date": "2026-11-14",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-106",
+    "name": "Barınma Hakkı Meclisleri",
+    "organization": "Barınma Hakkı Meclisleri",
+    "city": "",
+    "date": "2026-11-14",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-107",
+    "name": "Karakoçan Dayanışma İnisiyatifi",
+    "organization": "Karakoçan Dayanışma İnisiyatifi",
+    "city": "",
+    "date": "2026-11-14",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-108",
+    "name": "Sarıyer Kent Konseyi Hayvan Hakları K.Ç. G.",
+    "organization": "Sarıyer Kent Konseyi Hayvan Hakları K.Ç. G.",
+    "city": "",
+    "date": "2026-11-14",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-109",
+    "name": "Kuzey Ormanları Savunması",
+    "organization": "Kuzey Ormanları Savunması",
+    "city": "",
+    "date": "2026-11-14",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-110",
+    "name": "Türkiye Ormancılar Derneği Marmara Şubesi",
+    "organization": "Türkiye Ormancılar Derneği Marmara Şubesi",
+    "city": "",
+    "date": "2026-11-14",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-111",
+    "name": "Ümraniye Savunması",
+    "organization": "Ümraniye Savunması",
+    "city": "",
+    "date": "2026-11-14",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-112",
+    "name": "Sarıyer Kent Dayanışması",
+    "organization": "Sarıyer Kent Dayanışması",
+    "city": "",
+    "date": "2026-11-14",
+    "type": "institutional",
+    "emailVerified": true
+  },
+  {
+    "id": "sig-inst-113",
+    "name": "Eskişehir Doğa ve Yaşam Platformu",
+    "organization": "Eskişehir Doğa ve Yaşam Platformu",
+    "city": "",
+    "date": "2026-11-14",
+    "type": "institutional",
+    "emailVerified": true
   }
 ];
 
@@ -5458,7 +5603,20 @@ const CANONICAL_INSTITUTION_NAMES = {
   'çepni dernekleri federasyonu': 'Çepni Dernekleri Federasyonu',
   'smf ekoloji': 'SMF Ekoloji',
   'gündoğmuş çevre platformu': 'Gündoğmuş Çevre Platformu',
-  'galataport fotoğrafhanesi': 'Galataport Fotoğrafhanesi'
+  'galataport fotoğrafhanesi': 'Galataport Fotoğrafhanesi',
+  'dünya mirası adalar': 'Dünya Mirası Adalar',
+  'adalar sivil inisiyatifi': 'Adalar Sivil İnisiyatifi',
+  'ekolojik sistemi koruma derneği': 'Ekolojik Sistemi Koruma Derneği',
+  'agora senfoni orkestrası': 'Agora Senfoni Orkestrası',
+  'yeni kuşak köy enstitüleri derneği antalya şube (ykked)': 'Yeni Kuşak Köy Enstitüleri Derneği Antalya Şube (YKKED)',
+  'barınma hakkı meclisleri': 'Barınma Hakkı Meclisleri',
+  'karakoçan dayanışma inisiyatifi': 'Karakoçan Dayanışma İnisiyatifi',
+  'sarıyer kent konseyi hayvan hakları k.ç. g.': 'Sarıyer Kent Konseyi Hayvan Hakları K.Ç. G.',
+  'kuzey ormanları savunması': 'Kuzey Ormanları Savunması',
+  'türkiye ormancılar derneği marmara şubesi': 'Türkiye Ormancılar Derneği Marmara Şubesi',
+  'ümraniye savunması': 'Ümraniye Savunması',
+  'sarıyer kent dayanışması': 'Sarıyer Kent Dayanışması',
+  'eskişehir doğa ve yaşam platformu': 'Eskişehir Doğa ve Yaşam Platformu'
 };
 
 function getSignatoryKey(sig) {

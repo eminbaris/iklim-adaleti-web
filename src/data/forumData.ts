@@ -105,7 +105,20 @@ export const INITIAL_SIGNATORY_ORGANIZATIONS: string[] = [
   'Çepni Dernekleri Federasyonu',
   'SMF Ekoloji',
   'Gündoğmuş Çevre Platformu',
-  'Galataport Fotoğrafhanesi'
+  'Galataport Fotoğrafhanesi',
+  'Dünya Mirası Adalar',
+  'Adalar Sivil İnisiyatifi',
+  'Ekolojik Sistemi Koruma Derneği',
+  'Agora Senfoni Orkestrası',
+  'Yeni Kuşak Köy Enstitüleri Derneği Antalya Şube (YKKED)',
+  'Barınma Hakkı Meclisleri',
+  'Karakoçan Dayanışma İnisiyatifi',
+  'Sarıyer Kent Konseyi Hayvan Hakları K.Ç. G.',
+  'Kuzey Ormanları Savunması',
+  'Türkiye Ormancılar Derneği Marmara Şubesi',
+  'Ümraniye Savunması',
+  'Sarıyer Kent Dayanışması',
+  'Eskişehir Doğa ve Yaşam Platformu'
 ];
 
 const INITIAL_ORGANIZATION_CITIES: Record<string, string> = {
